@@ -13,7 +13,7 @@ const io = socketIo(server);
 let wordList = [];
 let foundWords = [];
 let letterList = [];
-let centerLetter = null
+let centerLetter = null;
 
 const checkLetters = (word) => {
     const letterArray = word.split('');
