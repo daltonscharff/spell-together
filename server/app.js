@@ -14,10 +14,10 @@ const server = http.createServer(app);
 
 const io = socketIo(server);
 
-let wordList = ['a', 'ab', 'abc', 'abcd', 'abcde'];
-let foundWords = ['a', 'ab', 'abc'];
-let letterList = ['a', 'b', 'c', 'd', 'e'];
-let centerLetter = 'a';
+let wordList = [];
+let foundWords = [];
+let letterList = [];
+let centerLetter = null
 
 const checkLetters = (word) => {
     const letterArray = word.split('');
@@ -95,7 +95,31 @@ app.get('/refresh', async (req, res) => {
         return "no center letter";
     })(wordList, letterList);
 
-    res.send({ centerLetter, letters: letterList, wordList }).status(200);
+    res.send({
+        wordList,
+        foundWords,
+        letterList,
+        centerLetter
+    });
+});
+
+app.get('/status', (req, res) => {
+    res.send({
+        wordList,
+        foundWords,
+        letterList,
+        centerLetter
+    });
+});
+
+app.get('/reset', (req, res) => {
+    foundWords = [];
+    res.send({
+        wordList,
+        foundWords,
+        letterList,
+        centerLetter
+    });
 });
 
 server.listen(port, () => console.log(`listening on port http://localhost:${port}`));
