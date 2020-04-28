@@ -2,13 +2,9 @@ const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
 
-// const index = require("./routes/index");
-// const refresh = require("./routes/refresh");
 const port = process.env.PORT || 4000;
 
 const app = express();
-// app.use(index);
-// app.use(refresh);
 
 const server = http.createServer(app);
 
