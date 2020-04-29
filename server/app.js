@@ -13,7 +13,7 @@ const io = socketIo(server);
 let wordList = [];
 let foundWords = [];
 let letterList = [];
-let centerLetter = null;
+let centerLetter = '';
 
 const checkLetters = (word) => {
     const letterArray = word.split('');
@@ -29,7 +29,7 @@ const checkLetters = (word) => {
 io.on('connection', socket => {
     console.log('new client connected');
 
-    socket.emit('setup', { letterList, centerLetter, foundWords });
+    socket.emit('setup', { letterList, centerLetter, foundWords, numOfAnswers: wordList.length });
 
     socket.on('submitWord', (word) => {
         word = word.toLowerCase();
