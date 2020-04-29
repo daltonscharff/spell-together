@@ -7,6 +7,7 @@ const containerStyle = {
     borderRadius: '.5em',
     padding: '1em 1.5em',
     margin: '1em',
+    flex: '1'
 };
 const wordListStyle = {
     display: 'flex',

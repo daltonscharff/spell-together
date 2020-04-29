@@ -19,7 +19,7 @@ const refreshButtonStyle = {
     padding: '.5em 0em .25em',
 }
 
-const Buttons = ({ shuffleLetters, deleteLetter }) => {
+const Buttons = ({ shuffleLetters, deleteLetter, submitWord }) => {
     return (
         <div style={containerStyle}>
             <button style={buttonStyle} onClick={deleteLetter}>
@@ -33,7 +33,7 @@ const Buttons = ({ shuffleLetters, deleteLetter }) => {
                     <polygon points="82,100 82,80 62,80" fill="black" />
                 </svg>
             </button>
-            <button style={buttonStyle}>
+            <button style={buttonStyle} onClick={submitWord}>
                 Enter
             </button>
         </div>

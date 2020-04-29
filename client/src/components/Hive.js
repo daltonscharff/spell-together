@@ -23,7 +23,7 @@ const textStyle = {
 const hiveStyle = {
     width: '75%',
     maxWidth: '400px',
-    margin: '1.5em auto 2em'
+    margin: '1em auto 2em'
 };
 
 const Hive = ({ centerLetter = '', otherLetters = [], addLetter }) => {

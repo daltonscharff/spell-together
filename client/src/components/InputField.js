@@ -5,7 +5,7 @@ const containerStyle = {
     fontSize: '2.25em',
     fontWeight: 'bold',
     justifyContent: 'center',
-    margin: '1em',
+    margin: '.5em',
     minHeight: '1em'
 };
 
@@ -19,7 +19,7 @@ const InputField = ({ centerLetter = '', otherLetters = '', playerInput = '' }) 
                     {letter.toUpperCase()}
                 </span>
             ))}
-            <span style={{ color: '#facd04', fontWeight: 'normal' }}>|</span>
+            <span style={{ color: '#facd04', fontWeight: 'normal', visibility: 'hidden' }}>|</span>
         </div>
     );
 };
