@@ -60,7 +60,7 @@ app.get('/refresh', async (req, res) => {
     const fetch = require('node-fetch');
     const $ = require('cheerio');
 
-    const r = await fetch('http://nytbee.com/Bee_20200424.html');
+    const r = await fetch('http://nytbee.com/');
     const html = await r.text();
 
     wordList = ((html) => {
