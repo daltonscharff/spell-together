@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Hive from './components/Hive';
 import Buttons from './components/Buttons';
 import WordList from './components/WordList';
+import InputField from './components/InputField';
 
 const containerStyle = {
   display: 'flex',
@@ -10,7 +11,8 @@ const containerStyle = {
 };
 
 const halfContainerStyle = {
-  flex: '1 1 0'
+  flex: '1 1 0',
+  minWidth: '300px'
 };
 
 const App = ({ socket }) => {
@@ -18,7 +20,7 @@ const App = ({ socket }) => {
   const [letterList, setLetterList] = useState([]);
   const [centerLetter, setCenterLetter] = useState('');
   const [numOfAnswers, setNumOfAnswers] = useState(0);
-  const [playerInput, setPlayerInput] = useState('');
+  const [playerInput, setPlayerInput] = useState('maeiouy');
 
   useEffect(() => {
     socket.on('setup', (data) => {
@@ -30,18 +32,41 @@ const App = ({ socket }) => {
     });
   }, []);
 
+  const addLetter = (letter) => {
+    setPlayerInput(playerInput + letter.toLowerCase());
+  };
+
+  const deleteLetter = () => {
+    setPlayerInput(playerInput.substring(0, playerInput.length - 1));
+  };
+
+  const shuffleLetters = () => {
+    let letters = letterList.filter((value) => value !== centerLetter);
+    for (let i in letters) {
+      const j = Math.floor(Math.random() * i)
+      const temp = letters[i];
+      letters[i] = letters[j];
+      letters[j] = temp;
+    }
+    setLetterList([centerLetter, ...letters]);
+  };
+
   return (
     <div style={containerStyle}>
       <div style={halfContainerStyle}>
-        <Hive
+        <InputField
+          playerInput={playerInput}
           centerLetter={centerLetter}
           otherLetters={letterList.filter((value) => value !== centerLetter)}
         />
+        <Hive
+          centerLetter={centerLetter}
+          otherLetters={letterList.filter((value) => value !== centerLetter)}
+          addLetter={addLetter}
+        />
         <Buttons
-          playerInput={playerInput}
-          setPlayerInput={setPlayerInput}
-          letterList={letterList}
-          setLetterList={setLetterList}
+          shuffleLetters={shuffleLetters}
+          deleteLetter={deleteLetter}
         />
       </div>
       <div style={halfContainerStyle}>
