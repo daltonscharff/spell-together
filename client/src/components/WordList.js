@@ -20,19 +20,27 @@ const wordListItemStyle = {
     maxWidth: '8em'
 };
 
-const WordList = ({ foundWords = [], numOfAnswers = 0 }) => (
-    <div style={containerStyle} >
-        <div style={{ margin: '0 0 1em' }}>
-            You have found {foundWords.length} out of {numOfAnswers} words
+const WordList = ({ foundWords = [], numOfAnswers = 0 }) => {
+    console.log(foundWords);
+    return (
+        <div style={containerStyle} >
+            <div style={{ margin: '0 0 1em' }}>
+                You have found {foundWords.length} out of {numOfAnswers} words
         </div>
-        <div style={wordListStyle}>
-            {foundWords.map((word) => (
-                <div style={wordListItemStyle} key={word}>
-                    {`${word.charAt(0).toUpperCase()}${word.substring(1, word.length).toLowerCase()}`}
-                </div>
-            ))}
+            <div style={wordListStyle}>
+                {foundWords.map((value) => (
+                    <div style={wordListItemStyle} key={value.word}>
+                        {`${value.word.charAt(0).toUpperCase()}${value.word.substring(1, value.word.length).toLowerCase()}`}
+                        <span style={{
+                            fontSize: '.8em',
+                            color: 'rgba(0, 0, 0, 0.4)',
+                            fontStyle: 'italic'
+                        }}> by {value.name}</span>
+                    </div>
+                ))}
+            </div>
         </div>
-    </div>
-);
+    )
+};
 
 export default WordList;

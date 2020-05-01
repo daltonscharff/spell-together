@@ -10,6 +10,14 @@ const containerStyle = {
   minHeight: '100vh'
 };
 
+const nameInputStyle = {
+  justifyContent: 'center',
+  maxWidth: '300px',
+  padding: '1em',
+  margin: '1em auto',
+  flexWrap: 'wrap'
+};
+
 const halfContainerStyle = {
   flex: '1 1 0',
   minWidth: '300px',
@@ -33,6 +41,8 @@ const App = ({ socket }) => {
   const [numOfAnswers, setNumOfAnswers] = useState(0);
   const [error, setError] = useState('.');
   const [playerInput, setPlayerInput] = useState('');
+  const [playerName, setPlayerName] = useState('');
+  const [nameFieldValue, setNameFieldValue] = useState('');
 
   useEffect(() => {
     socket.on('setup', (data) => {
@@ -48,9 +58,9 @@ const App = ({ socket }) => {
       setFoundWords(data);
     });
 
-    socket.on('wordAlreadyFound', (word) => {
-      console.log('already found ' + word);
-      setError('Already found');
+    socket.on('wordAlreadyFound', (value) => {
+      console.log('already found ' + value);
+      setError(`Already found by ${value.name}`);
       setTimeout(() => setError('.'), 3000);
     });
 
@@ -94,38 +104,70 @@ const App = ({ socket }) => {
 
   const submitWord = () => {
     if (!playerInput) return;
-    socket.emit('submitWord', playerInput);
+    socket.emit('submitWord', { word: playerInput, name: playerName });
     console.log('submitting word: ' + playerInput);
     setPlayerInput('');
   };
 
   return (
-    <div style={containerStyle}>
-      <div style={halfContainerStyle}>
-        <div style={{ ...errorStyle, visibility: error !== '.' ? 'visible' : 'hidden' }}>{error}</div>
-        <InputField
-          playerInput={playerInput}
-          centerLetter={centerLetter}
-          otherLetters={letterList.filter((value) => value !== centerLetter)}
+    <>
+      <form style={{ ...nameInputStyle, display: playerName ? 'none' : 'flex' }} onSubmit={(e) => { e.preventDefault(); setPlayerName(nameFieldValue) }}>
+        <input
+          type='text'
+          placeholder='Enter your name...'
+          value={nameFieldValue}
+          onChange={(e) => setNameFieldValue(e.target.value)}
+          style={{
+            flex: '1 0 100%',
+            margin: '.5em',
+            border: 'none',
+            borderBottom: '1px solid black'
+          }}
         />
-        <Hive
-          centerLetter={centerLetter}
-          otherLetters={letterList.filter((value) => value !== centerLetter)}
-          addLetter={addLetter}
-        />
-        <Buttons
-          shuffleLetters={shuffleLetters}
-          deleteLetter={deleteLetter}
-          submitWord={submitWord}
-        />
+        <button style={{
+          flex: '1 0 100%',
+          margin: '.5em'
+
+        }}>Enter</button>
+      </form>
+      <div style={{ ...containerStyle, display: playerName ? 'flex' : 'none' }}>
+        <div style={halfContainerStyle}>
+          <div style={{ ...errorStyle, visibility: error !== '.' ? 'visible' : 'hidden' }}>{error}</div>
+          <InputField
+            playerInput={playerInput}
+            centerLetter={centerLetter}
+            otherLetters={letterList.filter((value) => value !== centerLetter)}
+          />
+          <Hive
+            centerLetter={centerLetter}
+            otherLetters={letterList.filter((value) => value !== centerLetter)}
+            addLetter={addLetter}
+          />
+          <Buttons
+            shuffleLetters={shuffleLetters}
+            deleteLetter={deleteLetter}
+            submitWord={submitWord}
+          />
+        </div>
+        <div style={halfContainerStyle}>
+          <WordList
+            foundWords={foundWords}
+            numOfAnswers={numOfAnswers}
+          />
+          <p
+            onClick={() => setPlayerName()}
+            style={{
+              textAlign: 'right',
+              color: 'rgba(0,0,0,.4)',
+              margin: '0 1em .25em',
+              textDecoration: 'underline',
+              fontStyle: 'italic',
+              cursor: 'pointer'
+            }}
+          >not {playerName}?</p>
+        </div>
       </div>
-      <div style={halfContainerStyle}>
-        <WordList
-          foundWords={foundWords}
-          numOfAnswers={numOfAnswers}
-        />
-      </div>
-    </div>
+    </>
   );
 };
 

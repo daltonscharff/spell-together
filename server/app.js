@@ -31,10 +31,10 @@ io.on('connection', socket => {
 
     socket.emit('setup', { letterList, centerLetter, foundWords, numOfAnswers: wordList.length });
 
-    socket.on('submitWord', (word) => {
+    socket.on('submitWord', ({ word, name }) => {
         word = word.toLowerCase();
-        if (foundWords.includes(word)) {
-            socket.emit('wordAlreadyFound', word);
+        if (foundWords.map((values) => values.word).includes(word)) {
+            socket.emit('wordAlreadyFound', foundWords.find((value) => value.word === word));
         } else if (!checkLetters(word)) {
             socket.emit('incorrectLetters', word);
         } else if (!word.includes(centerLetter)) {
@@ -43,7 +43,7 @@ io.on('connection', socket => {
             socket.emit('notInWordList', word);
         } else {
             socket.emit('correctGuess', word);
-            foundWords = [...foundWords, word];
+            foundWords = [...foundWords, { word, name }];
             io.sockets.emit('foundWords', foundWords);
         }
     });
