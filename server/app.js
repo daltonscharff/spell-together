@@ -11,7 +11,12 @@ const server = http.createServer(app);
 
 const io = socketIo(server);
 
-const savedInfo = fs.readJSONSync('save.json');
+let savedInfo = {};
+try {
+    savedInfo = fs.readJSONSync('save.json')
+} catch (e) {
+    fs.writeJSON('save.json', savedInfo);
+}
 
 let wordList = savedInfo.wordList || [];
 let foundWords = savedInfo.foundWords || [];
