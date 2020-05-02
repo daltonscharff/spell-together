@@ -72,7 +72,7 @@ app.get('/refresh', async (req, res) => {
     const fetch = require('node-fetch');
     const $ = require('cheerio');
 
-    const r = await fetch('http://nytbee.com/');
+    const r = await fetch('https://nytbee.com');
     const html = await r.text();
 
     wordList = ((html) => {
@@ -92,18 +92,18 @@ app.get('/refresh', async (req, res) => {
         return Array.from(letterSet);
     })(wordList);
 
-    centerLetter = ((answers, letters) => {
-        for (let letter of letters) {
-            let count = 0;
-            for (let answer of answers) {
-                answer.includes(letter) ? count++ : count;
-            }
-            if (count == answers.length) return letter;
-        }
-        return "no center letter";
+    centerLetter = await (async () => {
+        const matches = html.match(/"color":(\[.*\]),"plotX"/g);
+        const match = matches[matches.length - 2];
+        const array = JSON.parse(match.match(/"color":(\[.*\]),"plotX"/)[1]);
+        const index = array.indexOf('firebrick');
+        const aCharCode = 97
+        return String.fromCharCode(aCharCode + index);
     })(wordList, letterList);
 
-    updateFile({ wordList, letterList, centerLetter });
+    foundWords = [];
+
+    updateFile({ wordList, foundWords, letterList, centerLetter });
 
     res.send({
         wordList,
@@ -114,19 +114,6 @@ app.get('/refresh', async (req, res) => {
 });
 
 app.get('/status', (req, res) => {
-    res.send({
-        wordList,
-        foundWords,
-        letterList,
-        centerLetter
-    });
-});
-
-app.get('/reset', (req, res) => {
-    foundWords = [];
-
-    updateFile({ foundWords });
-
     res.send({
         wordList,
         foundWords,
