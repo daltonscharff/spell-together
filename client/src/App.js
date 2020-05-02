@@ -41,7 +41,7 @@ const App = ({ socket }) => {
   const [numOfAnswers, setNumOfAnswers] = useState(0);
   const [error, setError] = useState('.');
   const [playerInput, setPlayerInput] = useState('');
-  const [playerName, setPlayerName] = useState('');
+  const [playerName, setPlayerName] = useState(localStorage.getItem('playerName') || '');
   const [nameFieldValue, setNameFieldValue] = useState('');
 
   useEffect(() => {
@@ -111,7 +111,11 @@ const App = ({ socket }) => {
 
   return (
     <>
-      <form style={{ ...nameInputStyle, display: playerName ? 'none' : 'flex' }} onSubmit={(e) => { e.preventDefault(); setPlayerName(nameFieldValue) }}>
+      <form style={{ ...nameInputStyle, display: playerName ? 'none' : 'flex' }} onSubmit={(e) => {
+        e.preventDefault();
+        setPlayerName(nameFieldValue);
+        localStorage.setItem('playerName', nameFieldValue);
+      }}>
         <input
           type='text'
           placeholder='Enter your name...'
