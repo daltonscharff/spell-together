@@ -30,7 +30,11 @@ const WordList = ({ foundWords = [], numOfAnswers = 0 }) => {
             <div style={wordListStyle}>
                 {foundWords.map((value) => (
                     <div style={wordListItemStyle} key={value.word}>
-                        {`${value.word.charAt(0).toUpperCase()}${value.word.substring(1, value.word.length).toLowerCase()}`}
+                        <span style={{
+                            backgroundColor: (new Set(value.word.toLowerCase().split(''))).size == 7 ? '#facd04' : 'transparent'
+                        }}>
+                            {`${value.word.charAt(0).toUpperCase()}${value.word.substring(1, value.word.length).toLowerCase()}`}
+                        </span>
                         <span style={{
                             fontSize: '.8em',
                             color: 'rgba(0, 0, 0, 0.4)',
