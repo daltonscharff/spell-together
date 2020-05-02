@@ -134,7 +134,13 @@ const App = ({ socket }) => {
 
         }}>Enter</button>
       </form>
-      <div style={{ ...containerStyle, display: playerName ? 'flex' : 'none' }}>
+      <div style={{
+        textAlign: 'center',
+        display: letterList.length ? 'none' : 'block'
+      }}>
+        Loading...
+      </div>
+      <div style={{ ...containerStyle, display: playerName && letterList.length ? 'flex' : 'none' }}>
         <div style={halfContainerStyle}>
           <div style={{ ...errorStyle, visibility: error !== '.' ? 'visible' : 'hidden' }}>{error}</div>
           <InputField
