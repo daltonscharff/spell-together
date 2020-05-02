@@ -138,7 +138,9 @@ const App = ({ socket }) => {
         textAlign: 'center',
         display: letterList.length ? 'none' : 'block'
       }}>
-        Loading...
+        <div>Loading...</div>
+        <br />
+        <p style={{ fontSize: '.75em' }}>...if you have the time to read this, there is probably something wrong.</p>
       </div>
       <div style={{ ...containerStyle, display: playerName && letterList.length ? 'flex' : 'none' }}>
         <div style={halfContainerStyle}>
