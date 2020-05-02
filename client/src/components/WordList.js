@@ -21,6 +21,7 @@ const wordListItemStyle = {
 };
 
 const WordList = ({ foundWords = [], numOfAnswers = 0 }) => {
+    foundWords = foundWords.sort((a, b) => a.word > b.word)
     return (
         <div style={containerStyle} >
             <div style={{ margin: '0 0 1em' }}>
