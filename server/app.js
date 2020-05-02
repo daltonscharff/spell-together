@@ -1,6 +1,7 @@
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
+const fs = require('fs-extra');
 
 const port = process.env.PORT || 4000;
 
@@ -10,10 +11,12 @@ const server = http.createServer(app);
 
 const io = socketIo(server);
 
-let wordList = [];
-let foundWords = [];
-let letterList = [];
-let centerLetter = '';
+const savedInfo = fs.readJSONSync('save.json');
+
+let wordList = savedInfo.wordList || [];
+let foundWords = savedInfo.foundWords || [];
+let letterList = savedInfo.letterList || [];
+let centerLetter = savedInfo.centerLetter || '';
 
 const checkLetters = (word) => {
     const letterArray = word.split('');
@@ -25,6 +28,12 @@ const checkLetters = (word) => {
     }
     return true;
 };
+
+const updateFile = (updates) => {
+    let contents = fs.readJSONSync('save.json');
+    contents = { ...contents, ...updates };
+    fs.writeJSON('save.json', contents);
+}
 
 io.on('connection', socket => {
     console.log('new client connected');
@@ -44,6 +53,9 @@ io.on('connection', socket => {
         } else {
             socket.emit('correctGuess', word);
             foundWords = [...foundWords, { word, name }];
+
+            updateFile({ foundWords });
+
             io.sockets.emit('foundWords', foundWords);
         }
     });
@@ -91,6 +103,8 @@ app.get('/refresh', async (req, res) => {
         return "no center letter";
     })(wordList, letterList);
 
+    updateFile({ wordList, letterList, centerLetter });
+
     res.send({
         wordList,
         foundWords,
@@ -110,6 +124,9 @@ app.get('/status', (req, res) => {
 
 app.get('/reset', (req, res) => {
     foundWords = [];
+
+    updateFile({ foundWords });
+
     res.send({
         wordList,
         foundWords,
