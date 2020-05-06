@@ -1,10 +1,6 @@
 const fetch = require('node-fetch');
 const $ = require('cheerio');
 
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-}
-
 class Scraper {
     constructor(url) {
         this.url = url || process.env.BEE_URL;
