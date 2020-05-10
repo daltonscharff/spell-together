@@ -1,164 +1,66 @@
-const express = require('express');
-const http = require('http');
-const socketIo = require('socket.io');
-const fs = require('fs-extra');
-const { Client } = require('pg');
-const moment = require('moment');
-
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
-const port = process.env.PORT;
-const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
-const client = new Client({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
-    port: process.env.DB_PORT
+const Scraper = require('./utils/scraper');
+const { Client, Pool } = require('pg');
+
+const pool = new Pool({
+    connectionString: process.env.DB_CONNECTION_STRING,
+    debug: true
 });
+const today = new Date();
 
-let wordList = [];
-let foundWords = [];
-let letterList = [];
-let centerLetter = '';
+let answers;
+let letters;
+let centerLetter;
 
-const initServer = async () => {
-    try {
-        await client.connect();
-        let res = await client.query('SELECT * FROM days ORDER BY date DESC LIMIT 1;');
+// on startup, check days table for today's entry
+// if exists: read table data into memory
+// if not exists: scrape data and insert into database
+(async () => {
 
-        if (res.rows.length > 0) {
-            console.log(res.rows[0]);
-            wordList = res.rows[0].valid_words;
-            letterList = res.rows[0].all_letters;
-            centerLetter = res.rows[0].center_letter;
-        } else {
-            const data = await scrapeData();
-            wordList = data.wordList;
-            letterList = data.letterList;
-            centerLetter = data.centerLetter;
-            res = await client.query('INSERT INTO days (date, valid_words, all_letters, center_letter) VALUES ($1, $2, $3, $4);', [new Date(), JSON.stringify(['a', 'b']), JSON.stringify(['c']), centerLetter]);
+    pool.connect();
+    console.log(today);
+    const result = await pool.query('SELECT * FROM game_view WHERE date=$1', [today]);
+    console.log(result.rowCount);
+
+    if (result.rowCount) {
+        console.log('no scrape');
+
+    } else {
+        const scraper = new Scraper();
+        const scrapedData = await scraper.scrape();
+        answers = scrapedData.answers;
+        letters = scrapedData.letters;
+        centerLetter = scrapedData.centerLetter;
+
+        try {
+            const daysResponse = pool.query('INSERT INTO days (date, letters, center_letter) VALUES ($1, $2, $3) \
+            ON CONFLICT (date) DO NOTHING', [today, JSON.stringify(letters), centerLetter]);
+            let wordsQuery = 'INSERT INTO words (word) VALUES ' + answers.map((_, i) => `($${i + 1})`).join(',') + ' ON CONFLICT (word) DO NOTHING';
+            const wordsResponse = pool.query(wordsQuery, answers);
+            await Promise.all([daysResponse, wordsResponse]);
+        } catch (e) {
+            console.log('Error writing to days or words to database:', e);
         }
-    } catch (e) {
-        console.log(e);
+
+        try {
+            let daysQuery = 'SELECT id FROM days WHERE date=$1';
+            let wordsQuery = 'SELECT id FROM words WHERE ' + answers.map((_, i) => `word=$${i + 1}`).join(' OR ');
+            const [daysResponse, wordsResponse] = await Promise.all([pool.query(daysQuery, [today]), pool.query(wordsQuery, answers)]);
+
+            const dayId = daysResponse.rows[0].id;
+            const wordIds = wordsResponse.rows.map((row) => row.id);
+
+            let wordsToDaysQuery = 'INSERT INTO words_to_days (word_id, day_id) VALUES ' + answers.map((_, i) => `($${i + 2}, $1)`).join(',');
+            await pool.query(wordsToDaysQuery, [dayId, ...wordIds]);
+        } catch (e) {
+            console.log('Error reading days and words or writing words_to_days to database:', e);
+        }
     }
-    await client.end();
-};
+    await pool.end();
 
-initServer();
+    console.log({ answers, letters, centerLetter });
+})();
 
-
-const checkLetters = (word) => {
-    const letterArray = word.split('');
-    const letterSet = new Set(letterArray);
-    for (let letter of letterSet) {
-        if (!letterList.includes(letter)) {
-            return false;
-        }
-    }
-    return true;
-};
-
-const updateFile = (updates) => {
-    let contents = fs.readJSONSync('save.json');
-    contents = { ...contents, ...updates };
-    fs.writeJSON('save.json', contents);
-}
-
-io.on('connection', socket => {
-    console.log('new client connected');
-
-    socket.emit('setup', { letterList, centerLetter, foundWords, numOfAnswers: wordList.length });
-
-    socket.on('submitWord', ({ word, name }) => {
-        word = word.toLowerCase();
-        if (foundWords.map((values) => values.word).includes(word)) {
-            socket.emit('wordAlreadyFound', foundWords.find((value) => value.word === word));
-        } else if (!checkLetters(word)) {
-            socket.emit('incorrectLetters', word);
-        } else if (!word.includes(centerLetter)) {
-            socket.emit('noCenterLetter', word);
-        } else if (!wordList.includes(word)) {
-            socket.emit('notInWordList', word);
-        } else {
-            socket.emit('correctGuess', word);
-            foundWords = [...foundWords, { word, name }];
-
-            updateFile({ foundWords });
-
-            io.sockets.emit('foundWords', foundWords);
-        }
-    });
-
-    socket.on('disconnect', () => {
-        console.log('client disconnected');
-    });
-});
-
-
-// app.get('/', (req, res) => { res.send({ response: 'Server is running...' }).status(200); });
-
-// app.get('/refresh', async (req, res) => {
-//     scrapeData();
-
-//     foundWords = [];
-
-//     updateFile({ wordList, foundWords, letterList, centerLetter });
-
-//     res.send({
-//         wordList,
-//         foundWords,
-//         letterList,
-//         centerLetter
-//     });
-// });
-
-const scrapeData = async () => {
-    const fetch = require('node-fetch');
-    const $ = require('cheerio');
-
-    const r = await fetch(process.env.BEE_URL);
-    const html = await r.text();
-
-    const wordList = ((html) => {
-        const rawList = $('#main-answer-list .column-list', html).text().split('\n');
-        return rawList.map((value) => value.trim()).filter((value) => value.length);
-    })(html);
-
-    const letterList = ((answers) => {
-        let letterSet = new Set();
-        for (let word of answers) {
-            word = word.toLowerCase();
-            let letterArray = word.split('');
-            for (let letter of letterArray) {
-                letterSet.add(letter);
-            }
-        }
-        return Array.from(letterSet);
-    })(wordList);
-
-    const centerLetter = await (async () => {
-        const matches = html.match(/"color":(\[.*\]),"plotX"/g);
-        const match = matches[matches.length - 2];
-        const array = JSON.parse(match.match(/"color":(\[.*\]),"plotX"/)[1]);
-        const index = array.indexOf('firebrick');
-        const aCharCode = 97
-        return String.fromCharCode(aCharCode + index);
-    })(wordList, letterList);
-    return { wordList, letterList, centerLetter };
-}
-
-// app.get('/status', (req, res) => {
-//     res.send({
-//         wordList,
-//         foundWords,
-//         letterList,
-//         centerLetter
-//     });
-// });
-
-// server.listen(port, () => console.log(`listening on port http://localhost:${port}`));
