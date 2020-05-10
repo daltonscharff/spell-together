@@ -31,7 +31,7 @@ class Scraper {
 
     parseCenterLetter(html) {
         const graphColorArrayPattern = /"color":(\[.*\]),"plotX".+"text":"Center Letter Frequency"/g;
-        const graphColorArrayMarkup = html.match(graphColorArrayPattern);
+        const graphColorArrayMarkup = graphColorArrayPattern.exec(html)[1];
         const graphColorArray = JSON.parse(graphColorArrayMarkup);
         const indexOfFirebrick = graphColorArray.indexOf('firebrick');
         const centerLetterCharCode = 'a'.charCodeAt(0) + indexOfFirebrick;
