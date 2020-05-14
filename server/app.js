@@ -3,41 +3,38 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const Scraper = require('./utils/scraper');
-const { Client, Pool } = require('pg');
+const { Pool } = require('pg');
 
 const pool = new Pool({
     connectionString: process.env.DB_CONNECTION_STRING,
     debug: true
 });
-const today = new Date();
 
-let answers;
-let letters;
-let centerLetter;
+const getGameState = async (pool, date) => {
+    date = date || new Date;
+    let answers = [];
+    let letters = [];
+    let centerLetter = '';
 
-// on startup, check days table for today's entry
-// if exists: read table data into memory
-// if not exists: scrape data and insert into database
-(async () => {
-
-    pool.connect();
-    console.log(today);
-    const result = await pool.query('SELECT * FROM game_view WHERE date=$1', [today]);
-    console.log(result.rowCount);
+    const result = await pool.query('SELECT * FROM game_view WHERE date=$1', [date]);
 
     if (result.rowCount) {
-        console.log('no scrape');
-
+        console.log('pulling from db');
+        letters = result.rows[0].letters;
+        centerLetter = result.rows[0].center_letter;
+        answers = result.rows.map((row) => row.word);
     } else {
+        console.log('scraping');
         const scraper = new Scraper();
         const scrapedData = await scraper.scrape();
         answers = scrapedData.answers;
         letters = scrapedData.letters;
         centerLetter = scrapedData.centerLetter;
+        console.log(await scraper.scrape())
 
         try {
             const daysResponse = pool.query('INSERT INTO days (date, letters, center_letter) VALUES ($1, $2, $3) \
-            ON CONFLICT (date) DO NOTHING', [today, JSON.stringify(letters), centerLetter]);
+            ON CONFLICT (date) DO NOTHING', [date, JSON.stringify(letters), centerLetter]);
             let wordsQuery = 'INSERT INTO words (word) VALUES ' + answers.map((_, i) => `($${i + 1})`).join(',') + ' ON CONFLICT (word) DO NOTHING';
             const wordsResponse = pool.query(wordsQuery, answers);
             await Promise.all([daysResponse, wordsResponse]);
@@ -48,7 +45,7 @@ let centerLetter;
         try {
             let daysQuery = 'SELECT id FROM days WHERE date=$1';
             let wordsQuery = 'SELECT id FROM words WHERE ' + answers.map((_, i) => `word=$${i + 1}`).join(' OR ');
-            const [daysResponse, wordsResponse] = await Promise.all([pool.query(daysQuery, [today]), pool.query(wordsQuery, answers)]);
+            const [daysResponse, wordsResponse] = await Promise.all([pool.query(daysQuery, [date]), pool.query(wordsQuery, answers)]);
 
             const dayId = daysResponse.rows[0].id;
             const wordIds = wordsResponse.rows.map((row) => row.id);
@@ -59,8 +56,15 @@ let centerLetter;
             console.log('Error reading days and words or writing words_to_days to database:', e);
         }
     }
-    await pool.end();
 
+    return { answers, letters, centerLetter };
+
+};
+
+(async () => {
+
+    ({ answers, letters, centerLetter } = await getGameState(pool));
     console.log({ answers, letters, centerLetter });
-})();
 
+    await pool.end();
+})();
