@@ -30,13 +30,12 @@ class Scraper {
     }
 
     parseCenterLetter(html) {
-        const graphColorArrayPattern = /"color":(\[.*\]),"plotX".+"text":"Center Letter Frequency"/g;
-        const graphColorArrayMarkup = graphColorArrayPattern.exec(html)[1];
-        const graphColorArray = JSON.parse(graphColorArrayMarkup);
-        const indexOfFirebrick = graphColorArray.indexOf('firebrick');
-        const centerLetterCharCode = 'a'.charCodeAt(0) + indexOfFirebrick;
-
-        return String.fromCharCode(centerLetterCharCode);
+        const matches = html.match(/"color":(\[.*\]),"plotX"/g);
+        const match = matches[matches.length - 2];
+        const array = JSON.parse(match.match(/"color":(\[.*\]),"plotX"/)[1]);
+        const index = array.indexOf('firebrick');
+        const aCharCode = 97;
+        return String.fromCharCode(aCharCode + index);
     }
 
     async scrape() {
@@ -45,8 +44,10 @@ class Scraper {
             const html = await request.text();
 
             this.answers = this.parseAnswers(html);
+            console.log(this.answers)
             this.letters = this.parseLetters(this.answers);
             this.centerLetter = this.parseCenterLetter(html);
+            console.log(this.centerLetter);
         } catch (e) {
             return { error: e };
         }
