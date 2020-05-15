@@ -30,7 +30,6 @@ const getGameState = async (pool, date) => {
         answers = scrapedData.answers;
         letters = scrapedData.letters;
         centerLetter = scrapedData.centerLetter;
-        console.log(await scraper.scrape())
 
         try {
             const daysResponse = pool.query('INSERT INTO days (date, letters, center_letter) VALUES ($1, $2, $3) \

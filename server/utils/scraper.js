@@ -44,10 +44,8 @@ class Scraper {
             const html = await request.text();
 
             this.answers = this.parseAnswers(html);
-            console.log(this.answers)
             this.letters = this.parseLetters(this.answers);
             this.centerLetter = this.parseCenterLetter(html);
-            console.log(this.centerLetter);
         } catch (e) {
             return { error: e };
         }
