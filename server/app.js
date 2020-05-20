@@ -12,8 +12,7 @@ if (process.env.NODE_ENV !== 'production') {
 const init = async (db, date) => {
     date = date || new Date;
 
-    // let rows = await db.readGame(date);
-    let rows = [];
+    let rows = await db.readGame(date);
 
     let dayId;
     let answers;
@@ -30,8 +29,7 @@ const init = async (db, date) => {
         centerLetter = scrapedData.centerLetter;
 
         dayId = await db.writeDay(date, letters, centerLetter);
-        // await db.writeAnswers(answers, dayId);
-
+        await db.writeAnswers(answers, dayId);
     } else {
         console.log('reading');
         dayId = rows[0].day_id;

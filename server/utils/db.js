@@ -27,13 +27,17 @@ class Db {
     }
 
     async writeAnswers(answers, dayId) {
-        let values = answers.map((_, i) => `($${i + 1})`.join(','));
-        let sql = `INSERT INTO words (word) VALUES ${values} RETURNING id ON CONFLICT DO NOTHING`;
-        let result = await this.pool.query(sql, [...answers]);
+        let values = answers.map((_, i) => `($${i + 1})`).join(',');
+        let sql = `INSERT INTO words (word) VALUES ${values} ON CONFLICT DO NOTHING`;
+        let result = await this.pool.query(sql, answers);
+        console.log('a');
 
+        let where = answers.map((_, i) => `word=$${i + 1}`).join(' OR ');
+        sql = `SELECT id FROM words WHERE ${where}`;
+        result = await this.pool.query(sql, answers);
         let wordIds = result.rows.map((row) => row.id);
 
-        values = wordIds.map((_, i) => `($${i + 1}, ${wordIds.length + 1})`);
+        values = wordIds.map((_, i) => `($${i + 1}, $${wordIds.length + 1})`);
         sql = `INSERT INTO words_to_days (word_id, day_id) VALUES ${values}`;
         result = await this.pool.query(sql, [...wordIds, dayId]);
 
