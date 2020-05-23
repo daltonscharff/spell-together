@@ -42,7 +42,7 @@ const init = async (db, date) => {
 };
 
 const checkIfFound = (word, foundWords) => {
-    return foundWords.map((row) => row.word).includes(word);
+    return foundWords.find((row) => row.word === word);
 };
 
 const checkForCorrectLetters = (word, letters) => {
@@ -68,37 +68,36 @@ const checkInWordList = (word, answers) => {
     const db = new Db();
     ({ dayId, answers, letters, centerLetter } = await init(db));
 
-    console.log({ dayId, answers, letters, centerLetter })
-
     const app = express();
     const server = http.createServer(app);
     const io = SocketIo(server);
 
     io.on('connection', (socket) => {
-        socket.on('initRequest', (async (roomId) => {
+        socket.on('initRequest', (async ({ roomId }) => {
+            socket.join(roomId);
             socket.emit('initResponse', {
                 dayId,
                 letters,
                 centerLetter,
-                foundWords: await readFoundWords(pool, roomId, dayId)
+                foundWords: await db.readFoundWords(dayId, roomId)
             });
         }));
 
-        socket.on('submit', (async (word, name, dayId, roomId) => {
+        socket.on('submit', (async ({ word, name, dayId, roomId }) => {
             word = word.toLowerCase();
-            let foundWords = await readFoundWords(pool, roomId, dayId);
-            if (checkIfFound(word, foundWords)) {
-                socket.emit('alreadyFound', word);
+            let foundWords = await db.readFoundWords(dayId, roomId);
+            let found;
+            if (found = checkIfFound(word, foundWords)) {
+                socket.emit('alreadyFound', { word: found.word, name: found.player_name });
             } else if (!checkForCorrectLetters(word, letters)) {
                 socket.emit('incorrectLetters', word);
             } else if (!checkForCenterLetter(word, centerLetter)) {
-                socket.emit('noCenterLetter', word);
+                socket.emit('noCenterLetter', { word });
             } else if (!checkInWordList(word, answers)) {
-                socket.emit('notInList', word);
+                socket.emit('notInList', { word });
             } else {
-                socket.emit('correct', word);
-                writeFoundWord(word, name, pool, dayId, roomId);
-                io.sockets.emit('updateFoundWords', {
+                db.writeFoundWord(word, name, dayId, roomId);
+                io.in(roomId).emit('updateFoundWords', {
                     foundWords,
                     word,
                     name
@@ -111,7 +110,12 @@ const checkInWordList = (word, answers) => {
         res.send('Server is running...');
     });
 
+    app.get('/test', (req, res) => {
+        let path = require('path');
+        res.sendFile(path.join(__dirname + '/test.html'));
+    });
+
     server.listen(process.env.PORT, () => console.log(`listening on port ${process.env.PORT}`));
 
-    await db.disconnect();
+    // await db.disconnect();
 })();
