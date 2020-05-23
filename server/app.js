@@ -41,15 +41,6 @@ const init = async (db, date) => {
     return { dayId, answers, letters, centerLetter };
 };
 
-const getAnswerLengths = (answers) => {
-    const answerLengths = [];
-    answers.forEach((answer) => {
-        let answerLength = answer.word.length;
-        answerLengths[answerLength] = answerLengths[answerLength] + 1 || 1;
-    });
-    return answerLengths;
-};
-
 const checkIfFound = (word, foundWords) => {
     return foundWords.map((row) => row.word).includes(word);
 };
