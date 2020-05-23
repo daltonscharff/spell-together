@@ -30,7 +30,6 @@ class Db {
         let values = answers.map((_, i) => `($${i + 1})`).join(',');
         let sql = `INSERT INTO words (word) VALUES ${values} ON CONFLICT DO NOTHING`;
         let result = await this.pool.query(sql, answers);
-        console.log('a');
 
         let where = answers.map((_, i) => `word=$${i + 1}`).join(' OR ');
         sql = `SELECT id FROM words WHERE ${where}`;
