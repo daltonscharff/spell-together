@@ -9,18 +9,16 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
-const init = async (db, date) => {
-    date = date || new Date;
+const init = async (db) => {
+    let date = new Date;
+    let day = await db.readDay(date);
 
-    let rows = await db.readGame(date);
-
-    let dayId;
     let answers;
     let letters;
     let centerLetter;
 
-    if (rows.length === 0) {
-        console.log('scraping')
+    if (!day) {
+        console.log('scraping');
         const scraper = new Scraper();
         const scrapedData = await scraper.scrape();
 
@@ -28,17 +26,18 @@ const init = async (db, date) => {
         letters = scrapedData.letters;
         centerLetter = scrapedData.centerLetter;
 
-        dayId = await db.writeDay(date, letters, centerLetter);
-        await db.writeAnswers(answers, dayId);
+        await db.clear();
+        let writeDayPromise = db.writeDay(date, letters, centerLetter);
+        let writeAnswerPromise = db.writeAnswers(answers);
+        await Promise.all([writeDayPromise, writeAnswerPromise]);
     } else {
         console.log('reading');
-        dayId = rows[0].day_id;
-        answers = rows.map((row) => row.word);
-        letters = rows[0].letters;
-        centerLetter = rows[0].center_letter;
+        letters = day.letters;
+        centerLetter = day.center_letter;
+        answers = await db.readAnswers();
     }
 
-    return { dayId, answers, letters, centerLetter };
+    return { answers, letters, centerLetter };
 };
 
 const checkIfFound = (word, foundWords) => {
@@ -61,12 +60,12 @@ const checkForCenterLetter = (word, centerLetter) => {
 };
 
 const checkInWordList = (word, answers) => {
-    return answers.includes(word);
+    return answers.find((answer => answer.word === word));
 };
 
 (async () => {
     const db = new Db();
-    ({ dayId, answers, letters, centerLetter } = await init(db));
+    ({ answers, letters, centerLetter } = await init(db));
 
     const app = express();
     const server = http.createServer(app);
@@ -76,16 +75,15 @@ const checkInWordList = (word, answers) => {
         socket.on('initRequest', (async ({ roomId }) => {
             socket.join(roomId);
             socket.emit('initResponse', {
-                dayId,
                 letters,
                 centerLetter,
-                foundWords: await db.readFoundWords(dayId, roomId)
+                foundWords: await db.readFoundWords(roomId)
             });
         }));
 
-        socket.on('submit', (async ({ word, name, dayId, roomId }) => {
+        socket.on('submit', (async ({ word, name, roomId }) => {
             word = word.toLowerCase();
-            let foundWords = await db.readFoundWords(dayId, roomId);
+            let foundWords = await db.readFoundWords(roomId);
             let found;
             if (found = checkIfFound(word, foundWords)) {
                 socket.emit('alreadyFound', { word: found.word, name: found.player_name });
@@ -96,7 +94,7 @@ const checkInWordList = (word, answers) => {
             } else if (!checkInWordList(word, answers)) {
                 socket.emit('notInList', { word });
             } else {
-                db.writeFoundWord(word, name, dayId, roomId);
+                db.writeFoundWord(word, name, roomId);
                 io.in(roomId).emit('updateFoundWords', {
                     foundWords,
                     word,
