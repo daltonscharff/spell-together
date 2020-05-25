@@ -115,5 +115,4 @@ const checkInWordList = (word, answers) => {
 
     server.listen(process.env.PORT, () => console.log(`listening on port ${process.env.PORT}`));
 
-    // await db.disconnect();
 })();

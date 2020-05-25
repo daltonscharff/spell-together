@@ -15,14 +15,12 @@
         const responseArea = document.querySelector('#responseArea');
         let roomId = 1;
         let name = "Dalton";
-        let dayId;
 
         socket.emit("initRequest", { roomId });
         console.log("sent initRequest");
 
         socket.on("initResponse", (response) => {
             responseArea.textContent = "initResponse: " + JSON.stringify(response);
-            dayId = response.dayId;
         });
         socket.on("alreadyFound", (response) => {
             responseArea.textContent = "alreadyFound: " + JSON.stringify(response);
@@ -45,7 +43,7 @@
             let inputElement = document.querySelector("#input");
             let word = inputElement.value;
             console.log("input value:", word);
-            socket.emit("submit", { word, name, dayId, roomId });
+            socket.emit("submit", { word, name, roomId });
             inputElement.value = "";
         });
     </script>
