@@ -24,12 +24,15 @@ class Db {
         return result.rows[0].id;
     }
 
-    async writeAnswers(answers) {
-        let values = answers.map((_, i) => `($${i + 1})`).join(',');
-        let sql = `INSERT INTO words (word) VALUES ${values} RETURNING id`;
-        let result = await this.pool.query(sql, answers);
+    async writeWords(words) {
+        let insertPromises = [];
+        words.forEach((word) => {
+            let sql = 'INSERT INTO words (word, definition) VALUES ($1, $2) RETURNING id';
+            insertPromises.push(this.pool.query(sql, [word.word, word.definition]));
+        });
+        let results = await Promise.all(insertPromises);
 
-        return result.rows.map((row) => row.id);
+        return results.map((result) => result.rows[0].id);
     }
 
     async writeFoundWord(word, name, roomId) {

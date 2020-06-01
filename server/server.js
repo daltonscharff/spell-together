@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const SocketIo = require('socket.io');
 const moment = require('moment');
+const fetch = require('node-fetch');
 
 const Db = require('./utils/db');
 const Scraper = require('./utils/scraper');
@@ -29,7 +30,7 @@ const init = async (db, date) => {
 
         await db.clear();
         const writeDayPromise = db.writeDay(date, letters, centerLetter);
-        const writeAnswerPromise = db.writeAnswers(answers);
+        const writeAnswerPromise = db.writeWords(await getWordData(answers));
         await Promise.all([writeDayPromise, writeAnswerPromise]);
     } else {
         console.log('reading');
@@ -37,6 +38,27 @@ const init = async (db, date) => {
         letters = day.letters;
         centerLetter = day.center_letter;
     }
+};
+
+const getWordData = async (words) => {
+    let headers = {
+        "x-rapidapi-host": "wordsapiv1.p.rapidapi.com",
+        "x-rapidapi-key": process.env.RAPID_API_KEY,
+        "useQueryString": true
+    };
+
+    let wordList = [];
+    for (let word of words) {
+        let baseURL = `https://wordsapiv1.p.rapidapi.com/words/${word}/`;
+        let definitions = await fetch(baseURL + 'definitions', { headers });
+        let definitionsJson = await definitions.json();
+
+        wordList.push({
+            word,
+            definition: definitionsJson.definitions.length ? definitionsJson.definitions[0].definition : 'no definition available'
+        })
+    }
+    return wordList;
 };
 
 const checkIfFound = (word, foundWords) => {
