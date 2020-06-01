@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const SocketIo = require('socket.io');
+const moment = require('moment');
 
 const Db = require('./utils/db');
 const Scraper = require('./utils/scraper');
@@ -9,13 +10,13 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
-const init = async (db) => {
-    let date = new Date;
-    let day = await db.readDay(date);
+let answers = [];
+let letters = [];
+let centerLetter = '';
+let gameDate = new moment.utc();
 
-    let answers;
-    let letters;
-    let centerLetter;
+const init = async (db, date) => {
+    let day = await db.readDay(date);
 
     if (!day) {
         console.log('scraping');
@@ -27,17 +28,15 @@ const init = async (db) => {
         centerLetter = scrapedData.centerLetter;
 
         await db.clear();
-        let writeDayPromise = db.writeDay(date, letters, centerLetter);
-        let writeAnswerPromise = db.writeAnswers(answers);
+        const writeDayPromise = db.writeDay(date, letters, centerLetter);
+        const writeAnswerPromise = db.writeAnswers(answers);
         await Promise.all([writeDayPromise, writeAnswerPromise]);
     } else {
         console.log('reading');
+        answers = await db.readAnswers();
         letters = day.letters;
         centerLetter = day.center_letter;
-        answers = await db.readAnswers();
     }
-
-    return { answers, letters, centerLetter };
 };
 
 const checkIfFound = (word, foundWords) => {
@@ -63,9 +62,27 @@ const checkInWordList = (word, answers) => {
     return answers.find((answer => answer.word === word));
 };
 
+const restartNeeded = (serverStartTime, gameRestartTime) => {
+    let now = new moment.utc();
+    return serverStartTime.isBefore(gameRestartTime) && now.isAfter(gameRestartTime);
+};
+
+const getGameDate = (serverStartTime, gameRestartTime) => {
+    let now = new moment.utc();
+    if (serverStartTime.isBefore(gameRestartTime)) {
+        return new moment.utc().subtract(1, 'day')
+    } else {
+        return new moment.utc();
+    }
+}
+
 (async () => {
     const db = new Db();
-    ({ answers, letters, centerLetter } = await init(db));
+    const serverStartTime = new moment.utc();
+    const gameRestartTime = new moment.utc('18:00 -0500', 'HH:mm Z'); // 6pm Central
+    gameDate = getGameDate(serverStartTime, gameRestartTime);
+
+    await init(db, gameDate);
 
     const app = express();
     const server = http.createServer(app);
@@ -73,11 +90,15 @@ const checkInWordList = (word, answers) => {
 
     io.on('connection', (socket) => {
         socket.on('initRequest', (async ({ roomId }) => {
+            if (restartNeeded(serverStartTime, gameRestartTime)) {
+                await init(db, new moment.utc());
+            }
             socket.join(roomId);
             socket.emit('initResponse', {
                 letters,
                 centerLetter,
-                foundWords: await db.readFoundWords(roomId)
+                foundWords: await db.readFoundWords(roomId),
+                numOfAnswers: answers.length
             });
         }));
 
@@ -86,15 +107,16 @@ const checkInWordList = (word, answers) => {
             let foundWords = await db.readFoundWords(roomId);
             let found;
             if (found = checkIfFound(word, foundWords)) {
-                socket.emit('alreadyFound', { word: found.word, name: found.player_name });
+                socket.emit('alreadyFound', { word: found.word, name: found.name });
             } else if (!checkForCorrectLetters(word, letters)) {
-                socket.emit('incorrectLetters', word);
+                socket.emit('incorrectLetters', { word });
             } else if (!checkForCenterLetter(word, centerLetter)) {
                 socket.emit('noCenterLetter', { word });
             } else if (!checkInWordList(word, answers)) {
                 socket.emit('notInList', { word });
             } else {
-                db.writeFoundWord(word, name, roomId);
+                await db.writeFoundWord(word, name, roomId);
+                foundWords = await db.readFoundWords(roomId);
                 io.in(roomId).emit('updateFoundWords', {
                     foundWords,
                     word,

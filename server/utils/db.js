@@ -55,7 +55,7 @@ class Db {
     }
 
     async readFoundWords(roomId) {
-        let sql = 'SELECT word, definition, player_name FROM words_to_rooms JOIN words ON word_id=words.id WHERE room_id=$1';
+        let sql = 'SELECT word, definition, player_name as name FROM words_to_rooms JOIN words ON word_id=words.id WHERE room_id=$1';
         let result = await this.pool.query(sql, [roomId]);
         return result.rows;
     }

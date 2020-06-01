@@ -14,7 +14,7 @@
         const socket = io('http://localhost:4000');
         const responseArea = document.querySelector('#responseArea');
         let roomId = 1;
-        let name = "Dalton";
+        let name = "TestPage";
 
         socket.emit("initRequest", { roomId });
         console.log("sent initRequest");
