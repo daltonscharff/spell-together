@@ -21,7 +21,7 @@ const wordListItemStyle = {
 };
 
 const WordList = ({ foundWords = [], numOfAnswers = 0 }) => {
-    foundWords = foundWords.sort((a, b) => a.word > b.word)
+    foundWords = foundWords.sort((a, b) => a.word > b.word);
     return (
         <div style={containerStyle} >
             <div style={{ margin: '0 0 1em' }}>
@@ -31,7 +31,7 @@ const WordList = ({ foundWords = [], numOfAnswers = 0 }) => {
                 {foundWords.map((value) => (
                     <div style={wordListItemStyle} key={value.word}>
                         <span style={{
-                            backgroundColor: (new Set(value.word.toLowerCase().split(''))).size == 7 ? '#facd04' : 'transparent'
+                            backgroundColor: (new Set(value.word.toLowerCase().split(''))).size === 7 ? '#facd04' : 'transparent'
                         }}>
                             {`${value.word.charAt(0).toUpperCase()}${value.word.substring(1, value.word.length).toLowerCase()}`}
                         </span>

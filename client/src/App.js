@@ -36,51 +36,55 @@ const errorStyle = {
 
 const App = ({ socket }) => {
   const [foundWords, setFoundWords] = useState([]);
-  const [letterList, setLetterList] = useState([]);
+  const [letters, setLetters] = useState([]);
   const [centerLetter, setCenterLetter] = useState('');
   const [numOfAnswers, setNumOfAnswers] = useState(0);
   const [error, setError] = useState('.');
   const [playerInput, setPlayerInput] = useState('');
   const [playerName, setPlayerName] = useState(localStorage.getItem('playerName') || '');
   const [nameFieldValue, setNameFieldValue] = useState('');
+  const roomId = 1;
 
   useEffect(() => {
-    socket.on('setup', (data) => {
+    socket.emit("initRequest", { roomId });
+
+    socket.on('initResponse', (data) => {
       setFoundWords(data.foundWords);
-      setLetterList(data.letterList);
+      setLetters(data.letters);
       setCenterLetter(data.centerLetter);
       setNumOfAnswers(data.numOfAnswers);
-      console.log('setting up new connection');
     });
 
-    socket.on('foundWords', (data) => {
+    socket.on('updateFoundWords', (data) => {
       console.log('someone found a word');
-      setFoundWords(data);
+      console.log(data);
+      setFoundWords(data.foundWords);
     });
 
-    socket.on('wordAlreadyFound', (value) => {
-      console.log('already found ' + value);
-      setError(`Already found by ${value.name}`);
+    socket.on('alreadyFound', (data) => {
+      console.log('already found ' + data);
+      setError(`Already found by ${data.name}`);
       setTimeout(() => setError('.'), 3000);
     });
 
-    socket.on('incorrectLetters', (word) => {
-      console.log('incorrect letters: ' + word);
+    socket.on('incorrectLetters', (data) => {
+      console.log('incorrect letters: ' + data);
       setError('Incorrect letters');
       setTimeout(() => setError('.'), 3000);
     });
 
-    socket.on('noCenterLetter', (word) => {
-      console.log('no center letter: ' + word);
+    socket.on('noCenterLetter', (data) => {
+      console.log('no center letter: ' + data);
       setError('Missing middle letter');
       setTimeout(() => setError('.'), 3000);
     });
 
-    socket.on('notInWordList', (word) => {
-      console.log('not in word list: ' + word);
+    socket.on('notInList', (data) => {
+      console.log('not in list: ' + data);
       setError('Not in word list');
       setTimeout(() => setError('.'), 3000);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const addLetter = (letter) => {
@@ -92,19 +96,19 @@ const App = ({ socket }) => {
   };
 
   const shuffleLetters = () => {
-    let letters = letterList.filter((value) => value !== centerLetter);
+    let letters = this.letters.filter((value) => value !== centerLetter);
     for (let i in letters) {
       const j = Math.floor(Math.random() * i)
       const temp = letters[i];
       letters[i] = letters[j];
       letters[j] = temp;
     }
-    setLetterList([centerLetter, ...letters]);
+    setLetters([centerLetter, ...letters]);
   };
 
   const submitWord = () => {
     if (!playerInput) return;
-    socket.emit('submitWord', { word: playerInput, name: playerName });
+    socket.emit('submit', { word: playerInput, name: playerName, roomId });
     console.log('submitting word: ' + playerInput);
     setPlayerInput('');
   };
@@ -136,23 +140,23 @@ const App = ({ socket }) => {
       </form>
       <div style={{
         textAlign: 'center',
-        display: letterList.length ? 'none' : 'block'
+        display: letters.length ? 'none' : 'block'
       }}>
         <div>Loading...</div>
         <br />
         <p style={{ fontSize: '.75em' }}>...if you have the time to read this, there is probably something wrong.</p>
       </div>
-      <div style={{ ...containerStyle, display: playerName && letterList.length ? 'flex' : 'none' }}>
+      <div style={{ ...containerStyle, display: playerName && letters.length ? 'flex' : 'none' }}>
         <div style={halfContainerStyle}>
           <div style={{ ...errorStyle, visibility: error !== '.' ? 'visible' : 'hidden' }}>{error}</div>
           <InputField
             playerInput={playerInput}
             centerLetter={centerLetter}
-            otherLetters={letterList.filter((value) => value !== centerLetter)}
+            otherLetters={letters.filter((value) => value !== centerLetter)}
           />
           <Hive
             centerLetter={centerLetter}
-            otherLetters={letterList.filter((value) => value !== centerLetter)}
+            otherLetters={letters.filter((value) => value !== centerLetter)}
             addLetter={addLetter}
           />
           <Buttons
