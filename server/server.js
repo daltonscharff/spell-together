@@ -11,7 +11,10 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
+
+const db = new Db();
 let answers = [];
+let definitions = {};
 let letters = [];
 let centerLetter = '';
 let gameDate = new moment.utc();
@@ -27,38 +30,38 @@ const init = async (db, date) => {
         answers = scrapedData.answers;
         letters = scrapedData.letters;
         centerLetter = scrapedData.centerLetter;
+        definitions = await getDefinitions(answers);
 
         await db.clear();
         const writeDayPromise = db.writeDay(date, letters, centerLetter);
-        const writeAnswerPromise = db.writeWords(await getWordData(answers));
+        const writeAnswerPromise = db.writeWords(answers.map((answer) => ({ word: answer, definition: definitions[answer] })));
         await Promise.all([writeDayPromise, writeAnswerPromise]);
     } else {
         console.log('reading');
-        answers = await db.readAnswers();
+        let words = await db.readWords();
+        answers = words.map(word => word.word);
+        words.forEach((word) => definitions[word.word] = word.definition);
         letters = day.letters;
         centerLetter = day.center_letter;
     }
 };
 
-const getWordData = async (words) => {
+const getDefinitions = async (words) => {
     let headers = {
         "x-rapidapi-host": "wordsapiv1.p.rapidapi.com",
         "x-rapidapi-key": process.env.RAPID_API_KEY,
         "useQueryString": true
     };
 
-    let wordList = [];
+    let definitions = {};
     for (let word of words) {
         let baseURL = `https://wordsapiv1.p.rapidapi.com/words/${word}/`;
-        let definitions = await fetch(baseURL + 'definitions', { headers });
-        let definitionsJson = await definitions.json();
+        let res = await fetch(baseURL + 'definitions', { headers });
+        let definitionsJson = await res.json();
 
-        wordList.push({
-            word,
-            definition: definitionsJson.definitions.length ? definitionsJson.definitions[0].definition : 'no definition available'
-        })
+        definitions[word] = !!definitionsJson.definitions && definitionsJson.definitions.length ? definitionsJson.definitions[0].definition : undefined;
     }
-    return wordList;
+    return definitions;
 };
 
 const checkIfFound = (word, foundWords) => {
@@ -81,7 +84,7 @@ const checkForCenterLetter = (word, centerLetter) => {
 };
 
 const checkInWordList = (word, answers) => {
-    return answers.find((answer => answer.word === word));
+    return answers.includes(word);
 };
 
 const restartNeeded = (serverStartTime, gameRestartTime) => {
@@ -99,7 +102,6 @@ const getGameDate = (serverStartTime, gameRestartTime) => {
 }
 
 (async () => {
-    const db = new Db();
     const serverStartTime = new moment.utc();
     const gameRestartTime = new moment.utc('18:00 -0500', 'HH:mm Z'); // 6pm Central
     gameDate = getGameDate(serverStartTime, gameRestartTime);
@@ -155,6 +157,24 @@ const getGameDate = (serverStartTime, gameRestartTime) => {
     app.get('/test', (req, res) => {
         let path = require('path');
         res.sendFile(path.join(__dirname + '/test.html'));
+    });
+
+    app.get('/status', async (req, res) => {
+        const found = await db.readFoundWords(req.query.roomId) || [];
+        const foundWords = found.map(found => found.word);
+        const remainingWords = answers.filter(answer => !foundWords.includes(answer));
+        const remaining = {};
+        console.log(definitions);
+        remainingWords.forEach(word => {
+            remaining[word] = definitions[word];
+        });
+        res.send({
+            answers,
+            letters,
+            centerLetter,
+            found,
+            remaining,
+        });
     });
 
     server.listen(process.env.PORT, () => console.log(`listening on port ${process.env.PORT}`));

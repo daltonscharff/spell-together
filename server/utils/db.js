@@ -51,7 +51,7 @@ class Db {
         return result.rows[0];
     }
 
-    async readAnswers() {
+    async readWords() {
         let sql = `SELECT word, definition FROM words`;
         let result = await this.pool.query(sql);
         return result.rows;
