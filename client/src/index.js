@@ -5,7 +5,7 @@ import io from 'socket.io-client';
 import './index.css';
 import App from './App';
 
-const socket = io(process.env.SOCKET_URL || 'http://localhost:4000');
+const socket = io(process.env.REACT_APP_SOCKET_URL || 'http://localhost:4000');
 
 ReactDOM.render(
   <React.StrictMode>
