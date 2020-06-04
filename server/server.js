@@ -17,9 +17,13 @@ let answers = [];
 let definitions = {};
 let letters = [];
 let centerLetter = '';
-let gameDate = new moment.utc();
 
-const init = async (db, date) => {
+const gameRestartTime = new moment.utc('18:00 -0500', 'HH:mm Z'); // 6pm Central
+let gameLoadTime = new moment.utc();
+
+const init = async (db) => {
+    const date = getGameDate(gameLoadTime, gameRestartTime);
+    gameLoadTime = new moment.utc();
     let day = await db.readDay(date);
 
     if (!day) {
@@ -102,11 +106,7 @@ const getGameDate = (serverStartTime, gameRestartTime) => {
 }
 
 (async () => {
-    const serverStartTime = new moment.utc();
-    const gameRestartTime = new moment.utc('18:00 -0500', 'HH:mm Z'); // 6pm Central
-    gameDate = getGameDate(serverStartTime, gameRestartTime);
-
-    await init(db, gameDate);
+    await init(db);
 
     const app = express();
     const server = http.createServer(app);
@@ -114,8 +114,8 @@ const getGameDate = (serverStartTime, gameRestartTime) => {
 
     io.on('connection', (socket) => {
         socket.on('initRequest', (async ({ roomId }) => {
-            if (restartNeeded(serverStartTime, gameRestartTime)) {
-                await init(db, new moment.utc());
+            if (restartNeeded(gameLoadTime, gameRestartTime)) {
+                await init(db);
             }
             socket.join(roomId);
             socket.emit('initResponse', {
@@ -152,11 +152,6 @@ const getGameDate = (serverStartTime, gameRestartTime) => {
 
     app.get('/', (req, res) => {
         res.send('Server is running...');
-    });
-
-    app.get('/test', (req, res) => {
-        let path = require('path');
-        res.sendFile(path.join(__dirname + '/test.html'));
     });
 
     app.get('/status', async (req, res) => {
