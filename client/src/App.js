@@ -96,14 +96,14 @@ const App = ({ socket }) => {
   };
 
   const shuffleLetters = () => {
-    let letters = this.letters.filter((value) => value !== centerLetter);
-    for (let i in letters) {
+    let filteredLetters = letters.filter((value) => value !== centerLetter);
+    for (let i in filteredLetters) {
       const j = Math.floor(Math.random() * i)
-      const temp = letters[i];
-      letters[i] = letters[j];
-      letters[j] = temp;
+      const temp = filteredLetters[i];
+      filteredLetters[i] = filteredLetters[j];
+      filteredLetters[j] = temp;
     }
-    setLetters([centerLetter, ...letters]);
+    setLetters([centerLetter, ...filteredLetters]);
   };
 
   const submitWord = () => {
