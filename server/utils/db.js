@@ -27,8 +27,8 @@ class Db {
     async writeWords(words) {
         let insertPromises = [];
         words.forEach((word) => {
-            let sql = 'INSERT INTO words (word, definition) VALUES ($1, $2) RETURNING id';
-            insertPromises.push(this.pool.query(sql, [word.word, word.definition]));
+            let sql = 'INSERT INTO words (word) VALUES ($1) RETURNING id';
+            insertPromises.push(this.pool.query(sql, [word]));
         });
         let results = await Promise.all(insertPromises);
 
@@ -52,13 +52,13 @@ class Db {
     }
 
     async readWords() {
-        let sql = `SELECT word, definition FROM words`;
+        let sql = `SELECT word FROM words`;
         let result = await this.pool.query(sql);
         return result.rows;
     }
 
     async readFoundWords(roomId) {
-        let sql = 'SELECT word, definition, player_name as name FROM words_to_rooms JOIN words ON word_id=words.id WHERE room_id=$1';
+        let sql = 'SELECT word, player_name as name FROM words_to_rooms JOIN words ON word_id=words.id WHERE room_id=$1';
         let result = await this.pool.query(sql, [roomId]);
         return result.rows;
     }
