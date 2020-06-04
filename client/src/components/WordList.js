@@ -11,13 +11,14 @@ const containerStyle = {
 };
 const wordListStyle = {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
     flexWrap: 'wrap'
 };
 const wordListItemStyle = {
     margin: '.25em 0',
     borderBottom: '1px solid #e6e6e6',
-    maxWidth: '8em'
+    width: '50%',
+    minWidth: '8em'
 };
 
 const WordList = ({ foundWords = [], numOfAnswers = 0 }) => {
