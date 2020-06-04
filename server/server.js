@@ -135,12 +135,7 @@ const getGameDate = (serverStartTime, gameRestartTime) => {
     app.get('/status', async (req, res) => {
         const found = await db.readFoundWords(req.query.roomId) || [];
         const foundWords = found.map(found => found.word);
-        const remainingWords = answers.filter(answer => !foundWords.includes(answer));
-        const remaining = {};
-        console.log(definitions);
-        remainingWords.forEach(word => {
-            remaining[word] = definitions[word];
-        });
+        const remaining = answers.filter((answer) => !foundWords.includes(answer));
         res.send({
             answers,
             letters,

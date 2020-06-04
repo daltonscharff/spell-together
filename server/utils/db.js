@@ -54,7 +54,7 @@ class Db {
     async readWords() {
         let sql = `SELECT word FROM words`;
         let result = await this.pool.query(sql);
-        return result.rows;
+        return result.rows.map((row) => row.word);
     }
 
     async readFoundWords(roomId) {
