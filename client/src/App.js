@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import Hive from './components/Hive';
 import Buttons from './components/Buttons';
 import WordList from './components/WordList';
@@ -43,16 +44,19 @@ const App = ({ socket }) => {
   const [playerInput, setPlayerInput] = useState('');
   const [playerName, setPlayerName] = useState(localStorage.getItem('playerName') || '');
   const [nameFieldValue, setNameFieldValue] = useState('');
+  const [answerLengths, setAnswerLengths] = useState({});
   const roomId = 1;
 
   useEffect(() => {
     socket.emit("initRequest", { roomId });
 
     socket.on('initResponse', (data) => {
+      console.log(data);
       setFoundWords(data.foundWords);
       setLetters(data.letters);
       setCenterLetter(data.centerLetter);
       setNumOfAnswers(data.numOfAnswers);
+      setAnswerLengths(data.answerLengths);
     });
 
     socket.on('updateFoundWords', (data) => {
@@ -169,6 +173,7 @@ const App = ({ socket }) => {
           <WordList
             foundWords={foundWords}
             numOfAnswers={numOfAnswers}
+            answerLengths={answerLengths}
           />
           <p
             onClick={() => setPlayerName()}

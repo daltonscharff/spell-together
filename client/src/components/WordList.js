@@ -1,5 +1,7 @@
 import React from 'react';
 
+import AnswerLengthGraph from './AnswerLengthGraph';
+
 const containerStyle = {
     display: 'flex',
     flexDirection: 'column',
@@ -21,13 +23,13 @@ const wordListItemStyle = {
     minWidth: '8em'
 };
 
-const WordList = ({ foundWords = [], numOfAnswers = 0 }) => {
+const WordList = ({ foundWords = [], numOfAnswers = 0, answerLengths }) => {
     foundWords = foundWords.sort((a, b) => a.word > b.word);
     return (
         <div style={containerStyle} >
             <div style={{ margin: '0 0 1em' }}>
                 You have found {foundWords.length} out of {numOfAnswers} words
-        </div>
+            </div>
             <div style={wordListStyle}>
                 {foundWords.map((value) => (
                     <div style={wordListItemStyle} key={value.word}>
@@ -44,6 +46,10 @@ const WordList = ({ foundWords = [], numOfAnswers = 0 }) => {
                     </div>
                 ))}
             </div>
+            <AnswerLengthGraph
+                foundWords={foundWords}
+                answerLengths={answerLengths}
+            />
         </div>
     )
 };
