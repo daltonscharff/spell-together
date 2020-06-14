@@ -1,8 +1,8 @@
 const getAnswerLengths = (answers) => {
-    const answerLengths = [];
+    const answerLengths = {};
     answers.forEach((answer) => {
-        let answerLength = answer.word.length;
-        answerLengths[answerLength] = answerLengths[answerLength] + 1 || 1;
+        let length = answer.length.toString();
+        answerLengths[length] = answerLengths[length] ? answerLengths[length] + 1 : 1;
     });
     return answerLengths;
 };

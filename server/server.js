@@ -2,10 +2,10 @@ const express = require('express');
 const http = require('http');
 const SocketIo = require('socket.io');
 const moment = require('moment');
-const fetch = require('node-fetch');
 
 const Db = require('./utils/db');
 const Scraper = require('./utils/scraper');
+const Stats = require('./utils/stats');
 
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
@@ -76,10 +76,12 @@ const checkForRestart = async (io, roomId) => {
         gameDate = newGameDate;
         await init(db, gameDate);
         io.in(roomId).emit('initResponse', {
+            gameDate,
             letters,
             centerLetter,
             foundWords: await db.readFoundWords(roomId),
-            numOfAnswers: answers.length
+            numOfAnswers: answers.length,
+            answerLengths: Stats.getAnswerLengths(answers)
         });
     }
 };
@@ -105,10 +107,12 @@ let gameDate = getGameDate();
             checkForRestart(io, roomId);
             socket.join(roomId);
             socket.emit('initResponse', {
+                gameDate,
                 letters,
                 centerLetter,
                 foundWords: await db.readFoundWords(roomId),
-                numOfAnswers: answers.length
+                numOfAnswers: answers.length,
+                answerLengths: Stats.getAnswerLengths(answers)
             });
         }));
 
