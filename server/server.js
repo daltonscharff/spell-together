@@ -11,18 +11,7 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
-
-const db = new Db();
-let answers = [];
-let letters = [];
-let centerLetter = '';
-
-const gameRestartTime = new moment.utc('18:00 -0500', 'HH:mm Z'); // 6pm Central
-let gameLoadTime = new moment.utc();
-
-const init = async (db) => {
-    const date = getGameDate(gameLoadTime, gameRestartTime);
-    gameLoadTime = new moment.utc();
+const init = async (db, date) => {
     let day = await db.readDay(date);
 
     if (!day) {
@@ -69,22 +58,43 @@ const checkInWordList = (word, answers) => {
     return answers.includes(word);
 };
 
-const restartNeeded = (serverStartTime, gameRestartTime) => {
-    let now = new moment.utc();
-    return serverStartTime.isBefore(gameRestartTime) && now.isAfter(gameRestartTime);
+const getGameDate = () => {
+    const now = new moment();
+    let date;
+    if (now.isBefore(gameRestartTime)) {
+        date = now.subtract(1, 'day');
+    } else {
+        date = now;
+    }
+    return date.format('YYYY-MM-DD');
 };
 
-const getGameDate = (serverStartTime, gameRestartTime) => {
-    let now = new moment.utc();
-    if (serverStartTime.isBefore(gameRestartTime)) {
-        return new moment.utc().subtract(1, 'day')
-    } else {
-        return new moment.utc();
+const checkForRestart = async (io, roomId) => {
+    let newGameDate = getGameDate();
+
+    if (newGameDate !== gameDate) {
+        gameDate = newGameDate;
+        await init(db, gameDate);
+        io.in(roomId).emit('initResponse', {
+            letters,
+            centerLetter,
+            foundWords: await db.readFoundWords(roomId),
+            numOfAnswers: answers.length
+        });
     }
-}
+};
+
+
+const db = new Db();
+let answers = [];
+let letters = [];
+let centerLetter = '';
+
+const gameRestartTime = new moment().set({ hours: 18, minutes: 0, seconds: 0 });
+let gameDate = getGameDate();
 
 (async () => {
-    await init(db);
+    await init(db, gameDate);
 
     const app = express();
     const server = http.createServer(app);
@@ -92,9 +102,7 @@ const getGameDate = (serverStartTime, gameRestartTime) => {
 
     io.on('connection', (socket) => {
         socket.on('initRequest', (async ({ roomId }) => {
-            if (restartNeeded(gameLoadTime, gameRestartTime)) {
-                await init(db);
-            }
+            checkForRestart(io, roomId);
             socket.join(roomId);
             socket.emit('initResponse', {
                 letters,
