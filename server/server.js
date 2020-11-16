@@ -92,7 +92,7 @@ let answers = [];
 let letters = [];
 let centerLetter = '';
 
-const gameRestartTime = new moment().set({ hours: 18, minutes: 0, seconds: 0 });
+const gameRestartTime = new moment().set({ hours: 17, minutes: 0, seconds: 0 });
 let gameDate = getGameDate();
 
 (async () => {
