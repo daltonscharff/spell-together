@@ -3,7 +3,7 @@ An implementation of the [New York Times Spelling Bee](https://www.nytimes.com/p
 
 The backend is hosted on Heroku and is built on Node. The frontend is hosted on Github Pages and built with React. The services interact via Socket IO, allowing for multidirectional communication without the frontend needing to poll for updates.
 
-![Spelling Bee](https://imgur.com/Pi6SQDC.png)
+![Spelling Bee](https://i.imgur.com/R3mha9g.png)
 
 ## Requirements
 * Node 12.x or later
