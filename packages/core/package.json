@@ -2,5 +2,8 @@
   "name": "spelling-bee-core",
   "version": "0.0.0",
   "main": "main.ts",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@prisma/client": "^3.1.1"
+  }
 }
