@@ -1,0 +1,14 @@
+{
+  "name": "spelling-bee",
+  "main": "main.ts",
+  "repository": "https://github.com/daltonscharff/multiplayer-spelling-bee.git",
+  "author": "Dalton Scharff",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/node": "^16.10.2",
+    "lerna": "^4.0.0",
+    "nodemon": "^2.0.13",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  }
+}
