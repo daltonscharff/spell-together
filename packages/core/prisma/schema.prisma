@@ -6,3 +6,47 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
+
+model Puzzle {
+  id           String   @id @default(uuid())
+  date         DateTime
+  letters      String[]
+  centerLetter String
+  maxScore     Int
+  answers      Word[]
+
+  records Record[]
+}
+
+model Record {
+  id         String   @id @default(uuid())
+  playerName String
+  foundAt    DateTime
+  puzzle     Puzzle   @relation(fields: [puzzleId], references: [id])
+  room       Room     @relation(fields: [roomId], references: [id])
+
+  puzzleId String
+  roomId   String
+}
+
+model Room {
+  id      String @id @default(uuid())
+  score   Int
+  name    String
+  answers Word[]
+
+  records Record[]
+}
+
+model Word {
+  id           String  @id @default(uuid())
+  word         String
+  pointValue   Int
+  definition   String?
+  partOfSpeech String?
+  synonym      String?
+  isPanagram   Boolean
+
+  puzzles Puzzle[]
+  rooms   Room[]
+}
