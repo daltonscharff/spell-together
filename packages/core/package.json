@@ -1,12 +1,18 @@
 {
   "name": "spelling-bee-core",
   "version": "0.0.0",
-  "main": "main.ts",
+  "main": "lib/index.js",
   "license": "UNLICENSED",
+  "scripts": {
+    "start": "ts-node --require dotenv/config ./src/index.ts"
+  },
   "dependencies": {
+    "dotenv": "^10.0.0",
+    "pg": "^8.7.1",
     "typeorm": "^0.2.38"
   },
   "devDependencies": {
+    "@types/node": "^16.10.2",
     "nodemon": "^2.0.13",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"

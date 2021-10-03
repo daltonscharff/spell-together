@@ -1,4 +1,4 @@
-import { Word } from "./word.entity";
+import { Word } from "./word";
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, BaseEntity } from "typeorm";
 
 @Entity('rooms')
