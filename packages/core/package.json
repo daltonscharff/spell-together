@@ -4,7 +4,8 @@
   "main": "lib/index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "ts-node --require dotenv/config ./src/index.ts"
+    "start": "ts-node --require dotenv/config ./src/index.ts",
+    "build": "tsc"
   },
   "dependencies": {
     "dotenv": "^10.0.0",

@@ -4,7 +4,7 @@ import { Record } from "./entities/record";
 import { Room } from "./entities/room";
 import { Word } from "./entities/word";
 
-async function connect() {
+export async function connect() {
     return createConnection({
         type: "postgres",
         url: process.env.DATABASE_URL,
@@ -19,4 +19,4 @@ async function connect() {
     })
 }
 
-module.exports({ connect, Puzzle, Record, Room, Word});
+export { Puzzle, Record, Room, Word }
