@@ -7,15 +7,15 @@ Packages:
 - Lerna for monorepo
 
 Gameplan:
-- [] basic api for puzzle, records, rooms, and words
+- [ ] basic api for puzzle, records, rooms, and words
 - [x] database
-- [] data validation
-- [] websocket endpoints
-- [] e2e testing
-- [] convert to monorepo
-- [] scraping tool
-- [] scraping tool unit testing
-- [] GUI
+- [ ] data validation
+- [ ] websocket endpoints
+- [ ] e2e testing
+- [ ] convert to monorepo
+- [ ] scraping tool
+- [ ] scraping tool unit testing
+- [ ] GUI
 
 Notes:
 - use `lerna add` instead of `yarn add` for new dependencies
