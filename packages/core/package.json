@@ -4,16 +4,18 @@
   "main": "lib/index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "ts-node --require dotenv/config ./src/index.ts",
+    "dev": "nodemon --require dotenv/config ./src/index.ts dotenv_config_path=../../.env",
+    "start": "ts-node ./src/index.ts",
     "build": "tsc"
   },
   "dependencies": {
-    "dotenv": "^10.0.0",
     "pg": "^8.7.1",
+    "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.38"
   },
   "devDependencies": {
     "@types/node": "^16.10.2",
+    "dotenv": "^10.0.0",
     "nodemon": "^2.0.13",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"

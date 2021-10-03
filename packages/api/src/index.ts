@@ -7,29 +7,21 @@ server.get('/ping', async (request, reply) => {
     return { pong: 'it worked!' };
 });
 
-server.get('/', async (request, reply) => {
-
+server.get('/rooms', async (request, reply) => {
+    return Room.find();
 });
 
-console.log(connect, Room)
-
-// const start = async () => {
-//     try {
-//         await server.listen(3000);
-//         console.log("Server started on http://localhost:3000");
-//     } catch (err) {
-//         server.log.error(err);
-//         process.exit(1);
-//     }
-// }
-// start();
-
-// connect().then(async () => {
-//     try {
-//         await server.listen(3000);
-//         console.log("Server started on http://localhost:3000");
-//     } catch (err) {
-//         server.log.error(err);
-//         process.exit(1);
-//     }
-// });
+connect({
+    url: process.env.DATABASE_URL,
+    logging: true
+})
+    .then(async () => {
+        try {
+            await server.listen(3000);
+            console.log("Server started on http://localhost:3000");
+        } catch (err) {
+            server.log.error(err);
+            process.exit(1);
+        }
+    })
+    .catch((error) => console.log(error))

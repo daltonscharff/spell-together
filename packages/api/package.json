@@ -4,15 +4,17 @@
   "main": "./lib/index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon --require dotenv/config ./src/index.ts dotenv_config_path=../../.env",
     "start": ""
   },
   "dependencies": {
     "fastify": "^3.22.0",
+    "reflect-metadata": "^0.1.13",
     "spelling-bee-core": "^0.0.0"
   },
   "devDependencies": {
     "@types/node": "^16.10.2",
+    "dotenv": "^10.0.0",
     "nodemon": "^2.0.13",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"
