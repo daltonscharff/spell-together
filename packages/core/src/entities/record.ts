@@ -1,21 +1,27 @@
 import { Puzzle } from "./puzzle";
 import { Room } from "./room";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, BaseEntity } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  BaseEntity,
+} from "typeorm";
 
-@Entity('records')
+@Entity("records")
 export class Record extends BaseEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
-    @Column({ length: 128 })
-    playerName: string;
+  @Column({ length: 128 })
+  playerName: string;
 
-    @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-    foundAt: string;
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  foundAt: string;
 
-    @ManyToOne(() => Puzzle)
-    puzzle: Puzzle;
+  @ManyToOne(() => Puzzle)
+  puzzle: Puzzle;
 
-    @ManyToOne(() => Room)
-    room: Room;
+  @ManyToOne(() => Room)
+  room: Room;
 }

@@ -1,4 +1,5 @@
 Packages:
+
 - Yarn as package manager
 - Fastify as http server
 - Typeorm for db creation/modification
@@ -7,6 +8,7 @@ Packages:
 - Lerna for monorepo
 
 Gameplan:
+
 - [ ] basic api for puzzle, records, rooms, and words
 - [x] database
 - [ ] data validation
@@ -18,9 +20,11 @@ Gameplan:
 - [ ] GUI
 
 Notes:
+
 - use `lerna add` instead of `yarn add` for new dependencies
 
 Scoring:
+
 - Beginner: 0%
 - Good Start: 2%
 - Moving Up: 5%
@@ -32,6 +36,7 @@ Scoring:
 - Genius: 70%
 
 Rules:
+
 - 4-letter words are worth 1 point each
 - Longer words earn 1 point per letter
 - Each puzzle includes at least one “pangram” which uses every letter

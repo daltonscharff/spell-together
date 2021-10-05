@@ -5,32 +5,27 @@ import { Record } from "./entities/record";
 import { Room } from "./entities/room";
 import { Word } from "./entities/word";
 
-export async function connect(options?: Omit<PostgresConnectionOptions, "type">) {
-    return createConnection({
-        type: "postgres",
-        entities: [
-            Puzzle,
-            Record,
-            Room,
-            Word
-        ],
-        migrations: [
-            "./migrations/**/*.ts"
-        ],
-        ...options
-    })
+export async function connect(
+  options?: Omit<PostgresConnectionOptions, "type">
+) {
+  return createConnection({
+    type: "postgres",
+    entities: [Puzzle, Record, Room, Word],
+    migrations: ["./migrations/**/*.ts"],
+    ...options,
+  });
 }
 
-export { Puzzle, Record, Room, Word }
+export { Puzzle, Record, Room, Word };
 
 if (require.main === module) {
-    connect({
-        url: process.env.DATABASE_URL,
-        synchronize: true,
-        logging: true
+  connect({
+    url: process.env.DATABASE_URL,
+    synchronize: true,
+    logging: true,
+  })
+    .then((connection) => {
+      connection.close();
     })
-        .then((connection) => {
-            connection.close();
-        })
-        .catch((error) => console.log(error));
+    .catch((error) => console.log(error));
 }
