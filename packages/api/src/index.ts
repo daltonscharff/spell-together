@@ -1,4 +1,4 @@
-import { connect, Room, Word } from "spelling-bee-core";
+import { connect } from "spelling-bee-core";
 import fastify from "fastify";
 import wordRoutes from "./routes/words";
 
