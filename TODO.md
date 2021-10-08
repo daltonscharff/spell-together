@@ -21,7 +21,7 @@ Gameplan:
 
 Notes:
 
-- use `lerna add` instead of `yarn add` for new dependencies
+- use `lerna add <package_name> packages/<core,api>` instead of `yarn add` for new dependencies
 
 Scoring:
 
