@@ -1,5 +1,4 @@
-Packages:
-
+## Packages
 - Yarn as package manager
 - Fastify as http server
 - Typeorm for db creation/modification
@@ -7,24 +6,21 @@ Packages:
 - Supertest for e2e testing
 - Lerna for monorepo
 
-Gameplan:
-
-- [ ] basic api for puzzle, records, rooms, and words
+## Gameplan
+- [x] basic api for puzzle, records, rooms, and words
 - [x] database
-- [ ] data validation
+- [x] data validation
 - [ ] websocket endpoints
 - [ ] e2e testing
-- [ ] convert to monorepo
+- [x] convert to monorepo
 - [ ] scraping tool
 - [ ] scraping tool unit testing
 - [ ] GUI
 
-Notes:
-
+## Notes
 - use `lerna add <package_name> packages/<core,api>` instead of `yarn add` for new dependencies
 
-Scoring:
-
+### Scoring
 - Beginner: 0%
 - Good Start: 2%
 - Moving Up: 5%
@@ -35,8 +31,7 @@ Scoring:
 - Amazing: 50%
 - Genius: 70%
 
-Rules:
-
+### Rules
 - 4-letter words are worth 1 point each
 - Longer words earn 1 point per letter
 - Each puzzle includes at least one “pangram” which uses every letter
