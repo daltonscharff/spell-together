@@ -8,11 +8,12 @@
     "start": ""
   },
   "dependencies": {
+    "@daltonscharff/spelling-bee-core": "^0.0.0",
     "@fastify-resty/core": "^0.3.0",
     "@fastify-resty/typeorm": "^0.3.0",
     "fastify": "^3.22.0",
+    "fastify-socket.io": "^2.0.1",
     "reflect-metadata": "^0.1.13",
-    "spelling-bee-core": "^0.0.0",
     "typeorm": "^0.2.38"
   },
   "devDependencies": {

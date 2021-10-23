@@ -1,13 +1,14 @@
-import { connect } from "spelling-bee-core";
+import { connect } from "@daltonscharff/spelling-bee-core";
 import fastify from "fastify";
 import { bootstrap } from "@fastify-resty/core";
+import socketio from "fastify-socket.io";
 import typeorm from "@fastify-resty/typeorm";
 import WordController from "./controllers/word";
 import PuzzleController from "./controllers/puzzle";
 import RecordController from "./controllers/record";
 import RoomController from "./controllers/room";
 
-const server = fastify({});
+const server = fastify({logger: process.env.NODE_ENV !== "production"});
 
 connect({
   url: process.env.DATABASE_URL,
@@ -21,6 +22,7 @@ connect({
     RoomController,
     WordController
   ]});
+  server.register(socketio);
 
   try {
       const port = process.env.APP_PORT || 3000;

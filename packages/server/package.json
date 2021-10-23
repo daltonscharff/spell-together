@@ -1,17 +1,16 @@
 {
-  "name": "@daltonscharff/spelling-bee-core",
+  "name": "@daltonscharff/spelling-bee-server",
   "version": "0.0.0",
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "license": "UNLICENSED",
   "scripts": {
     "dev": "nodemon --require dotenv/config ./src/index.ts dotenv_config_path=../../.env",
-    "start": "ts-node ./src/index.ts",
-    "build": "tsc"
+    "start": ""
   },
   "dependencies": {
-    "pg": "^8.7.1",
-    "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.38"
+    "@daltonscharff/spelling-bee-core": "^0.0.0",
+    "fastify": "^3.22.0",
+    "fastify-socket.io": "^2.0.1"
   },
   "devDependencies": {
     "@types/node": "^16.10.2",
