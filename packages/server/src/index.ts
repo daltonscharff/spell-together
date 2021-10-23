@@ -35,9 +35,26 @@ async function main() {
   }
 }
 
+/**
+ * puzzle:read
+ *
+ * record:create
+ *
+ * room:create
+ * room:update_name
+ * room:view_members
+ * room:view_activity
+ * room:view_found_answers
+ *
+ * @param socket
+ */
 function onConnection(socket) {
   socket.on("hello", (payload) => {
     console.log(payload, "HELLO");
+  });
+
+  socket.on("puzzle:read", () => {
+    console.log("puzzle:read");
   });
 }
 
