@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import * as fs from "fs";
-import scrape from "./scrape";
+import scrape, { ScrapedData } from "./scrape";
 
 const sourceUrl = "https://nytbee.com";
 const exampleDataFile = "example_data.html";
@@ -20,13 +20,16 @@ async function main() {
     html = fs.readFileSync(exampleDataFile, "utf-8");
   }
 
+  let data: ScrapedData;
   try {
-    const data = scrape(html);
-    console.log(data);
+    data = scrape(html);
+    data.validate();
   } catch (error) {
     console.error(error);
     process.exit(1);
   }
+
+  console.log(data);
 }
 
 main();

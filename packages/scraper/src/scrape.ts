@@ -6,6 +6,16 @@ export class ScrapedData {
   letters: string[];
   centerLetter: string;
   words: string[];
+
+  validate() {
+    if (!dayjs(this.date).isValid) throw new Error("Invalid date");
+    if (this.letters.length !== 7)
+      throw new Error("All letters could not be found");
+    if (this.centerLetter.length !== 1)
+      throw new Error("Could not find center letter");
+    if (this.words.length === 0)
+      throw new Error("Word list could not be found");
+  }
 }
 
 export default function scrape(html: string): ScrapedData {
