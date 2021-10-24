@@ -8,6 +8,7 @@
     "start": "ts-node --require dotenv/config ./src/index.ts dotenv_config_path=../../.env"
   },
   "dependencies": {
+    "@daltonscharff/spelling-bee-core": "^0.0.0",
     "cheerio": "^1.0.0-rc.10",
     "dayjs": "^1.10.7",
     "node-fetch": "^2.6.2"

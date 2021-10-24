@@ -1,6 +1,7 @@
 import fetch from "node-fetch";
 import * as fs from "fs";
 import scrape, { ScrapedData } from "./scrape";
+import update from "./update";
 
 const sourceUrl = "https://nytbee.com";
 const exampleDataFile = "example_data.html";
@@ -30,6 +31,7 @@ async function main() {
   }
 
   console.log(data);
+  update(data);
 }
 
 main();
