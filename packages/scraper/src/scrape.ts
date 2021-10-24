@@ -9,15 +9,10 @@ export class ScrapedData {
 
 export default function scrape(html: string): ScrapedData {
   const data = new ScrapedData();
-  try {
-    data.date = parseDate(html);
-    data.words = parseWords(html);
-    data.letters = parseLetters(data.words);
-    data.centerLetter = parseCenterLetter(data.words);
-  } catch (error) {
-    console.error(error);
-    process.exit(1);
-  }
+  data.date = parseDate(html);
+  data.words = parseWords(html);
+  data.letters = parseLetters(data.words);
+  data.centerLetter = parseCenterLetter(data.words);
 
   return data;
 }

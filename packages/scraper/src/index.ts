@@ -16,11 +16,17 @@ async function main() {
       process.exit(1);
     }
   } else {
+    console.log("Reading from file:", exampleDataFile);
     html = fs.readFileSync(exampleDataFile, "utf-8");
   }
 
-  const data = scrape(html);
-  console.log(data);
+  try {
+    const data = scrape(html);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
 }
 
 main();
