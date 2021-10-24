@@ -1,20 +1,26 @@
 import fetch from "node-fetch";
+import * as fs from "fs";
 import scrape from "./scrape";
 
 const sourceUrl = "https://nytbee.com";
+const exampleDataFile = "example_data.html";
 
 async function main() {
   let html;
-  try {
-    const request = await fetch(sourceUrl);
-    html = await request.text();
-  } catch (error) {
-    console.error(`Error fetching html from ${sourceUrl}`, error);
-    process.exit(1);
+  if (process.env.NODE_ENV !== "development") {
+    try {
+      const request = await fetch(sourceUrl);
+      html = await request.text();
+    } catch (error) {
+      console.error(`Error fetching html from ${sourceUrl}`, error);
+      process.exit(1);
+    }
+  } else {
+    html = fs.readFileSync(exampleDataFile, "utf-8");
   }
 
-  console.log(html);
-  scrape(html);
+  const data = scrape(html);
+  console.log(data);
 }
 
 main();

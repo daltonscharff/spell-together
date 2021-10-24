@@ -1,14 +1,14 @@
 import $ from "cheerio";
 
-export type ScrapedData = {
+export class ScrapedData {
   date: string;
   letters: string[];
   centerLetter: string;
   words: string[];
-};
+}
 
 export default function scrape(html: string): ScrapedData {
-  let data: ScrapedData;
+  const data = new ScrapedData();
   try {
     data.date = parseDate(html);
     data.words = parseWords(html);
