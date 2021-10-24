@@ -30,8 +30,13 @@ async function main() {
     process.exit(1);
   }
 
-  console.log(data);
-  update(data);
+  try {
+    let updateResult = await update(data);
+    console.log(updateResult);
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
 }
 
 main();
