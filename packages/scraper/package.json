@@ -1,0 +1,21 @@
+{
+  "name": "@daltonscharff/spelling-bee-scraper",
+  "version": "0.0.0",
+  "main": "./lib/index.js",
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "nodemon --require dotenv/config ./src/index.ts dotenv_config_path=../../.env",
+    "start": ""
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
+    "node-fetch": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.10.2",
+    "dotenv": "^10.0.0",
+    "nodemon": "^2.0.13",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  }
+}
