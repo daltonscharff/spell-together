@@ -13,7 +13,7 @@
 - [ ] websocket endpoints
 - [ ] e2e testing
 - [x] convert to monorepo
-- [ ] scraping tool
+- [x] scraping tool
 - [ ] scraping tool unit testing
 - [ ] GUI
 
@@ -36,3 +36,7 @@
 - Longer words earn 1 point per letter
 - Each puzzle includes at least one “pangram” which uses every letter
   - These are worth 7 extra points
+
+### Wireframes
+Desktop: https://wireframe.cc/HhdIC4
+Mobile: https://wireframe.cc/p73MbN
