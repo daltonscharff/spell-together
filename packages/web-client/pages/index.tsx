@@ -1,13 +1,13 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Cookies from "js-cookie";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
+import InputTextField from "../components/InputTextField";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -44,21 +44,11 @@ const Home: NextPage = () => {
     <Container component="main" maxWidth="sm">
       <CssBaseline />
       <Box component="form">
-        <Controller
-          name={"roomCode"}
+        <InputTextField
+          name="roomCode"
+          label="Room Code"
           control={control}
-          render={({ field: { onChange, value }, fieldState: { invalid } }) => (
-            <TextField
-              label="Room Code"
-              variant="outlined"
-              margin="normal"
-              value={value}
-              onChange={onChange}
-              error={invalid}
-              helperText={errors.roomCode?.message}
-              fullWidth
-            />
-          )}
+          helperText={errors.roomCode?.message}
           rules={{
             required: {
               value: true,
@@ -74,21 +64,11 @@ const Home: NextPage = () => {
             },
           }}
         />
-        <Controller
-          name={"name"}
+        <InputTextField
+          name="name"
+          label="Name"
           control={control}
-          render={({ field: { onChange, value }, fieldState: { invalid } }) => (
-            <TextField
-              label="Name"
-              variant="outlined"
-              margin="normal"
-              value={value}
-              onChange={onChange}
-              error={invalid}
-              helperText={errors.name?.message}
-              fullWidth
-            />
-          )}
+          helperText={errors.name?.message}
           rules={{
             required: {
               value: true,

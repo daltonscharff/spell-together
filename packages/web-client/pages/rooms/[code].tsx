@@ -12,6 +12,7 @@ const GameRoom: NextPage = () => {
 
   return (
     <Container component="main" maxWidth="sm">
+      <CssBaseline />
       Hello from room {router.query.code}
     </Container>
   );
