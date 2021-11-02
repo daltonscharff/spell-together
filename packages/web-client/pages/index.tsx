@@ -1,9 +1,13 @@
 import type { NextPage } from "next";
-import { Box, Button, Container, CssBaseline, TextField } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-import Cookies from "js-cookie";
 import { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import Cookies from "js-cookie";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -32,7 +36,7 @@ const Home: NextPage = () => {
     Cookies.set("roomCode", data.roomCode, { sameSite: "strict" });
     Cookies.set("name", data.name, { sameSite: "strict" });
     router.push({
-      pathname: "/new",
+      pathname: `/rooms/${data.roomCode}`,
     });
   };
 
