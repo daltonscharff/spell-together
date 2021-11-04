@@ -34,7 +34,7 @@ const Home: NextPage = () => {
       name: data.name,
     });
     Cookies.set("roomCode", data.roomCode, { sameSite: "strict" });
-    Cookies.set("name", data.name, { sameSite: "strict" });
+    Cookies.set("name", data.name, { sameSite: "strict", expires: 365 });
     router.push({
       pathname: `/rooms/${data.roomCode}`,
     });
