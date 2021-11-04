@@ -17,7 +17,7 @@ const style: SxProps<Theme> = {
   textTransform: "capitalize",
 };
 
-const GameBoard: React.FC<Props> = ({ centerLetter, letters, onClick }) => {
+const Tiles: React.FC<Props> = ({ centerLetter, letters, onClick }) => {
   letters = letters.filter((letter) => letter !== centerLetter);
   return (
     <Grid container spacing={3}>
@@ -41,4 +41,4 @@ const GameBoard: React.FC<Props> = ({ centerLetter, letters, onClick }) => {
   );
 };
 
-export default GameBoard;
+export default Tiles;
