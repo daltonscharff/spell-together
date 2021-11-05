@@ -17,7 +17,7 @@ function jumble(
   setLetters(array);
 }
 
-function handleInput(
+function handleInputAreaChange(
   setInput: Dispatch<SetStateAction<string>>,
   letters: string[],
   event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -30,6 +30,14 @@ function handleInput(
   }
 }
 
+function handleTilesClick(
+  input: string,
+  setInput: Dispatch<SetStateAction<string>>,
+  letter: string
+) {
+  setInput(input + letter);
+}
+
 const GameBoard: React.FC<Props> = () => {
   const [input, setInput] = useState("");
   const [letters, setLetters] = useState(["a", "b", "c", "d", "e", "f", "g"]);
@@ -39,15 +47,13 @@ const GameBoard: React.FC<Props> = () => {
       <InputArea
         input={input}
         setInput={setInput}
-        handleInput={handleInput.bind(this, setInput, letters)}
+        onChange={handleInputAreaChange.bind(this, setInput, letters)}
         onJumble={jumble.bind(this, letters, setLetters)}
       />
       <Tiles
         letters={letters}
         centerLetter={centerLetter}
-        onClick={(letter) => {
-          console.log(letter);
-        }}
+        onClick={handleTilesClick.bind(this, input, setInput)}
       />
     </>
   );
