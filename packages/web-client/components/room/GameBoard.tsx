@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { useState, Dispatch, SetStateAction } from "react";
 import InputArea from "./InputArea";
 import Tiles from "./Tiles";
@@ -17,12 +17,31 @@ function jumble(
   setLetters(array);
 }
 
+function handleInput(
+  setInput: Dispatch<SetStateAction<string>>,
+  letters: string[],
+  event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+) {
+  const inputChar = event.target.value?.toLowerCase().split("").pop();
+  if (inputChar === undefined) {
+    setInput("");
+  } else if (letters.includes(inputChar)) {
+    setInput(event.target.value.toLowerCase());
+  }
+}
+
 const GameBoard: React.FC<Props> = () => {
+  const [input, setInput] = useState("");
   const [letters, setLetters] = useState(["a", "b", "c", "d", "e", "f", "g"]);
   const centerLetter = "d";
   return (
     <>
-      <InputArea onJumble={() => jumble(letters, setLetters)} />
+      <InputArea
+        input={input}
+        setInput={setInput}
+        handleInput={handleInput.bind(this, setInput, letters)}
+        onJumble={jumble.bind(this, letters, setLetters)}
+      />
       <Tiles
         letters={letters}
         centerLetter={centerLetter}
