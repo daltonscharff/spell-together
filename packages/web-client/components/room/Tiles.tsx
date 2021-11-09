@@ -1,5 +1,6 @@
 import { Theme } from "@mui/material";
 import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import { SxProps } from "@mui/system";
 import React from "react";
@@ -11,10 +12,14 @@ interface Props {
 }
 
 const style: SxProps<Theme> = {
-  padding: "1em",
-  border: "1px solid grey",
+  padding: "2.5em",
+  // border: "1px solid grey",
   textAlign: "center",
   textTransform: "capitalize",
+  ":hover": {
+    cursor: "pointer",
+    backgroundColor: "#efefef",
+  },
 };
 
 const Tiles: React.FC<Props> = ({ centerLetter, letters, onClick }) => {
@@ -24,15 +29,15 @@ const Tiles: React.FC<Props> = ({ centerLetter, letters, onClick }) => {
       {letters.map((letter, index) => (
         <React.Fragment key={`GameBoard${index}`}>
           <Grid item xs={4} key={`GameBoard${index}`}>
-            <Box sx={style} onClick={onClick.bind(this, letter)}>
+            <Paper sx={style} onClick={onClick.bind(this, letter)}>
               {letter}
-            </Box>
+            </Paper>
           </Grid>
           {index === 2 ? (
             <Grid item xs={12} key={`GameBoard${index}Center`}>
-              <Box sx={style} onClick={onClick.bind(this, centerLetter)}>
+              <Paper sx={style} onClick={onClick.bind(this, centerLetter)}>
                 {centerLetter}
-              </Box>
+              </Paper>
             </Grid>
           ) : null}
         </React.Fragment>
