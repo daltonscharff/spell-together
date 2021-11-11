@@ -3,8 +3,8 @@ import fastify from "fastify";
 import socketio from "fastify-socket.io";
 
 const server = fastify();
-const port = process.env.APP_PORT || 3000;
-const host = process.env.APP_HOST || "localhost";
+const port = process.env.SERVER_PORT || 3000;
+const host = process.env.SERVER_HOST || "localhost";
 
 async function main() {
   const dbPromise = connect({
@@ -49,6 +49,7 @@ async function main() {
  * @param socket
  */
 function onConnection(socket) {
+  console.log("Connected");
   socket.on("hello", (payload) => {
     console.log(payload, "HELLO");
   });
