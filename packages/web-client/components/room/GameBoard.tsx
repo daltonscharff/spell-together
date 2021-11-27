@@ -1,10 +1,10 @@
-import React, { ChangeEvent } from "react";
-import {
+import React, {
   useState,
   Dispatch,
   SetStateAction,
   useContext,
   useEffect,
+  ChangeEvent,
 } from "react";
 import SocketContext from "../../providers/socketContext";
 import InputArea from "./InputArea";

@@ -38,12 +38,37 @@ async function main() {
   }
 }
 
+export type GameReadServer = Pick<
+  Puzzle,
+  "date" | "letters" | "centerLetter" | "maxScore"
+>;
+
+export type GameGuessClient = string;
+export type GameGuessServer = boolean;
+
 function onConnection(socket) {
   console.log(socket.client.conn.server.clientsCount + " users connected");
+
+  socket.on("room:join", (data) => {
+    socket.rooms.forEach((room) => {
+      socket.leave(room);
+    });
+    socket.join(data.room);
+    console.log("joining", data.room);
+  });
+  socket.on("room:leave", (data) => {
+    socket.leave(data.room);
+    console.log("leaving", data.room);
+  });
+
   socket.on("game:read", async () => {
     const puzzle = await Puzzle.findOne();
-    delete puzzle.id;
-    socket.emit("game:read", puzzle);
+    socket.emit("game:read", {
+      date: puzzle.date,
+      letters: puzzle.letters,
+      centerLetter: puzzle.centerLetter,
+      maxScore: puzzle.maxScore,
+    });
   });
 }
 
