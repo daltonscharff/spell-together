@@ -1,4 +1,4 @@
-import { connect } from "@daltonscharff/spelling-bee-core";
+import { connect, Puzzle } from "@daltonscharff/spelling-bee-core";
 import fastify from "fastify";
 import socketio from "fastify-socket.io";
 
@@ -23,6 +23,9 @@ async function main() {
     process.exit(1);
   }
   server.io.on("connection", onConnection);
+  server.io.on("disconnect", (socket) =>
+    console.log(socket.client.conn.server.clientsCount + " users connected")
+  );
 
   const fastifyPromise = server.listen(port, host);
 
@@ -35,27 +38,12 @@ async function main() {
   }
 }
 
-/**
- * puzzle:read
- *
- * record:create
- *
- * room:create
- * room:update_name
- * room:view_members
- * room:view_activity
- * room:view_found_answers
- *
- * @param socket
- */
 function onConnection(socket) {
-  console.log("Connected");
-  socket.on("hello", (payload) => {
-    console.log(payload, "HELLO");
-  });
-
-  socket.on("puzzle:read", () => {
-    console.log("puzzle:read");
+  console.log(socket.client.conn.server.clientsCount + " users connected");
+  socket.on("game:read", async () => {
+    const puzzle = await Puzzle.findOne();
+    delete puzzle.id;
+    socket.emit("game:read", puzzle);
   });
 }
 

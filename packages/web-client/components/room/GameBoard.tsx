@@ -1,7 +1,15 @@
 import React, { ChangeEvent } from "react";
-import { useState, Dispatch, SetStateAction } from "react";
+import {
+  useState,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+} from "react";
+import SocketContext from "../../providers/socketContext";
 import InputArea from "./InputArea";
 import Tiles from "./Tiles";
+import { Socket } from "socket.io-client";
 
 interface Props {}
 
@@ -38,10 +46,20 @@ function handleTilesClick(
   setInput(input + letter);
 }
 
+function init(socket: Socket) {
+  console.log("INIT GAMEBOARD");
+  socket.on("game:read", (value) => console.log("Gameboard:", value));
+  socket.emit("game:read");
+}
+
 const GameBoard: React.FC<Props> = () => {
+  const socket = useContext(SocketContext);
   const [input, setInput] = useState("");
   const [letters, setLetters] = useState(["a", "b", "c", "d", "e", "f", "g"]);
   const centerLetter = "d";
+
+  useEffect(init.bind(this, socket), []);
+
   return (
     <>
       <InputArea

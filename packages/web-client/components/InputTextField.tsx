@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 interface Props {
   name: string;
   label: string;
-  control: Control;
+  control: Control<any, object>;
   helperText?: string;
   rules?: any;
 }
