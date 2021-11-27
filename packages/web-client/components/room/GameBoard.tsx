@@ -9,7 +9,7 @@ import {
 import SocketContext from "../../providers/socketContext";
 import InputArea from "./InputArea";
 import Tiles from "./Tiles";
-import { Socket } from "socket.io-client";
+import { Puzzle } from "@daltonscharff/spelling-bee-core";
 
 interface Props {}
 
@@ -46,19 +46,19 @@ function handleTilesClick(
   setInput(input + letter);
 }
 
-function init(socket: Socket) {
-  console.log("INIT GAMEBOARD");
-  socket.on("game:read", (value) => console.log("Gameboard:", value));
-  socket.emit("game:read");
-}
-
 const GameBoard: React.FC<Props> = () => {
   const socket = useContext(SocketContext);
   const [input, setInput] = useState("");
-  const [letters, setLetters] = useState(["a", "b", "c", "d", "e", "f", "g"]);
-  const centerLetter = "d";
+  const [letters, setLetters] = useState([""]);
+  const [centerLetter, setCenterLetter] = useState("");
 
-  useEffect(init.bind(this, socket), []);
+  useEffect(() => {
+    socket.on("game:read", (puzzle: Puzzle) => {
+      setLetters(puzzle.letters);
+      setCenterLetter(puzzle.centerLetter);
+    });
+    socket.emit("game:read");
+  }, []);
 
   return (
     <>
