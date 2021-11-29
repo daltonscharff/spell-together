@@ -4,11 +4,10 @@ import React, {
   SetStateAction,
   useEffect,
   ChangeEvent,
-  useContext,
 } from "react";
 import InputArea from "./InputArea";
 import Tiles from "./Tiles";
-import { SocketContext } from "../../providers/SocketProvider";
+import { socket, useSocket } from "../../hooks/useSocket";
 
 interface Props {}
 
@@ -46,21 +45,18 @@ function handleTilesClick(
 }
 
 const GameBoard: React.FC<Props> = () => {
-  const socket = useContext(SocketContext);
   const [input, setInput] = useState("");
   const [letters, setLetters] = useState([""]);
   const [centerLetter, setCenterLetter] = useState("");
 
+  useSocket("game:read", (puzzle) => {
+    setLetters(puzzle.letters);
+    setCenterLetter(puzzle.centerLetter);
+  });
+
   useEffect(() => {
-    socket.on("game:read", (puzzle) => {
-      setLetters(puzzle.letters);
-      setCenterLetter(puzzle.centerLetter);
-    });
     socket.emit("game:read");
-    return () => {
-      socket.removeAllListeners("game:read");
-    };
-  }, [socket]);
+  }, []);
 
   return (
     <>
