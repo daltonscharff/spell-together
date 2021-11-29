@@ -1,12 +1,12 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { RecoilRoot } from "recoil";
+import SocketProvider from "../providers/SocketProvider";
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <RecoilRoot>
+    <SocketProvider>
       <Component {...pageProps} />
-    </RecoilRoot>
+    </SocketProvider>
   );
 }
 

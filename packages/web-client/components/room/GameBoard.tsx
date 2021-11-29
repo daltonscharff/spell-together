@@ -4,16 +4,11 @@ import React, {
   SetStateAction,
   useEffect,
   ChangeEvent,
+  useContext,
 } from "react";
 import InputArea from "./InputArea";
 import Tiles from "./Tiles";
-import { Puzzle } from "@daltonscharff/spelling-bee-core";
-import { useRecoilState } from "recoil";
-import {
-  socket,
-  centerLetterState,
-  lettersState,
-} from "../../atoms/socketState";
+import { SocketContext } from "../../providers/SocketProvider";
 
 interface Props {}
 
@@ -51,16 +46,20 @@ function handleTilesClick(
 }
 
 const GameBoard: React.FC<Props> = () => {
+  const socket = useContext(SocketContext);
   const [input, setInput] = useState("");
-  const [letters, setLetters] = useRecoilState(lettersState);
-  const [centerLetter, setCenterLetter] = useRecoilState(centerLetterState);
+  const [letters, setLetters] = useState([""]);
+  const [centerLetter, setCenterLetter] = useState("");
 
   useEffect(() => {
-    socket?.on("game:read", (puzzle: Puzzle) => {
+    socket.on("game:read", (puzzle) => {
       setLetters(puzzle.letters);
       setCenterLetter(puzzle.centerLetter);
     });
-    socket?.emit("game:read");
+    socket.emit("game:read");
+    return () => {
+      socket.removeAllListeners("game:read");
+    };
   }, [socket]);
 
   return (
