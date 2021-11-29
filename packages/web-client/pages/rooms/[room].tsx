@@ -5,7 +5,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { useRouter } from "next/router";
 import GameBoard from "../../components/room/GameBoard";
 import SocketContext from "../../providers/socketContext";
-import RoomCodeContext from "../../providers/roomCodeContext";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { roomState } from "../../atoms/socketState";
 
