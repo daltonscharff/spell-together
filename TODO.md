@@ -18,7 +18,7 @@
 - [ ] GUI
 
 ## Notes
-- use `lerna add <package_name> packages/<core,api>` instead of `yarn add` for new dependencies
+- use `lerna add <package_name> packages/<core|api|web-client>` instead of `yarn add` for new dependencies
 
 ### Scoring
 - Beginner: 0%
