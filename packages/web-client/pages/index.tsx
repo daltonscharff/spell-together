@@ -1,8 +1,6 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import Cookies from "js-cookie";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -15,7 +13,6 @@ const Home: NextPage = () => {
     handleSubmit,
     control,
     formState: { errors },
-    setValue,
   } = useForm({
     defaultValues: {
       roomCode: "",
@@ -23,18 +20,11 @@ const Home: NextPage = () => {
     },
   });
 
-  useEffect(() => {
-    setValue("roomCode", Cookies.get("roomCode") ?? "");
-    setValue("name", Cookies.get("name") ?? "");
-  }, []);
-
   const onSubmit = (data: { roomCode: string; name: string }) => {
     console.log({
       roomCode: data.roomCode,
       name: data.name,
     });
-    Cookies.set("roomCode", data.roomCode, { sameSite: "strict" });
-    Cookies.set("name", data.name, { sameSite: "strict", expires: 365 });
     router.push({
       pathname: `/rooms/${data.roomCode}`,
     });

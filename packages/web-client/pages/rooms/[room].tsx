@@ -3,38 +3,34 @@ import React, { useEffect, useContext } from "react";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useRouter } from "next/router";
-import Cookies from "js-cookie";
 import GameBoard from "../../components/room/GameBoard";
 import SocketContext from "../../providers/socketContext";
+import RoomCodeContext from "../../providers/roomCodeContext";
+import { useRecoilState, useResetRecoilState } from "recoil";
+import { roomState } from "../../atoms/socketState";
 
 const GameRoom: NextPage = () => {
-  const socket = useContext(SocketContext);
+  const [room, setRoom] = useRecoilState(roomState);
+  const resetRoom = useResetRecoilState(roomState);
   const router = useRouter();
 
   useEffect(() => {
-    if (router.query.code) {
-      Cookies.set("roomCode", router.query.code ?? "", { sameSite: "strict" });
-      socket.emit("room:join", { room: router.query.code });
+    if (typeof router.query.room === "string") {
+      setRoom(router.query.room);
     }
   }, [router]);
 
   useEffect(() => {
-    const leaveRoom = () => {
-      socket.emit("room:leave", { room: router.query.code });
+    router.beforePopState(() => {
+      resetRoom();
       return true;
-    };
-
-    router.beforePopState(leaveRoom);
-  }, []);
-
-  // useEffect(() => {
-  //   socket.onAny((eventName, ...args) => console.log({ eventName, ...args }));
-  // }, []);
+    });
+  }, [router]);
 
   return (
     <Container component="main" maxWidth="sm">
       <CssBaseline />
-      Hello from room {router.query.code}
+      Hello from room {room}
       <GameBoard />
     </Container>
   );
