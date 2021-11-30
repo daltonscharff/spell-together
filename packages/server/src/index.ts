@@ -1,6 +1,7 @@
 import { connect, Puzzle } from "@daltonscharff/spelling-bee-core";
 import fastify from "fastify";
 import socketio from "fastify-socket.io";
+import { Socket } from "socket.io";
 
 const server = fastify();
 const port = process.env.SERVER_PORT || 3000;
@@ -22,6 +23,7 @@ async function main() {
     server.log.error(error);
     process.exit(1);
   }
+  // @ts-ignore
   server.io.on("connection", onConnection);
   server.io.on("disconnect", (socket) =>
     console.log(socket.client.conn.server.clientsCount + " users connected")
@@ -46,19 +48,22 @@ export type GameReadServer = Pick<
 export type GameGuessClient = string;
 export type GameGuessServer = boolean;
 
-function onConnection(socket) {
+function onConnection(socket: Socket) {
+  // @ts-ignore
   console.log(socket.client.conn.server.clientsCount + " users connected");
 
-  socket.on("room:join", (data) => {
+  socket.on("joinRoom", ({ user, room }) => {
     socket.rooms.forEach((room) => {
       socket.leave(room);
     });
-    socket.join(data.room);
-    console.log("joining", data.room);
+    socket.to(room).emit("userConnected", { user, room });
+    socket.join(room);
+    console.log(user, "joining", room);
   });
-  socket.on("room:leave", (data) => {
-    socket.leave(data.room);
-    console.log("leaving", data.room);
+  socket.on("leaveRoom", ({ user, room }) => {
+    socket.leave(room);
+    socket.to(room).emit("userDisconnected", { user, room });
+    console.log(user, "leaving", room);
   });
 
   socket.on("game:read", async () => {

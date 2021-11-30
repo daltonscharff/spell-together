@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useRouter } from "next/router";
@@ -11,6 +11,16 @@ const GameRoom: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
+    const func = (eventName: string, args: any) => {
+      console.log(eventName, args);
+    };
+    socket.onAny(func);
+    return () => {
+      socket.offAny(func);
+    };
+  });
+
+  useEffect(() => {
     if (typeof router.query.room === "string") {
       setRoom(router.query.room);
     }
@@ -18,17 +28,17 @@ const GameRoom: NextPage = () => {
 
   useEffect(() => {
     router.beforePopState(() => {
-      socket.emit("room:leave", { room: router.query.room });
+      socket.emit("leaveRoom", { user: "TEST USER", room });
       return true;
     });
     return () => {
       router.beforePopState(() => true);
     };
-  }, []);
+  }, [room]);
 
   useEffect(() => {
     if (room.length > 0) {
-      socket.emit("room:join", { room });
+      socket.emit("joinRoom", { user: "TEST USER", room });
     }
   }, [room]);
 
