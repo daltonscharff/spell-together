@@ -4,8 +4,8 @@
   "main": "./lib/index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "nodemon --require dotenv/config ./src/index.ts dotenv_config_path=../../.env",
-    "start": "ts-node --require dotenv/config ./src/index.ts dotenv_config_path=../../.env"
+    "dev": "nodemon --require dotenv/config ./src/index.ts",
+    "start": "ts-node --require dotenv/config ./src/index.ts"
   },
   "dependencies": {
     "@daltonscharff/spelling-bee-core": "^0.0.0",

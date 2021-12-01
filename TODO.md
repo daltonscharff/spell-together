@@ -16,7 +16,7 @@
 - [x] scraping tool
 - [ ] scraping tool unit testing
 - [ ] GUI
-- [ ] package specific .env files
+- [x] package specific .env files
 
 ## Notes
 - use `lerna add <package_name> packages/<core|server|web-client>` instead of `yarn add` for new dependencies

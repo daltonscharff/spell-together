@@ -4,7 +4,7 @@
   "main": "lib/index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "nodemon --require dotenv/config ./src/index.ts dotenv_config_path=../../.env",
+    "dev": "nodemon --require dotenv/config ./src/index.ts",
     "start": "ts-node ./src/index.ts",
     "build": "tsc"
   },
@@ -17,6 +17,7 @@
     "@types/node": "^16.10.2",
     "dotenv": "^10.0.0",
     "nodemon": "^2.0.13",
+    "prisma": "^3.6.0",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"
   }
