@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Word {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  word         String   @unique @db.VarChar(255)
+  pointValue   Int
+  definition   String   @db.Text
+  partOfSpeech String   @db.VarChar(255)
+  synonym      String   @db.VarChar(255)
+  isPanagram   Boolean
+
+  rooms   RoomWord[]
+  records Record[]
+  puzzles PuzzleWord[]
+
+  @@map("word")
+}
+
+model Room {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  code      String   @unique @db.VarChar(6)
+  score     Int      @default(0)
+  name      String   @db.VarChar(255)
+
+  foundWords RoomWord[]
+  records    Record[]
+
+  @@map("room")
+}
+
+model Record {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  user      String   @db.VarChar(255)
+  puzzleId  String
+  roomId    String
+  wordId    String
+
+  puzzle Puzzle @relation(fields: [puzzleId], references: [id])
+  room   Room   @relation(fields: [roomId], references: [id])
+  word   Word   @relation(fields: [wordId], references: [id])
+}
+
+model Puzzle {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  letters      String[]
+  centerLetter String   @db.Char
+  maxScore     Int
+
+  answers PuzzleWord[]
+  records Record[]
+
+  @@map("puzzle")
+}
+
+model RoomWord {
+  roomId String @map("room_id")
+  wordId String @map("word_id")
+
+  room Room @relation(fields: [roomId], references: [id])
+  word Word @relation(fields: [wordId], references: [id])
+
+  @@id([roomId, wordId])
+  @@map("room_word")
+}
+
+model PuzzleWord {
+  puzzleId String @map("puzzle_id")
+  wordId   String @map("word_id")
+
+  puzzle Puzzle @relation(fields: [puzzleId], references: [id], map: "puzzle_word_puzzle_id_fkey")
+  word   Word   @relation(fields: [wordId], references: [id])
+
+  @@id([puzzleId, wordId])
+  @@map("puzzle_word")
+}

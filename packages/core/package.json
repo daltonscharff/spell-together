@@ -9,6 +9,7 @@
     "build": "tsc"
   },
   "dependencies": {
+    "@prisma/client": "^3.6.0",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.38"
