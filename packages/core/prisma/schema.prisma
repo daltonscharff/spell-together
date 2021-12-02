@@ -50,6 +50,8 @@ model Record {
   puzzle Puzzle @relation(fields: [puzzleId], references: [id])
   room   Room   @relation(fields: [roomId], references: [id])
   word   Word   @relation(fields: [wordId], references: [id])
+
+  @@map("record")
 }
 
 model Puzzle {
