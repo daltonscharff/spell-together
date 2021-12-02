@@ -4,9 +4,8 @@
   "main": "lib/index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "nodemon --require dotenv/config ./src/index.ts",
-    "start": "ts-node ./src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "studio": "prisma studio"
   },
   "dependencies": {
     "@prisma/client": "^3.6.0",

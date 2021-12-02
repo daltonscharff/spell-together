@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import { ScrapedData } from "./scrape";
-import { connect, Word, Puzzle } from "@daltonscharff/spelling-bee-core";
+import { prisma } from "@daltonscharff/spelling-bee-core";
 
 const lookupUrl = "https://wordsapiv1.p.rapidapi.com/words";
 
@@ -44,41 +44,52 @@ async function lookup(word: string): Promise<{
   };
 }
 
-export default async function update(data: ScrapedData): Promise<Puzzle> {
-  const connection = await connect({
-    url: process.env.DATABASE_URL,
-    extra: {
-      max: 1, // limit connection pool to 1
-    },
-  });
+export default async function update(data: ScrapedData) {
+  await prisma.puzzleWord.deleteMany();
+  await Promise.all([prisma.word.deleteMany(), prisma.puzzle.deleteMany()]);
 
-  await connection.createQueryBuilder().delete().from(Word).execute();
-  await connection.createQueryBuilder().delete().from(Puzzle).execute();
-
-  const answers = await Promise.all(
+  const words = await Promise.all(
     data.words.map(async (word) => {
-      const entity = new Word();
-      entity.word = word;
-      entity.pointValue = calculatePointValue(word);
-      entity.isPanagram = isPanagram(word);
       const { definition, partOfSpeech, synonym } = await lookup(word);
-      entity.definition = definition || null;
-      entity.partOfSpeech = partOfSpeech || null;
-      entity.synonym = synonym || null;
-      await connection.manager.save(entity);
-      return entity;
+      const w = {
+        word: word,
+        pointValue: calculatePointValue(word),
+        isPanagram: isPanagram(word),
+        definition,
+        partOfSpeech,
+        synonym,
+      };
+      return w;
     })
   );
 
-  const puzzle = new Puzzle();
-  puzzle.date = data.date;
-  puzzle.letters = data.letters;
-  puzzle.centerLetter = data.centerLetter;
-  puzzle.maxScore = answers.reduce((total, word) => {
-    return (total += word.pointValue);
-  }, 0);
-  puzzle.answers = answers;
-  await connection.manager.save(puzzle);
+  const wordIds = await Promise.all(
+    words.map(async (word) => {
+      return {
+        wordId: (
+          await prisma.word.create({
+            select: {
+              id: true,
+            },
+            data: word,
+          })
+        ).id,
+      };
+    })
+  );
+
+  const puzzle = await prisma.puzzle.create({
+    data: {
+      letters: data.letters,
+      centerLetter: data.centerLetter,
+      maxScore: words.reduce((total, word) => (total += word.pointValue), 0),
+      answers: {
+        createMany: {
+          data: wordIds,
+        },
+      },
+    },
+  });
 
   return puzzle;
 }

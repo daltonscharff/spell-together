@@ -1,31 +1,27 @@
-import { createConnection } from "typeorm";
-import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
-import { Puzzle } from "./entities/puzzle";
-import { Record } from "./entities/record";
-import { Room } from "./entities/room";
-import { Word } from "./entities/word";
+import {
+  PrismaClient,
+  Prisma,
+  Word,
+  Room,
+  Record,
+  Puzzle,
+  RoomWord,
+  PuzzleWord,
+} from "@prisma/client";
+import generateRoomCode from "./generateRoomCode";
 
-export async function connect(
-  options?: Omit<PostgresConnectionOptions, "type">
-) {
-  return createConnection({
-    type: "postgres",
-    entities: [Puzzle, Record, Room, Word],
-    migrations: ["./migrations/**/*.ts"],
-    ...options,
-  });
-}
+export const prisma = new PrismaClient();
 
-export { Puzzle, Record, Room, Word };
+prisma.$use(async (params: Prisma.MiddlewareParams, next) => {
+  if (
+    params.action === "create" &&
+    params.model === "Room" &&
+    params.args.data.code === null
+  ) {
+    let room = params.args.data;
+    room.code = generateRoomCode(6);
+  }
+  return await next(params);
+});
 
-if (require.main === module) {
-  connect({
-    url: process.env.DATABASE_URL,
-    synchronize: true,
-    logging: true,
-  })
-    .then((connection) => {
-      connection.close();
-    })
-    .catch((error) => console.log(error));
-}
+export { Word, Room, Record, Puzzle, RoomWord, PuzzleWord };
