@@ -20,7 +20,6 @@ model Word {
 
   rooms   RoomWord[]
   records Record[]
-  puzzles PuzzleWord[]
 
   @@map("word")
 }
@@ -43,13 +42,11 @@ model Record {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   user      String   @db.VarChar(255)
-  puzzleId  String
   roomId    String
   wordId    String
 
-  puzzle Puzzle @relation(fields: [puzzleId], references: [id])
-  room   Room   @relation(fields: [roomId], references: [id])
-  word   Word   @relation(fields: [wordId], references: [id])
+  room Room @relation(fields: [roomId], references: [id])
+  word Word @relation(fields: [wordId], references: [id])
 
   @@map("record")
 }
@@ -60,9 +57,6 @@ model Puzzle {
   letters      String[]
   centerLetter String   @db.Char
   maxScore     Int
-
-  answers PuzzleWord[]
-  records Record[]
 
   @@map("puzzle")
 }
@@ -76,15 +70,4 @@ model RoomWord {
 
   @@id([roomId, wordId])
   @@map("room_word")
-}
-
-model PuzzleWord {
-  puzzleId String @map("puzzle_id")
-  wordId   String @map("word_id")
-
-  puzzle Puzzle @relation(fields: [puzzleId], references: [id], map: "puzzle_word_puzzle_id_fkey")
-  word   Word   @relation(fields: [wordId], references: [id])
-
-  @@id([puzzleId, wordId])
-  @@map("puzzle_word")
 }

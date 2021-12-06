@@ -5,7 +5,9 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "tsc",
-    "studio": "prisma studio"
+    "studio": "prisma studio",
+    "generate": "prisma generate",
+    "push": "prisma db push"
   },
   "dependencies": {
     "@prisma/client": "^3.6.0",
