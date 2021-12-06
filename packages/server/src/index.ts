@@ -1,4 +1,3 @@
-import { connect, Puzzle } from "@daltonscharff/spelling-bee-core";
 import fastify from "fastify";
 import socketio from "fastify-socket.io";
 import { Socket } from "socket.io";
@@ -8,11 +7,6 @@ const port = process.env.SERVER_PORT || 3000;
 const host = process.env.SERVER_HOST || "localhost";
 
 async function main() {
-  const dbPromise = connect({
-    url: process.env.DATABASE_URL,
-    logging: process.env.NODE_ENV === "development",
-  });
-
   server.register(socketio, {
     cors: { origin: "*", methods: ["GET", "POST"] },
   });
@@ -23,35 +17,24 @@ async function main() {
     server.log.error(error);
     process.exit(1);
   }
-  // @ts-ignore
-  server.io.on("connection", onConnection);
+
+  server.io.on("connection", (socket) => {
+    // @ts-ignore
+    console.log(socket.client.conn.server.clientsCount + " users connected");
+    onConnection(socket);
+  });
   server.io.on("disconnect", (socket) =>
     console.log(socket.client.conn.server.clientsCount + " users connected")
   );
 
-  const fastifyPromise = server.listen(port, host);
-
-  try {
-    await Promise.all([dbPromise, fastifyPromise]);
-    console.log(`Server started on http://${host}:${port}`);
-  } catch (error) {
-    server.log.error(error);
+  await server.listen(port, host, (err, address) => {
+    console.error(err);
     process.exit(1);
-  }
+  });
+  console.log(`Server started on http://${host}:${port}`);
 }
 
-export type GameReadServer = Pick<
-  Puzzle,
-  "date" | "letters" | "centerLetter" | "maxScore"
->;
-
-export type GameGuessClient = string;
-export type GameGuessServer = boolean;
-
-function onConnection(socket: Socket) {
-  // @ts-ignore
-  console.log(socket.client.conn.server.clientsCount + " users connected");
-
+function onConnection(socket) {
   socket.on("joinRoom", ({ user, room }) => {
     socket.rooms.forEach((room) => {
       socket.leave(room);
@@ -76,5 +59,7 @@ function onConnection(socket: Socket) {
     });
   });
 }
+
+function roomHandler(io, socket) {}
 
 main();
