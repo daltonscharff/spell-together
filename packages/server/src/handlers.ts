@@ -14,7 +14,6 @@ export async function readRoom(code: string) {
       code,
     },
     include: {
-      foundWords: true,
       records: true,
     },
   });
@@ -34,23 +33,25 @@ export async function guessWord(
   word: string,
   user: string
 ): Promise<GuessWordResponse> {
-  const { id: wordId } = (await prisma.word.findUnique({
+  const { id: wordId, pointValue: wordScore } = (await prisma.word.findUnique({
     where: {
       word,
     },
     select: {
       id: true,
+      pointValue: true,
     },
   })) || { id: null };
 
   if (!wordId) return { validWord: false };
 
-  const { id: roomId } = (await prisma.room.findUnique({
+  const { id: roomId, score: roomScore } = (await prisma.room.findUnique({
     where: {
       code: roomCode,
     },
     select: {
       id: true,
+      score: true,
     },
   })) || { id: null };
 
@@ -72,10 +73,12 @@ export async function guessWord(
           user,
         },
       }),
-      prisma.roomWord.create({
+      prisma.room.update({
+        where: {
+          id: roomId,
+        },
         data: {
-          wordId,
-          roomId,
+          score: roomScore + wordScore,
         },
       }),
     ]);
@@ -92,17 +95,17 @@ export async function guessWord(
 //   .catch((err) => console.error("ERROR", err));
 
 guessWord("123456", "acai", "testUser")
-  .then((res) => console.log(res))
+  .then((res) => console.log("guessWord", res))
   .catch((err) => console.error("ERROR", err));
 
 // createRoom("123456")
 //   .then((res) => console.log(res))
 //   .catch((err) => console.error("ERROR", err));
 
-readPuzzle()
-  .then((res) => console.log(res))
-  .catch((err) => console.error("ERROR", err));
+// readPuzzle()
+//   .then((res) => console.log(res))
+//   .catch((err) => console.error("ERROR", err));
 
 readRoom("123456")
-  .then((res) => console.log(res))
+  .then((res) => console.log("readRoom", res))
   .catch((err) => console.error("ERROR", err));
