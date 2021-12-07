@@ -5,7 +5,6 @@ import {
   Room,
   Record,
   Puzzle,
-  RoomWord,
 } from "@prisma/client";
 import generateRoomCode from "./generateRoomCode";
 
@@ -33,4 +32,4 @@ prisma.$use(async (params: Prisma.MiddlewareParams, next) => {
   return await next(params);
 });
 
-export { Word, Room, Record, Puzzle, RoomWord };
+export { Word, Room, Record, Puzzle };

@@ -18,7 +18,6 @@ model Word {
   synonym      String?  @db.VarChar(255)
   isPanagram   Boolean
 
-  rooms   RoomWord[]
   records Record[]
 
   @@map("word")
@@ -32,8 +31,7 @@ model Room {
   score     Int      @default(0)
   name      String   @db.VarChar(255)
 
-  foundWords RoomWord[]
-  records    Record[]
+  records Record[]
 
   @@map("room")
 }
@@ -59,15 +57,4 @@ model Puzzle {
   maxScore     Int
 
   @@map("puzzle")
-}
-
-model RoomWord {
-  roomId String @map("room_id")
-  wordId String @map("word_id")
-
-  room Room @relation(fields: [roomId], references: [id])
-  word Word @relation(fields: [wordId], references: [id])
-
-  @@id([roomId, wordId])
-  @@map("room_word")
 }
