@@ -1,11 +1,10 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import CssBaseline from "@mui/material/CssBaseline";
-import InputTextField from "../components/InputTextField";
+import InputTextField from "../components/index/InputTextField";
+import Header from "../components/Header";
+import Button from "../components/Button";
+import TextInput from "../components/TextInput";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -31,9 +30,15 @@ const Home: NextPage = () => {
   };
 
   return (
-    <Container component="main" maxWidth="sm">
-      <CssBaseline />
-      <Box component="form">
+    <div className="container max-w-md mx-auto h-screen pt-2 pb-8 px-6">
+      <div className="flex flex-col gap-4 h-full">
+        <Header />
+        <TextInput placeholder="Room code" />
+        <TextInput placeholder="Your name" />
+        <div className="grow" />
+        <Button>Join</Button>
+      </div>
+      {/* <form>
         <InputTextField
           name="roomCode"
           label="Room Code"
@@ -74,18 +79,11 @@ const Home: NextPage = () => {
             },
           }}
         />
-        <Button
-          onClick={handleSubmit(onSubmit)}
-          type="submit"
-          fullWidth
-          size="large"
-          variant="contained"
-          sx={{ mt: 2, mb: 2, fontWeight: 700, textTransform: "none" }}
-        >
+        <button onClick={handleSubmit(onSubmit)} type="submit">
           Join
-        </Button>
-      </Box>
-    </Container>
+        </button>
+      </form> */}
+    </div>
   );
 };
 

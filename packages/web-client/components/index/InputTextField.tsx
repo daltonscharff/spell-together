@@ -1,6 +1,4 @@
-import { Control } from "react-hook-form";
-import { Controller } from "react-hook-form";
-import TextField from "@mui/material/TextField";
+import { Controller, Control } from "react-hook-form";
 
 interface Props {
   name: string;
@@ -20,17 +18,9 @@ const InputTextField: React.FC<Props> = ({
   <Controller
     name={name}
     control={control}
+    // @ts-ignore
     render={({ field: { onChange, value }, fieldState: { invalid } }) => (
-      <TextField
-        label={label}
-        variant="outlined"
-        margin="normal"
-        value={value}
-        onChange={onChange}
-        error={invalid}
-        helperText={helperText}
-        fullWidth
-      />
+      <input type="text" value={value} onChange={onChange} />
     )}
     rules={rules}
   />

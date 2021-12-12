@@ -9,14 +9,28 @@ export async function createRoom(name: string) {
 }
 
 export async function readRoom(code: string) {
-  return prisma.room.findUnique({
-    where: {
-      code,
-    },
-    include: {
-      records: true,
-    },
-  });
+  return Promise.all([
+    prisma.room.findUnique({
+      where: {
+        code,
+      },
+      select: {
+        code: true,
+        score: true,
+        name: true,
+      },
+    }),
+    prisma.record.findMany({
+      where: {
+        room: {
+          code,
+        },
+      },
+      select: {
+        word: true,
+      },
+    }),
+  ]);
 }
 
 export async function readPuzzle() {
@@ -94,7 +108,7 @@ export async function guessWord(
 //   .then((res) => console.log(res))
 //   .catch((err) => console.error("ERROR", err));
 
-guessWord("123456", "acai", "testUser")
+guessWord("123456", "acacia", "testUser")
   .then((res) => console.log("guessWord", res))
   .catch((err) => console.error("ERROR", err));
 
