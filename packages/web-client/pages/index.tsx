@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import InputTextField from "../components/InputTextField";
 import Header from "../components/Header";
 import Button from "../components/Button";
-import TextInput from "../components/TextInput";
+import LetterInput from "../components/LetterInput";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -33,8 +33,8 @@ const Home: NextPage = () => {
     <div className="container max-w-md mx-auto h-screen pt-2 pb-8 px-6">
       <div className="flex flex-col gap-4 h-full">
         <Header />
-        <TextInput placeholder="Room code" />
-        <TextInput placeholder="Your name" />
+        {/* <LetterInput placeholder="Room code" />
+        <LetterInput placeholder="Your name" /> */}
         <div className="grow" />
         <Button>Join</Button>
       </div>

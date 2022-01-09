@@ -1,12 +1,16 @@
-import { FC, ReactChild, ReactChildren } from "react";
+import { FC, PropsWithChildren } from "react";
 
-type Props = {
-  children: ReactChildren | ReactChild;
-};
+type Props = PropsWithChildren<{
+  className?: string;
+  onClick?: () => void;
+}>;
 
-const Button: FC<Props> = ({ children }) => {
+const Button: FC<Props> = ({ className, onClick, children }) => {
   return (
-    <button className="bg-emerald-600 text-white font-bold w-full py-2 rounded-full">
+    <button
+      onClick={onClick}
+      className={`p-3 px-6 rounded-full border ${className}`}
+    >
       {children}
     </button>
   );

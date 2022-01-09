@@ -1,8 +1,8 @@
 import create from "zustand";
 
 type StoreState = {
-  name?: string;
-  setName: (name: string) => void;
+  username?: string;
+  setUsername: (name: string) => void;
   roomCode?: string;
   setRoomCode: (code: string) => void;
   letters: string[];
@@ -10,9 +10,9 @@ type StoreState = {
 };
 
 export const useStore = create<StoreState>((set) => ({
-  setName: (name) =>
+  setUsername: (name) =>
     set(() => {
-      name;
+      username: name;
     }),
   setRoomCode: (code) =>
     set(() => {
