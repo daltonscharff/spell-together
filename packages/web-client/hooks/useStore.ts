@@ -7,6 +7,9 @@ type StoreState = {
   setRoomCode: (code: string) => void;
   letters: string[];
   centerLetter: string;
+  foundWords: string[];
+  score: number;
+  maxScore: number;
 };
 
 export const useStore = create<StoreState>((set) => ({
@@ -20,6 +23,9 @@ export const useStore = create<StoreState>((set) => ({
     }),
   letters: ["b", "c", "d", "e", "f", "g"],
   centerLetter: "a",
+  foundWords: ["ADAGE", "CAGE", "BABE"],
+  score: 10,
+  maxScore: 121,
 }));
 
 export default useStore;

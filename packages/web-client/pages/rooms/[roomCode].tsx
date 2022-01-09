@@ -1,23 +1,33 @@
 import type { NextPage } from "next";
-import { useRouter } from "next/router";
-import { socket } from "../../hooks/useSocket";
 import useStore from "../../hooks/useStore";
 import Hive from "../../components/Hive";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LetterInput from "../../components/LetterInput";
 import Button from "../../components/Button";
+import FoundWords from "../../components/FoundWords";
+import ProgressBar from "../../components/ProgressBar";
+
+function shuffleLetters(letters: string[]): string[] {
+  for (let i in letters) {
+    const j = Math.floor(Math.random() * parseInt(i, 10));
+    const temp = letters[i];
+    letters[i] = letters[j];
+    letters[j] = temp;
+  }
+  return [...letters];
+}
 
 const Room: NextPage = () => {
-  const router = useRouter();
   const [inputLetters, setInputLetters] = useState("");
-  const roomCode = useStore((state) => state.roomCode);
-  const username = useStore((state) => state.username);
-  const letters = useStore((state) => state.letters);
+  const [letters, setLetters] = useState(useStore((state) => state.letters));
   const centerLetter = useStore((state) => state.centerLetter);
-  console.log({ letterInput: inputLetters });
+  const foundWords = useStore((state) => state.foundWords);
+  const score = useStore((state) => state.score);
+  const maxScore = useStore((state) => state.maxScore);
 
   return (
     <>
+      <ProgressBar currentScore={score} maxScore={maxScore} />
       <LetterInput
         value={inputLetters}
         onChange={(value) => setInputLetters(value.toUpperCase())}
@@ -27,9 +37,22 @@ const Room: NextPage = () => {
         centerLetter={centerLetter}
         onClick={(letter) => setInputLetters(inputLetters + letter)}
       />
-      <Button>Delete</Button>
-      <Button>Shuffle</Button>
+      <Button
+        onClick={() =>
+          setInputLetters(inputLetters.slice(0, inputLetters.length - 1))
+        }
+      >
+        Delete
+      </Button>
+      <Button
+        onClick={() => {
+          setLetters(shuffleLetters(letters));
+        }}
+      >
+        Shuffle
+      </Button>
       <Button>Enter</Button>
+      <FoundWords words={foundWords} />
     </>
   );
 };

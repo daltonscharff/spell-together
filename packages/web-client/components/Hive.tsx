@@ -72,7 +72,7 @@ const Hive: FC<Props> = ({
           <polygon points={"25 0, 75 0, 100 43.3, 75 86.6, 25 86.6, 0 43.3"} />
         </symbol>
         {letters.map((letter, i) => (
-          <symbol id={cells[i].id}>
+          <symbol key={letter} id={cells[i].id}>
             <use
               href="#hexagon"
               style={hexagonStyle}
@@ -103,6 +103,7 @@ const Hive: FC<Props> = ({
           y={cells[i].y}
           width="100"
           height="86.6"
+          key={letter}
         />
       ))}
       <use
