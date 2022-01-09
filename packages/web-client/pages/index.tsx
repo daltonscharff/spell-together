@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import InputTextField from "../components/index/InputTextField";
+import InputTextField from "../components/InputTextField";
 import Header from "../components/Header";
 import Button from "../components/Button";
 import TextInput from "../components/TextInput";
