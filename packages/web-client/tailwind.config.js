@@ -6,6 +6,9 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    screens: {
+      xs: "320px",
+    },
     extend: {
       fontFamily: {
         Roboto: ["Roboto", "sans-serif"],

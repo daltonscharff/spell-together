@@ -31,7 +31,7 @@ const Room: NextPage = () => {
   return (
     <Layout className="font-Roboto">
       <Header date="January 10, 2022" username={username} />
-      <ProgressBar currentScore={score} maxScore={maxScore} />
+      <ProgressBar currentScore={10} maxScore={maxScore} />
       <FoundWords words={foundWords} />
       <LetterInput
         value={inputLetters}
@@ -42,7 +42,7 @@ const Room: NextPage = () => {
         centerLetter={centerLetter}
         onClick={(letter) => setInputLetters(inputLetters + letter)}
       />
-      <div className="flex flex-row gap-4 justify-center my-6">
+      <div className="flex flex-col xs:flex-row  gap-4 justify-center my-6">
         <Button
           onClick={() =>
             setInputLetters(inputLetters.slice(0, inputLetters.length - 1))
@@ -54,8 +54,33 @@ const Room: NextPage = () => {
           onClick={() => {
             setLetters(shuffleLetters(letters));
           }}
+          className="px-3 flex justify-center"
         >
-          Shuffle
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            version="1.1"
+            viewBox="0 0 100 100"
+            className="w-6"
+          >
+            <circle
+              cx="50"
+              cy="50"
+              r="47"
+              stroke="black"
+              strokeWidth="6"
+              fill="white"
+            />
+            <line
+              x1="0"
+              y1="0"
+              x2="100"
+              y2="100"
+              strokeWidth="20"
+              stroke="white"
+            />
+            <polygon points="18,0 18,20 38,20" fill="black" />
+            <polygon points="82,100 82,80 62,80" fill="black" />
+          </svg>
         </Button>
         <Button>Enter</Button>
       </div>
