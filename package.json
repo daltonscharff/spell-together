@@ -3,11 +3,11 @@
   "repository": "https://github.com/daltonscharff/multiplayer-spelling-bee.git",
   "author": "Dalton Scharff",
   "license": "UNLICENSED",
-  "devDependencies": {
-    "lerna": "^4.0.0"
-  },
   "private": true,
   "prettier": {
     "semi": true
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
