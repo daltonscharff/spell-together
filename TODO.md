@@ -1,10 +1,9 @@
 ## Packages
 - Yarn as package manager
 - Fastify as http server
-- Typeorm for db creation/modification
+- Prisma for db creation/modification
 - ??? for data validation
 - Supertest for e2e testing
-- Lerna for monorepo
 
 ## Gameplan
 - [x] basic api for puzzle, records, rooms, and words
@@ -17,9 +16,6 @@
 - [ ] scraping tool unit testing
 - [ ] GUI
 - [x] package specific .env files
-
-## Notes
-- use `lerna add <package_name> packages/<core|server|web-client>` instead of `yarn add` for new dependencies
 
 ### Scoring
 - Beginner: 0%
