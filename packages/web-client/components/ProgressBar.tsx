@@ -46,11 +46,15 @@ const levels = [
 
 function findLevelIndex(currentScore: number, maxScore: number): number {
   const currentPercent = (currentScore / maxScore) * 100;
-  return levels.findIndex((level) => level.percent > currentPercent) - 1;
+  const index = levels.findIndex((level) => level.percent > currentPercent);
+
+  if (index === -1) return levels.length - 1;
+  return index - 1;
 }
 
 const FoundWords: FC<Props> = ({ currentScore, maxScore }) => {
   const levelIndex = findLevelIndex(currentScore, maxScore);
+  console.log({ levelIndex });
   const rank = levels[levelIndex].rank;
   return (
     <div className="flex items-center">
