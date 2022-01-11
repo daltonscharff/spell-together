@@ -1,12 +1,19 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 
-const Header: FC = () => {
-  const [blinker, setBlinker] = useState("▁");
+type Props = {
+  date: string;
+  username?: string;
+};
+
+const Header: FC<Props> = ({ date, username }) => {
   return (
-    <div className="font-NotoSans text-2xl font-bold my-3">
-      <span>Spell Together</span>
-      <span className="text-amber-400 opacity-50 ml-1">{blinker}</span>
-    </div>
+    <header className="flex justify-between font-Roboto pb-4 mb-4 border-b">
+      <div>
+        <div className="font-RobotoSlab text-3xl">Spell Together</div>
+        <div>{date}</div>
+      </div>
+      {username ? <div className="leading-9">{username}</div> : <></>}
+    </header>
   );
 };
 

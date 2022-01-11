@@ -32,7 +32,7 @@ const Home: NextPage = () => {
   return (
     <div className="container max-w-md mx-auto h-screen pt-2 pb-8 px-6">
       <div className="flex flex-col gap-4 h-full">
-        <Header />
+        {/* <Header /> */}
         {/* <LetterInput placeholder="Room code" />
         <LetterInput placeholder="Your name" /> */}
         <div className="grow" />

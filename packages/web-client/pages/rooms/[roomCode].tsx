@@ -6,6 +6,8 @@ import LetterInput from "../../components/LetterInput";
 import Button from "../../components/Button";
 import FoundWords from "../../components/FoundWords";
 import ProgressBar from "../../components/ProgressBar";
+import Layout from "../../components/Layout";
+import Header from "../../components/Header";
 
 function shuffleLetters(letters: string[]): string[] {
   for (let i in letters) {
@@ -24,10 +26,13 @@ const Room: NextPage = () => {
   const foundWords = useStore((state) => state.foundWords);
   const score = useStore((state) => state.score);
   const maxScore = useStore((state) => state.maxScore);
+  const username = useStore((state) => state.username) || "UNKNOWN";
 
   return (
-    <>
+    <Layout>
+      <Header date="January 10, 2022" username={username} />
       <ProgressBar currentScore={score} maxScore={maxScore} />
+      <FoundWords words={foundWords} />
       <LetterInput
         value={inputLetters}
         onChange={(value) => setInputLetters(value.toUpperCase())}
@@ -52,8 +57,7 @@ const Room: NextPage = () => {
         Shuffle
       </Button>
       <Button>Enter</Button>
-      <FoundWords words={foundWords} />
-    </>
+    </Layout>
   );
 };
 

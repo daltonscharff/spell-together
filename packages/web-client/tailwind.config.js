@@ -8,8 +8,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        NotoSans: ["Noto Sans Display", "sans-serif"],
-        sans: ["Noto Sans Display", ...defaultTheme.fontFamily.sans],
+        Roboto: ["Roboto", "sans-serif"],
+        RobotoSlab: ["Roboto Slab", "serif"],
       },
     },
   },

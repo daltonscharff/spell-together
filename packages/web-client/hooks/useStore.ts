@@ -21,6 +21,7 @@ export const useStore = create<StoreState>((set) => ({
     set(() => {
       roomCode: code;
     }),
+  username: "Dalton",
   letters: ["b", "c", "d", "e", "f", "g"],
   centerLetter: "a",
   foundWords: ["ADAGE", "CAGE", "BABE"],
