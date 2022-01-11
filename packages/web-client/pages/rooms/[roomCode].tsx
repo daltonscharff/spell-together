@@ -29,7 +29,7 @@ const Room: NextPage = () => {
   const username = useStore((state) => state.username) || "UNKNOWN";
 
   return (
-    <Layout>
+    <Layout className="font-Roboto">
       <Header date="January 10, 2022" username={username} />
       <ProgressBar currentScore={score} maxScore={maxScore} />
       <FoundWords words={foundWords} />
@@ -42,21 +42,23 @@ const Room: NextPage = () => {
         centerLetter={centerLetter}
         onClick={(letter) => setInputLetters(inputLetters + letter)}
       />
-      <Button
-        onClick={() =>
-          setInputLetters(inputLetters.slice(0, inputLetters.length - 1))
-        }
-      >
-        Delete
-      </Button>
-      <Button
-        onClick={() => {
-          setLetters(shuffleLetters(letters));
-        }}
-      >
-        Shuffle
-      </Button>
-      <Button>Enter</Button>
+      <div className="flex flex-row gap-4 justify-center my-6">
+        <Button
+          onClick={() =>
+            setInputLetters(inputLetters.slice(0, inputLetters.length - 1))
+          }
+        >
+          Delete
+        </Button>
+        <Button
+          onClick={() => {
+            setLetters(shuffleLetters(letters));
+          }}
+        >
+          Shuffle
+        </Button>
+        <Button>Enter</Button>
+      </div>
     </Layout>
   );
 };

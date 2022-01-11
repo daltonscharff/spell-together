@@ -9,7 +9,8 @@ const LetterInput: FC<Props> = ({ value, onChange }) => {
   return (
     <input
       type="text"
-      className="w-full py-3 bg-zinc-50 rounded pl-8 pr-2"
+      className="w-full font-black text-3xl text-center py-3 mb-4 rounded focus:outline-none"
+      placeholder={'"..."'}
       value={value}
       onChange={(event) => onChange(event.target.value)}
     />
