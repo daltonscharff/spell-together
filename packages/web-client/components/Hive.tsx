@@ -45,7 +45,6 @@ const hexagonStyle: CSSProperties = {
   cursor: "pointer",
 };
 const textStyle: CSSProperties = {
-  fontSize: "32px",
   dominantBaseline: "middle",
   textAnchor: "middle",
   cursor: "pointer",
@@ -78,7 +77,12 @@ const Hive: FC<Props> = ({
               style={hexagonStyle}
               className="fill-zinc-100"
             />
-            <text x="50%" y="55%" style={textStyle} className="font-bold">
+            <text
+              x="50%"
+              y="55%"
+              style={textStyle}
+              className="font-bold text-3xl"
+            >
               {letter}
             </text>
           </symbol>
@@ -89,7 +93,12 @@ const Hive: FC<Props> = ({
             style={hexagonStyle}
             className="fill-yellow-300"
           />
-          <text x="50%" y="55%" style={textStyle} className="font-bold">
+          <text
+            x="50%"
+            y="55%"
+            style={textStyle}
+            className="font-bold text-3xl"
+          >
             {centerLetter}
           </text>
         </symbol>
