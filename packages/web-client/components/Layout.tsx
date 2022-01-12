@@ -6,7 +6,7 @@ type Props = PropsWithChildren<{
 
 const Layout: FC<Props> = ({ className, children }) => {
   return (
-    <main className={`container mx-auto px-6 py-4 ${className}`}>
+    <main className={`sm:container mx-auto px-6 my-4 ${className}`}>
       {children}
     </main>
   );

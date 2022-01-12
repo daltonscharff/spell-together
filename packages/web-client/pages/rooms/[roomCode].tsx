@@ -42,7 +42,7 @@ const Room: NextPage = () => {
         centerLetter={centerLetter}
         onClick={(letter) => setInputLetters(inputLetters + letter)}
       />
-      <div className="flex flex-col xs:flex-row  gap-4 justify-center my-6">
+      <div className="flex flex-col xs:flex-row gap-4 justify-center my-6">
         <Button
           onClick={() =>
             setInputLetters(inputLetters.slice(0, inputLetters.length - 1))
