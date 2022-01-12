@@ -60,7 +60,12 @@ const FoundWords: FC<Props> = ({ currentScore, maxScore }) => {
       <span className="capitalize font-black w-20 mr-2">{rank}</span>
       <span className="flex justify-between items-center w-full">
         {levels.map((_, i) => (
-          <>
+          <div
+            className={`flex ${
+              i !== levels.length - 1 ? "flex-grow" : ""
+            } justify-between items-center`}
+            key={i}
+          >
             <span
               key={i}
               className={`text-center align-middle ${
@@ -76,7 +81,7 @@ const FoundWords: FC<Props> = ({ currentScore, maxScore }) => {
             ) : (
               ""
             )}
-          </>
+          </div>
         ))}
       </span>
     </div>
