@@ -7,12 +7,14 @@ type Props = {
 
 const Header: FC<Props> = ({ date, username }) => {
   return (
-    <header className="flex justify-between pb-4 mb-4 border-b">
-      <div>
-        <div className="font-RobotoSlab text-3xl">Spell Together</div>
-        <div className="font-light">{date}</div>
+    <header className="pb-4 border-b">
+      <div className="font-RobotoSlab text-3xl text-left mb-3">
+        Spell Together
       </div>
-      {username ? <div className="leading-9">{username}</div> : <></>}
+      <div className="flex justify-between gap-4 font-light">
+        <div>{date}</div>
+        {username && <div>{username}</div>}
+      </div>
     </header>
   );
 };

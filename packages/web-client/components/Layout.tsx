@@ -6,7 +6,9 @@ type Props = PropsWithChildren<{
 
 const Layout: FC<Props> = ({ className, children }) => {
   return (
-    <main className={`sm:container mx-auto px-6 my-4 ${className}`}>
+    <main
+      className={`sm:container mx-auto px-6 my-4 flex flex-col gap-4 ${className}`}
+    >
       {children}
     </main>
   );
