@@ -24,7 +24,7 @@ export const useStore = create<StoreState>((set) => ({
   username: "Dalton",
   letters: ["b", "c", "d", "e", "f", "g"],
   centerLetter: "a",
-  foundWords: ["ADAGE", "CAGE", "BABE"],
+  foundWords: ["CAGE", "ADAGE", "BABE", "CAGED", "BAGGAGE", "CABBAGE", "BADGE"],
   score: 10,
   maxScore: 121,
 }));
