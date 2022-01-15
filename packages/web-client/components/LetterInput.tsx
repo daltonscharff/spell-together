@@ -27,7 +27,7 @@ const LetterInput: FC<Props> = ({
   centerLetter,
   onChange,
 }) => {
-  const [isFocused, setIsFocused] = useState(false);
+  const [isFocused, setIsFocused] = useState(true);
 
   useEffect(() => {
     const registerEvent = (event: KeyboardEvent) => {
