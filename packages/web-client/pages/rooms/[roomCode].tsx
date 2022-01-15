@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import useStore from "../../hooks/useStore";
 import Hive from "../../components/Hive";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import LetterInput from "../../components/LetterInput";
 import Button from "../../components/Button";
 import FoundWords from "../../components/FoundWords";
@@ -27,7 +27,24 @@ const Room: NextPage = () => {
   const score = useStore((state) => state.score);
   const maxScore = useStore((state) => state.maxScore);
   const username = useStore((state) => state.username) || "UNKNOWN";
-  const letterInputRef = useRef<HTMLInputElement>(null);
+
+  const addLetterToInput = (letter: string) => {
+    if (inputLetters.length > 20) return;
+    setInputLetters(inputLetters + letter.toUpperCase());
+  };
+
+  const deleteLetterFromInput = () =>
+    setInputLetters(inputLetters.slice(0, inputLetters.length - 1));
+
+  const handleLetterInput = (key: string) => {
+    if (/[a-zA-Z]/.test(key) && key.length === 1) {
+      addLetterToInput(key);
+    } else if (key === "Backspace") {
+      deleteLetterFromInput();
+    } else if (key === "Enter") {
+      // do something
+    }
+  };
 
   return (
     <Layout className="font-Roboto">
@@ -37,29 +54,20 @@ const Room: NextPage = () => {
           <ProgressBar currentScore={score} maxScore={maxScore} />
           <FoundWords words={foundWords} />
         </div>
-        <div
-          className="flex flex-col gap-4 justify-center"
-          onClick={() => letterInputRef.current?.focus()}
-        >
+        <div className="flex flex-col gap-4 justify-center">
           <LetterInput
             value={inputLetters}
             validLetters={letters}
             centerLetter={centerLetter}
-            inputRef={letterInputRef}
-            onChange={(value) => setInputLetters(value.toUpperCase())}
+            onChange={(value) => handleLetterInput(value)}
           />
           <Hive
             letters={letters}
             centerLetter={centerLetter}
-            onClick={(letter) => setInputLetters(inputLetters + letter)}
+            onClick={(letter) => addLetterToInput(letter)}
           />
           <div className="flex flex-col xs:flex-row gap-4 justify-center my-6">
-            <Button
-              className="xs:w-24"
-              onClick={() =>
-                setInputLetters(inputLetters.slice(0, inputLetters.length - 1))
-              }
-            >
+            <Button className="xs:w-24" onClick={() => deleteLetterFromInput()}>
               Delete
             </Button>
             <Button
