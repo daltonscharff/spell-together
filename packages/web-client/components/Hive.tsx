@@ -65,7 +65,7 @@ const Hive: FC<Props> = ({
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
       viewBox="0 0 250 259.8"
-      className="max-w-xs mx-auto"
+      className="max-w-[280px] mx-auto"
     >
       <defs>
         <symbol id="hexagon">
