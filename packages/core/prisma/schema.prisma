@@ -16,7 +16,7 @@ model Word {
   definition   String?  @db.Text
   partOfSpeech String?  @db.VarChar(255)
   synonym      String?  @db.VarChar(255)
-  isPanagram   Boolean
+  isPangram    Boolean
 
   records Record[]
 
@@ -52,7 +52,7 @@ model Record {
 model Puzzle {
   id           String   @id @default(cuid())
   createdAt    DateTime @default(now())
-  letters      String[]
+  outerLetters String[]
   centerLetter String   @db.Char
   maxScore     Int
 

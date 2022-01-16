@@ -9,24 +9,26 @@ import ProgressBar from "../../components/ProgressBar";
 import Layout from "../../components/Layout";
 import Header from "../../components/Header";
 
-function shuffleLetters(letters: string[]): string[] {
-  for (let i in letters) {
+function shuffle(items: string[]): string[] {
+  for (let i in items) {
     const j = Math.floor(Math.random() * parseInt(i, 10));
-    const temp = letters[i];
-    letters[i] = letters[j];
-    letters[j] = temp;
+    const temp = items[i];
+    items[i] = items[j];
+    items[j] = temp;
   }
-  return [...letters];
+  return [...items];
 }
 
 const Room: NextPage = () => {
-  const [inputLetters, setInputLetters] = useState("");
-  const [letters, setLetters] = useState(useStore((state) => state.letters));
+  const outerLetters = useStore((state) => state.outerLetters);
   const centerLetter = useStore((state) => state.centerLetter);
   const foundWords = useStore((state) => state.foundWords);
   const score = useStore((state) => state.score);
   const maxScore = useStore((state) => state.maxScore);
   const username = useStore((state) => state.username) || "UNKNOWN";
+
+  const [shuffledLetters, setShuffledLetters] = useState(outerLetters);
+  const [inputLetters, setInputLetters] = useState("");
 
   const addLetterToInput = (letter: string) => {
     if (inputLetters.length > 20) return;
@@ -62,12 +64,12 @@ const Room: NextPage = () => {
         <div className="flex flex-col gap-4 justify-center">
           <LetterInput
             value={inputLetters}
-            validLetters={letters}
+            outerLetters={outerLetters}
             centerLetter={centerLetter}
             onChange={(value) => handleLetterInput(value)}
           />
           <Hive
-            letters={letters}
+            outerLetters={shuffledLetters}
             centerLetter={centerLetter}
             onClick={(letter) => addLetterToInput(letter)}
           />
@@ -77,7 +79,7 @@ const Room: NextPage = () => {
             </Button>
             <Button
               onClick={() => {
-                setLetters(shuffleLetters(letters));
+                setShuffledLetters(shuffle(shuffledLetters));
               }}
               className="px-3 flex justify-center"
             >

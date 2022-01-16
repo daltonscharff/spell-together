@@ -1,7 +1,7 @@
 import { CSSProperties, FC } from "react";
 
 type Props = {
-  letters: string[];
+  outerLetters: string[];
   centerLetter: string;
   onClick?: (letter: string) => void;
 };
@@ -51,14 +51,12 @@ const textStyle: CSSProperties = {
 };
 
 const Hive: FC<Props> = ({
-  letters,
+  outerLetters,
   centerLetter,
   onClick = (_: string) => {},
 }) => {
   centerLetter = centerLetter.toUpperCase();
-  letters = letters
-    .map((letter) => letter.toUpperCase())
-    .filter((letter) => letter !== centerLetter);
+  outerLetters = outerLetters.map((letter) => letter.toUpperCase());
 
   return (
     <svg
@@ -71,7 +69,7 @@ const Hive: FC<Props> = ({
         <symbol id="hexagon">
           <polygon points={"25 0, 75 0, 100 43.3, 75 86.6, 25 86.6, 0 43.3"} />
         </symbol>
-        {letters.map((letter, i) => (
+        {outerLetters.map((letter, i) => (
           <symbol key={letter} id={cells[i].id}>
             <use
               href="#hexagon"
@@ -105,7 +103,7 @@ const Hive: FC<Props> = ({
         </symbol>
       </defs>
 
-      {letters.map((letter, i) => (
+      {outerLetters.map((letter, i) => (
         <use
           href={`#${cells[i].id}`}
           onClick={() => onClick(letter)}

@@ -2,31 +2,22 @@ import create from "zustand";
 
 type StoreState = {
   username?: string;
-  setUsername: (name: string) => void;
   roomCode?: string;
-  setRoomCode: (code: string) => void;
-  letters: string[];
+  outerLetters: string[];
   centerLetter: string;
   foundWords: string[];
   score: number;
   maxScore: number;
 };
 
-export const useStore = create<StoreState>((set) => ({
-  setUsername: (name) =>
-    set(() => {
-      username: name;
-    }),
-  setRoomCode: (code) =>
-    set(() => {
-      roomCode: code;
-    }),
+const store = () => ({
   username: "Dalton",
-  letters: ["b", "c", "d", "e", "f", "g"],
+  outerLetters: ["b", "c", "d", "e", "f", "g"],
   centerLetter: "a",
   foundWords: ["CAGE", "ADAGE", "BABE", "CAGED", "BAGGAGE", "CABBAGE", "BADGE"],
   score: 10,
   maxScore: 121,
-}));
+});
 
+export const useStore = create<StoreState>(store);
 export default useStore;

@@ -2,7 +2,7 @@ import { FC, RefObject, useEffect, useRef, useState } from "react";
 
 type Props = {
   value: string;
-  validLetters: string[];
+  outerLetters: string[];
   centerLetter: string;
   onChange: (key: string) => void;
 };
@@ -11,19 +11,19 @@ type LetterCategory = "valid" | "invalid" | "center";
 
 function checkLetterCategory(
   letter: string,
-  letters: string[],
+  outerLetters: string[],
   centerLetter: string
 ): LetterCategory {
   letter = letter.toLowerCase();
   if (letter === centerLetter) return "center";
-  if (letters.map((letter) => letter.toLowerCase()).includes(letter))
+  if (outerLetters.map((letter) => letter.toLowerCase()).includes(letter))
     return "valid";
   return "invalid";
 }
 
 const LetterInput: FC<Props> = ({
   value,
-  validLetters,
+  outerLetters,
   centerLetter,
   onChange,
 }) => {
@@ -56,7 +56,7 @@ const LetterInput: FC<Props> = ({
       {value.split("").map((letter, i) => {
         const category = checkLetterCategory(
           letter,
-          validLetters,
+          outerLetters,
           centerLetter
         );
         let color = "";

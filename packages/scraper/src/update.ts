@@ -4,7 +4,7 @@ import { prisma } from "@daltonscharff/spelling-bee-core";
 
 const lookupUrl = "https://wordsapiv1.p.rapidapi.com/words";
 
-function isPanagram(word: string): boolean {
+function isPangram(word: string): boolean {
   const letterSet = new Set<string>();
   for (let letter of word.split("")) {
     letterSet.add(letter);
@@ -19,7 +19,7 @@ function calculatePointValue(word: string): number {
   } else if (word.length > 4) {
     points = word.length;
   }
-  if (isPanagram(word)) points += 7;
+  if (isPangram(word)) points += 7;
   return points;
 }
 
@@ -45,51 +45,33 @@ async function lookup(word: string): Promise<{
 }
 
 export default async function update(data: ScrapedData) {
-  await prisma.puzzleWord.deleteMany();
   await Promise.all([prisma.word.deleteMany(), prisma.puzzle.deleteMany()]);
 
   const words = await Promise.all(
     data.words.map(async (word) => {
       const { definition, partOfSpeech, synonym } = await lookup(word);
-      const w = {
-        word: word,
-        pointValue: calculatePointValue(word),
-        isPanagram: isPanagram(word),
-        definition,
-        partOfSpeech,
-        synonym,
-      };
-      return w;
-    })
-  );
-
-  const wordIds = await Promise.all(
-    words.map(async (word) => {
-      return {
-        wordId: (
-          await prisma.word.create({
-            select: {
-              id: true,
-            },
-            data: word,
-          })
-        ).id,
-      };
+      return await prisma.word.create({
+        data: {
+          word: word,
+          pointValue: calculatePointValue(word),
+          isPangram: isPangram(word),
+          definition,
+          partOfSpeech,
+          synonym,
+        },
+      });
     })
   );
 
   const puzzle = await prisma.puzzle.create({
     data: {
-      letters: data.letters,
+      outerLetters: data.letters.filter(
+        (letter) => letter !== data.centerLetter
+      ),
       centerLetter: data.centerLetter,
       maxScore: words.reduce((total, word) => (total += word.pointValue), 0),
-      answers: {
-        createMany: {
-          data: wordIds,
-        },
-      },
     },
   });
 
-  return puzzle;
+  return { puzzle, words };
 }
