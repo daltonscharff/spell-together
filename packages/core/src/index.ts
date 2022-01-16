@@ -33,3 +33,4 @@ prisma.$use(async (params: Prisma.MiddlewareParams, next) => {
 });
 
 export { Word, Room, Record, Puzzle };
+export * from "./types";

@@ -1,13 +1,7 @@
 import create from "zustand";
 import dayjs from "dayjs";
+import { FoundWord } from "@daltonscharff/spelling-bee-core";
 import { socket } from "./useSocket";
-import { Record, Word } from "@daltonscharff/spelling-bee-core";
-
-export type FoundWord = Omit<
-  Word,
-  "id" | "createdAt" | "updatedAt" | "records"
-> &
-  Pick<Record, "user">;
 
 type StoreState = {
   username?: string;
@@ -22,6 +16,7 @@ type StoreState = {
 
 const store = () => ({
   username: "Dalton",
+  roomCode: "123456",
   outerLetters: [],
   centerLetter: "",
   foundWords: [],
@@ -42,7 +37,9 @@ socket.on(
   }
 );
 
-socket.on("updateFoundWords", ({ foundWords }) => {});
+socket.on("updateFoundWords", ({ foundWords }) => {
+  useStore.setState({ foundWords });
+});
 
 export const useStore = create<StoreState>(store);
 export default useStore;
