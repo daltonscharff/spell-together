@@ -47,12 +47,17 @@ const Room: NextPage = () => {
   };
 
   return (
-    <Layout className="font-Roboto">
+    <Layout className="font-Roboto min-w-[260px]">
       <Header date="January 10, 2022" username={username} />
       <div className="flex flex-col gap-4 sm:gap-8 sm:flex-row-reverse">
         <div className="flex flex-grow flex-col gap-4">
           <ProgressBar currentScore={score} maxScore={maxScore} />
-          <FoundWords words={foundWords} />
+          <div className="hidden sm:block">
+            <FoundWords words={foundWords} />
+          </div>
+          <div className="sm:hidden">
+            <FoundWords words={foundWords} collapsible />
+          </div>
         </div>
         <div className="flex flex-col gap-4 justify-center">
           <LetterInput
