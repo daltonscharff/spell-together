@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { FoundWord } from "../hooks/useStore";
+import { FoundWord } from "@daltonscharff/spelling-bee-core";
 
 type Props = {
   words: FoundWord[];
@@ -15,11 +15,13 @@ const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
         className={`flex-grow flex flex-row border rounded-lg p-3 capitalize`}
       >
         <div className={`flex flex-row flex-grow overflow-hidden`}>
-          {words.map((word, i) => (
-            <div className="px-1" key={i}>
-              {word.word.toLowerCase()}
-            </div>
-          ))}
+          {words
+            .sort((a, b) => (a.foundAt < b.foundAt ? 1 : -1))
+            .map((word, i) => (
+              <div className="px-1" key={i}>
+                {word.word.toLowerCase()}
+              </div>
+            ))}
         </div>
         <div className="px-1 ml-2" onClick={() => setIsCollapsed(!isCollapsed)}>
           <i className={`bx bxs-chevron-down`}></i>
