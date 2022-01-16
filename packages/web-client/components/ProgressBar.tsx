@@ -57,7 +57,7 @@ const FoundWords: FC<Props> = ({ currentScore, maxScore }) => {
   const rank = levels[levelIndex].rank;
   return (
     <div className="flex items-center">
-      <span className="capitalize font-black w-20 mr-2">{rank}</span>
+      <span className="capitalize font-black mr-3">{rank}</span>
       <span className="flex justify-between items-center w-full">
         {levels.map((_, i) => (
           <div

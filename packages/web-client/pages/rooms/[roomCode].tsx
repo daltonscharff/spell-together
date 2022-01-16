@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import useStore from "../../hooks/useStore";
 import Hive from "../../components/Hive";
-import { useCallback, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import LetterInput from "../../components/LetterInput";
 import Button from "../../components/Button";
 import FoundWords from "../../components/FoundWords";
@@ -24,11 +24,14 @@ const Room: NextPage = () => {
   const centerLetter = useStore((state) => state.centerLetter);
   const foundWords = useStore((state) => state.foundWords);
   const score = useStore((state) => state.score);
+  const date = useStore((state) => state.date);
   const maxScore = useStore((state) => state.maxScore);
   const username = useStore((state) => state.username) || "UNKNOWN";
 
   const [shuffledLetters, setShuffledLetters] = useState(outerLetters);
   const [inputLetters, setInputLetters] = useState("");
+
+  useEffect(() => setShuffledLetters(outerLetters), [outerLetters]);
 
   const addLetterToInput = (letter: string) => {
     if (inputLetters.length > 20) return;
@@ -50,7 +53,7 @@ const Room: NextPage = () => {
 
   return (
     <Layout className="font-Roboto min-w-[260px]">
-      <Header date="January 10, 2022" username={username} />
+      <Header date={date} username={username} />
       <div className="flex flex-col gap-4 sm:gap-8 sm:flex-row-reverse">
         <div className="flex flex-grow flex-col gap-4">
           <ProgressBar currentScore={score} maxScore={maxScore} />

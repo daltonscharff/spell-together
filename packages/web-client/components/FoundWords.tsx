@@ -1,7 +1,8 @@
 import { FC, useState } from "react";
+import { FoundWord } from "../hooks/useStore";
 
 type Props = {
-  words: string[];
+  words: FoundWord[];
   collapsible?: boolean;
 };
 
@@ -16,7 +17,7 @@ const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
         <div className={`flex flex-row flex-grow overflow-hidden`}>
           {words.map((word, i) => (
             <div className="px-1" key={i}>
-              {word.toLowerCase()}
+              {word.word.toLowerCase()}
             </div>
           ))}
         </div>
@@ -43,8 +44,8 @@ const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
       </div>
       <div className="grid grid-cols-2 gap-2">
         {[...words].sort().map((word, i) => (
-          <div key={i} className="border-b py-1">
-            {word.toLowerCase()}
+          <div key={i} className="border-b my-1">
+            {word.word.toLowerCase()}
           </div>
         ))}
       </div>
