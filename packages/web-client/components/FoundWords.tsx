@@ -15,7 +15,7 @@ const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
         className={`flex-grow flex flex-row border rounded-lg p-3 capitalize`}
       >
         <div className={`flex flex-row flex-grow overflow-hidden`}>
-          {words
+          {[...words]
             .sort((a, b) => (a.foundAt < b.foundAt ? 1 : -1))
             .map((word, i) => (
               <div className="px-1" key={i}>
@@ -45,11 +45,13 @@ const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
         )}
       </div>
       <div className="grid grid-cols-2 gap-2">
-        {[...words].sort().map((word, i) => (
-          <div key={i} className="border-b my-1">
-            {word.word.toLowerCase()}
-          </div>
-        ))}
+        {[...words]
+          .sort((a, b) => (a.word > b.word ? 1 : -1))
+          .map((word, i) => (
+            <div key={i} className="border-b my-1">
+              {word.word.toLowerCase()}
+            </div>
+          ))}
       </div>
     </div>
   );

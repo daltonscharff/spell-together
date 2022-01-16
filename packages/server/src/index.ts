@@ -15,11 +15,9 @@ server.ready().then(async () => {
     // @ts-ignore
     console.log(socket.client.conn.server.clientsCount + " users connected");
 
-    socket.emit("updatePuzzle", await getPuzzle());
-
-    socket.emit("updateFoundWords", {
-      foundWords: await getFoundWords("123456"),
-    });
+    updatePuzzle(socket);
+    updateFoundWords(socket, "123456");
+    onSubmitWord(socket);
   });
 
   server.io.on("disconnect", (socket) =>
@@ -35,14 +33,13 @@ server.ready().then(async () => {
     });
 });
 
-async function getPuzzle(): Promise<Omit<Puzzle, "id">> {
+async function updatePuzzle(socket) {
   const puzzle = await prisma.puzzle.findFirst();
-  console.log(puzzle);
   delete puzzle.id;
-  return puzzle;
+  socket.emit("updatePuzzle", puzzle);
 }
 
-async function getFoundWords(roomCode: string): Promise<FoundWord[]> {
+async function updateFoundWords(socket, roomCode: string) {
   const { id: roomId } = await prisma.room.findUnique({
     where: {
       code: roomCode,
@@ -58,8 +55,7 @@ async function getFoundWords(roomCode: string): Promise<FoundWord[]> {
       word: true,
     },
   });
-
-  return records.map((record) => ({
+  const foundWords = records.map((record) => ({
     username: record.user,
     foundAt: record.createdAt.toISOString(),
     word: record.word.word,
@@ -69,4 +65,45 @@ async function getFoundWords(roomCode: string): Promise<FoundWord[]> {
     synonym: record.word.synonym,
     isPangram: record.word.isPangram,
   }));
+
+  socket.emit("updateFoundWords", { foundWords });
+}
+
+async function onSubmitWord(socket) {
+  socket.on(
+    "submitWord",
+    async (data: { username: string; roomCode: string; word: string }) => {
+      const word = await prisma.word.findUnique({
+        where: {
+          word: data.word.toLowerCase(),
+        },
+        select: {
+          id: true,
+        },
+      });
+      const room = await prisma.room.findUnique({
+        where: {
+          code: data.roomCode,
+        },
+      });
+      if (word && room) {
+        const count = await prisma.record.count({
+          where: {
+            roomId: room.id,
+            wordId: word.id,
+          },
+        });
+        if (count === 0) {
+          await prisma.record.create({
+            data: {
+              user: data.username,
+              roomId: room.id,
+              wordId: word.id,
+            },
+          });
+        }
+      }
+      updateFoundWords(socket, data.roomCode);
+    }
+  );
 }

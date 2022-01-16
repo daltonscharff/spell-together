@@ -12,6 +12,7 @@ type StoreState = {
   score: number;
   maxScore: number;
   date: string;
+  hasLoaded: boolean;
 };
 
 const store = () => ({
@@ -23,6 +24,7 @@ const store = () => ({
   score: 0,
   maxScore: 0,
   date: "",
+  hasLoaded: false,
 });
 
 socket.on(
@@ -33,11 +35,15 @@ socket.on(
       centerLetter,
       maxScore,
       date: dayjs(createdAt).format("MMMM D, YYYY"),
+      hasLoaded: true,
     });
   }
 );
 
-socket.on("updateFoundWords", ({ foundWords }) => {
+socket.on("updateFoundWords", ({ foundWords }: { foundWords: FoundWord[] }) => {
+  useStore.setState({
+    score: foundWords.reduce((total, { pointValue }) => total + pointValue, 0),
+  });
   useStore.setState({ foundWords });
 });
 

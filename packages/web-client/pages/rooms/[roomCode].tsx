@@ -8,6 +8,8 @@ import FoundWords from "../../components/FoundWords";
 import ProgressBar from "../../components/ProgressBar";
 import Layout from "../../components/Layout";
 import Header from "../../components/Header";
+import Loader from "../../components/Loader";
+import { socket } from "../../hooks/useSocket";
 
 function shuffle(items: string[]): string[] {
   for (let i in items) {
@@ -27,6 +29,8 @@ const Room: NextPage = () => {
   const date = useStore((state) => state.date);
   const maxScore = useStore((state) => state.maxScore);
   const username = useStore((state) => state.username) || "UNKNOWN";
+  const roomCode = useStore((state) => state.roomCode);
+  const hasLoaded = useStore((state) => state.hasLoaded);
 
   const [shuffledLetters, setShuffledLetters] = useState(outerLetters);
   const [inputLetters, setInputLetters] = useState("");
@@ -47,9 +51,25 @@ const Room: NextPage = () => {
     } else if (key === "Backspace") {
       deleteLetterFromInput();
     } else if (key === "Enter") {
-      // do something
+      submitInput();
     }
   };
+
+  const submitInput = () => {
+    socket.emit("submitWord", {
+      username,
+      roomCode,
+      word: inputLetters,
+    });
+    setInputLetters("");
+  };
+
+  if (!hasLoaded)
+    return (
+      <div className="flex justify-center h-screen items-center">
+        <Loader />
+      </div>
+    );
 
   return (
     <Layout className="font-Roboto min-w-[260px]">
@@ -112,7 +132,9 @@ const Room: NextPage = () => {
                 <polygon points="82,100 82,80 62,80" fill="black" />
               </svg>
             </Button>
-            <Button className="xs:w-24">Enter</Button>
+            <Button className="xs:w-24" onClick={submitInput}>
+              Enter
+            </Button>
           </div>
         </div>
       </div>
