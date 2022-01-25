@@ -21,6 +21,7 @@ socket.on("updateFoundWords", ({ foundWords }: { foundWords: any[] }) => {
     score: foundWords.reduce((total, { pointValue }) => total + pointValue, 0),
   });
   useStore.setState({ foundWords });
+  console.log({ foundWords });
 });
 
 export const useStore = create<StoreState>(store);

@@ -117,9 +117,9 @@ async function onSubmitWord(socket) {
               wordId: word.id,
             },
           });
+          updateFoundWords(socket, data.roomCode);
         }
       }
-      updateFoundWords(socket, data.roomCode);
     }
   );
 }

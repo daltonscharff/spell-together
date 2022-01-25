@@ -7,7 +7,6 @@ type Props = {
 
 const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
-  console.log(words);
   if (collapsible && isCollapsed)
     return (
       <div
