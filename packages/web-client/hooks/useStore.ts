@@ -1,31 +1,7 @@
 import create from "zustand";
 import dayjs from "dayjs";
-import { FoundWord } from "@daltonscharff/spelling-bee-core";
 import { socket } from "./useSocket";
-
-type StoreState = {
-  username?: string;
-  roomCode?: string;
-  outerLetters: string[];
-  centerLetter: string;
-  foundWords: FoundWord[];
-  score: number;
-  maxScore: number;
-  date: string;
-  hasLoaded: boolean;
-};
-
-const store = () => ({
-  username: "Dalton",
-  roomCode: "123456",
-  outerLetters: [],
-  centerLetter: "",
-  foundWords: [],
-  score: 0,
-  maxScore: 0,
-  date: "",
-  hasLoaded: false,
-});
+import store, { StoreState } from "../store";
 
 socket.on(
   "updatePuzzle",
@@ -40,7 +16,7 @@ socket.on(
   }
 );
 
-socket.on("updateFoundWords", ({ foundWords }: { foundWords: FoundWord[] }) => {
+socket.on("updateFoundWords", ({ foundWords }: { foundWords: any[] }) => {
   useStore.setState({
     score: foundWords.reduce((total, { pointValue }) => total + pointValue, 0),
   });

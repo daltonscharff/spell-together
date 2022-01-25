@@ -1,10 +1,16 @@
-import { prisma, FoundWord, Puzzle } from "@daltonscharff/spelling-bee-core";
+import {
+  prisma,
+  Record,
+  Room,
+  Word,
+  FoundWord,
+} from "@daltonscharff/spelling-bee-core";
 import fastify from "fastify";
 import socketio from "fastify-socket.io";
 
 const server = fastify();
-const port = process.env.SERVER_PORT || 3000;
-const host = process.env.SERVER_HOST || "localhost";
+const port = process.env.PORT || 3000;
+const host = process.env.HOST || "localhost";
 
 server.register(socketio, {
   cors: { origin: "*", methods: ["GET", "POST"] },
@@ -33,6 +39,13 @@ server.ready().then(async () => {
     });
 });
 
+if (process.env.NODE_ENV !== "production") {
+  prisma.$on("query", (e) => {
+    console.log("Query:", e.query);
+    console.log("Duration:", e.duration, "ms");
+  });
+}
+
 async function updatePuzzle(socket) {
   const puzzle = await prisma.puzzle.findFirst();
   delete puzzle.id;
@@ -40,30 +53,32 @@ async function updatePuzzle(socket) {
 }
 
 async function updateFoundWords(socket, roomCode: string) {
-  const { id: roomId } = await prisma.room.findUnique({
-    where: {
-      code: roomCode,
-    },
-  });
-  const records = await prisma.record.findMany({
-    where: {
-      roomId,
-    },
-    select: {
-      createdAt: true,
-      user: true,
-      word: true,
-    },
-  });
-  const foundWords = records.map((record) => ({
-    username: record.user,
-    foundAt: record.createdAt.toISOString(),
-    word: record.word.word,
-    pointValue: record.word.pointValue,
-    definition: record.word.definition,
-    partOfSpeech: record.word.partOfSpeech,
-    synonym: record.word.synonym,
-    isPangram: record.word.isPangram,
+  const rows = await prisma.$queryRaw<
+    (Record & Room & Word & { createdAt: string })[]
+  >`
+    SELECT
+      *,
+      record.id AS "id"
+    FROM 
+      record
+      JOIN word ON word.id = record."wordId"
+      JOIN room ON room.id = record."roomId"
+    WHERE 
+      "roomId" = (
+        SELECT id 
+        FROM room
+        WHERE code = ${roomCode}
+      );
+  `;
+  const foundWords: FoundWord[] = rows.map((row) => ({
+    user: row.user,
+    foundAt: row.createdAt,
+    word: row.word,
+    pointValue: row.pointValue,
+    definition: row.definition,
+    partOfSpeech: row.partOfSpeech,
+    synonym: row.synonym,
+    isPangram: row.isPangram,
   }));
 
   socket.emit("updateFoundWords", { foundWords });

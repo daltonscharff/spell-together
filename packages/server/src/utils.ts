@@ -7,5 +7,3 @@ export function generateRoomCode(length: number) {
   }
   return roomCode;
 }
-
-export default generateRoomCode;

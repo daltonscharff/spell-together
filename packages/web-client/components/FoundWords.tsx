@@ -1,8 +1,7 @@
 import { FC, useState } from "react";
-import { FoundWord } from "@daltonscharff/spelling-bee-core";
 
 type Props = {
-  words: FoundWord[];
+  words: any[];
   collapsible?: boolean;
 };
 
@@ -19,7 +18,7 @@ const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
             .sort((a, b) => (a.foundAt < b.foundAt ? 1 : -1))
             .map((word, i) => (
               <div className="px-1" key={i}>
-                {word.word.toLowerCase()}
+                {word.word?.toLowerCase()}
               </div>
             ))}
         </div>
@@ -49,7 +48,7 @@ const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
           .sort((a, b) => (a.word > b.word ? 1 : -1))
           .map((word, i) => (
             <div key={i} className="border-b my-1">
-              {word.word.toLowerCase()}
+              {word.word?.toLowerCase()}
             </div>
           ))}
       </div>

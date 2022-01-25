@@ -1,5 +1,5 @@
 export type FoundWord = {
-  username: string;
+  user: string;
   foundAt: string;
   word: string;
   pointValue: number;

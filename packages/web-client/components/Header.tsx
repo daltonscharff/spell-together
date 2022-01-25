@@ -1,4 +1,5 @@
 import { FC } from "react";
+import dayjs from "dayjs";
 
 type Props = {
   date: string;
@@ -12,7 +13,7 @@ const Header: FC<Props> = ({ date, username }) => {
         Spell Together
       </div>
       <div className="flex justify-between gap-4 font-light">
-        <div>{date}</div>
+        <div>{dayjs(date).format("MMMM D, YYYY")}</div>
         {username && <div>{username}</div>}
       </div>
     </header>
