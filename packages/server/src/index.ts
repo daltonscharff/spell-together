@@ -58,7 +58,8 @@ async function updateFoundWords(socket, roomCode: string) {
   >`
     SELECT
       *,
-      record.id AS "id"
+      record.id AS "id",
+      record."createdAt" as "createdAt"
     FROM 
       record
       JOIN word ON word.id = record."wordId"

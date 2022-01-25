@@ -71,7 +71,7 @@ const FoundWords: FC<Props> = ({ currentScore, maxScore }) => {
               className={`text-center align-middle ${
                 i === levelIndex ? "w-8 h-8 leading-8" : "w-3 h-3"
               } ${i < levels.length - 1 ? "rounded-full" : "rounded-none"} ${
-                i <= levelIndex ? "bg-amber-200" : "bg-gray-200"
+                i <= levelIndex ? "bg-yellow-300" : "bg-gray-200"
               }`}
             >
               {i === levelIndex ? currentScore : ""}

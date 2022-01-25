@@ -78,7 +78,7 @@ const LetterInput: FC<Props> = ({
       })}
 
       <div
-        className={`animate-blink mx-[2px] h-9 w-[2px] bg-yellow-300 ${
+        className={`animate-blink mx-[2px] h-9 w-[2px] bg-yellow-200 ${
           !isFocused && "invisible"
         }`}
       />

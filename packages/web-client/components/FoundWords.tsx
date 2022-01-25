@@ -7,7 +7,7 @@ type Props = {
 
 const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
-
+  console.log(words);
   if (collapsible && isCollapsed)
     return (
       <div
@@ -17,7 +17,10 @@ const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
           {[...words]
             .sort((a, b) => (a.foundAt < b.foundAt ? 1 : -1))
             .map((word, i) => (
-              <div className="px-1" key={i}>
+              <div
+                className={`px-1 ${word.isPangram && "bg-yellow-300"}`}
+                key={i}
+              >
                 {word.word?.toLowerCase()}
               </div>
             ))}
@@ -51,7 +54,9 @@ const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
           .sort((a, b) => (a.word > b.word ? 1 : -1))
           .map((word, i) => (
             <div key={i} className="border-b my-1">
-              {word.word?.toLowerCase()}
+              <span className={`px-1 ${word.isPangram && "bg-yellow-300"}`}>
+                {word.word?.toLowerCase()}
+              </span>
             </div>
           ))}
         {words.length === 0 && (
