@@ -78,7 +78,7 @@ const Room: NextPage = () => {
       <div className="flex flex-col gap-4 sm:gap-8 sm:flex-row-reverse">
         <div className="flex flex-grow flex-col gap-4">
           <ProgressBar currentScore={score} maxScore={maxScore} />
-          <div className="hidden sm:block">
+          <div className="hidden sm:block h-full">
             <FoundWords words={foundWords} />
           </div>
           <div className="sm:hidden">

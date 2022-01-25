@@ -21,6 +21,9 @@ const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
                 {word.word?.toLowerCase()}
               </div>
             ))}
+          {words.length === 0 && (
+            <div className="text-zinc-300 normal-case">Your words...</div>
+          )}
         </div>
         <div className="px-1 ml-2" onClick={() => setIsCollapsed(!isCollapsed)}>
           <i className={`bx bxs-chevron-down`}></i>
@@ -29,7 +32,7 @@ const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
     );
 
   return (
-    <div className={`flex-grow border rounded-lg p-3 capitalize`}>
+    <div className={`flex-grow border rounded-lg p-3 capitalize h-full`}>
       <div className={`flex`}>
         <div className="flex-grow normal-case mb-3">
           You have found {words.length} {words.length === 1 ? "word" : "words"}
@@ -51,6 +54,9 @@ const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
               {word.word?.toLowerCase()}
             </div>
           ))}
+        {words.length === 0 && (
+          <div className="text-zinc-300 normal-case">Your words...</div>
+        )}
       </div>
     </div>
   );
