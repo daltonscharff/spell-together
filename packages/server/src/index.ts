@@ -1,125 +1,28 @@
-import {
-  prisma,
-  Record,
-  Room,
-  Word,
-  FoundWord,
-} from "@daltonscharff/spelling-bee-core";
-import fastify from "fastify";
-import socketio from "fastify-socket.io";
+import express from "express";
+import { createServer } from "http";
+import cors from "cors";
+import helmet from "helmet";
+import { Server } from "socket.io";
+import roomRouter from "./api/rooms/room.router";
+import puzzleRouter from "./api/puzzles/puzzle.router";
+import wsHandler from "./ws/handler";
 
-const server = fastify();
-const port = process.env.PORT || 3000;
-const host = process.env.HOST || "localhost";
+const port = parseInt(process.env.PORT, 10) || 3000;
+const hostname = process.env.HOSTNAME || "localhost";
 
-server.register(socketio, {
-  cors: { origin: "*", methods: ["GET", "POST"] },
+const app = express();
+
+app.use(helmet());
+app.use(cors());
+app.use(express.json());
+app.use("/api/rooms", roomRouter);
+app.use("/api/puzzles", puzzleRouter);
+
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+
+io.on("connection", wsHandler);
+
+httpServer.listen(port, hostname, () => {
+  console.log(`Listening at http://${hostname}:${port}`);
 });
-
-server.ready().then(async () => {
-  server.io.on("connection", async (socket) => {
-    // @ts-ignore
-    console.log(socket.client.conn.server.clientsCount + " users connected");
-
-    updatePuzzle(socket);
-    updateFoundWords(socket, "123456");
-    onSubmitWord(socket);
-  });
-
-  server.io.on("disconnect", (socket) =>
-    console.log(socket.client.conn.server.clientsCount + " users connected")
-  );
-
-  server
-    .listen(port, host)
-    .then(() => console.log(`Server started on http://${host}:${port}`))
-    .catch((err) => {
-      console.error(err);
-      process.exit(1);
-    });
-});
-
-if (process.env.NODE_ENV !== "production") {
-  prisma.$on("query", (e) => {
-    console.log("Query:", e.query);
-    console.log("Duration:", e.duration, "ms");
-  });
-}
-
-async function updatePuzzle(socket) {
-  const puzzle = await prisma.puzzle.findFirst();
-  delete puzzle.id;
-  socket.emit("updatePuzzle", puzzle);
-}
-
-async function updateFoundWords(socket, roomCode: string) {
-  const rows = await prisma.$queryRaw<
-    (Record & Room & Word & { createdAt: string })[]
-  >`
-    SELECT
-      *,
-      record.id AS "id",
-      record."createdAt" as "createdAt"
-    FROM 
-      record
-      JOIN word ON word.id = record."wordId"
-      JOIN room ON room.id = record."roomId"
-    WHERE 
-      "roomId" = (
-        SELECT id 
-        FROM room
-        WHERE code = ${roomCode}
-      );
-  `;
-  const foundWords: FoundWord[] = rows.map((row) => ({
-    user: row.user,
-    foundAt: row.createdAt,
-    word: row.word,
-    pointValue: row.pointValue,
-    definition: row.definition,
-    partOfSpeech: row.partOfSpeech,
-    synonym: row.synonym,
-    isPangram: row.isPangram,
-  }));
-
-  socket.emit("updateFoundWords", { foundWords });
-}
-
-async function onSubmitWord(socket) {
-  socket.on(
-    "submitWord",
-    async (data: { username: string; roomCode: string; word: string }) => {
-      const word = await prisma.word.findUnique({
-        where: {
-          word: data.word.toLowerCase(),
-        },
-        select: {
-          id: true,
-        },
-      });
-      const room = await prisma.room.findUnique({
-        where: {
-          code: data.roomCode,
-        },
-      });
-      if (word && room) {
-        const count = await prisma.record.count({
-          where: {
-            roomId: room.id,
-            wordId: word.id,
-          },
-        });
-        if (count === 0) {
-          await prisma.record.create({
-            data: {
-              user: data.username,
-              roomId: room.id,
-              wordId: word.id,
-            },
-          });
-          updateFoundWords(socket, data.roomCode);
-        }
-      }
-    }
-  );
-}

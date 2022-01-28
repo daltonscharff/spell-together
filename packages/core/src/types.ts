@@ -15,12 +15,12 @@ export type GetRoomRequest = {
 };
 
 export type PostRoomRequest = {
-  name: string;
+  name?: string;
 };
 
 export type RoomResponse = {
   code: string;
-  name: string;
+  name?: string;
   foundWords: FoundWord[];
 };
 
