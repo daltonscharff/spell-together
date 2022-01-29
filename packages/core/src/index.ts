@@ -1,13 +1,19 @@
-import { PrismaClient, Word, Room, Record, Puzzle } from "@prisma/client";
+import Knex from "knex";
+import knexConfig from "../knexfile";
+import { Model } from "objection";
+import Puzzle from "./models/Puzzle";
+import Record from "./models/Record";
+import Room from "./models/Room";
+import Word from "./models/Word";
 
-export const prisma = new PrismaClient({
-  log: [
-    {
-      emit: "event",
-      level: "query",
-    },
-  ],
-});
+export default function connect() {
+  const knex =
+    process.env.NODE_ENV === "production"
+      ? Knex(knexConfig.production)
+      : Knex(knexConfig.development);
 
-export { Word, Room, Record, Puzzle };
-export * from "./types";
+  Model.knex(knex);
+  return knex;
+}
+
+export { Puzzle, Record, Room, Word };
