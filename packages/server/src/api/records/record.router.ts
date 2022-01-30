@@ -13,4 +13,15 @@ recordRouter.get("/:shortcode", async (req: Request, res: Response) => {
   }
 });
 
+recordRouter.post("/", async (req: Request, res: Response) => {
+  const { shortcode, username, word } = req.body;
+  try {
+    const record = await RecordService.create(word, shortcode, username);
+    if (record) return res.status(201).send(record);
+    res.status(204).send();
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+});
+
 export default recordRouter;

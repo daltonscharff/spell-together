@@ -11,10 +11,22 @@ export async function findAllInRoom(shortcode: string): Promise<Records> {
     );
 }
 
-// export async function create(guessedWord: string, username: string, shortcode: string): Promise<Record | null> {
-//   try {
-
-//   } catch (e) {
-//     return null;
-//   }
-// }
+export async function create(
+  word: string,
+  shortcode: string,
+  username: string
+): Promise<Record | null> {
+  try {
+    console.log("adding record");
+    const record = await models.Record.query().insertAndFetch({
+      username,
+      roomId: models.Room.query().select("id").where({ shortcode }),
+      wordId: models.Word.query().select("id").where({ word }),
+    });
+    console.log(record);
+    return record;
+  } catch (e) {
+    console.log("already found");
+    return null;
+  }
+}
