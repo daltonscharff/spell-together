@@ -5,6 +5,7 @@ import helmet from "helmet";
 import { Server } from "socket.io";
 import roomRouter from "./api/rooms/room.router";
 import puzzleRouter from "./api/puzzles/puzzle.router";
+import recordRouter from "./api/records/record.router";
 import wsHandler from "./ws/handler";
 import connect from "@daltonscharff/spelling-bee-core";
 
@@ -19,6 +20,7 @@ connect()
     app.use(express.json());
     app.use("/api/rooms", roomRouter);
     app.use("/api/puzzles", puzzleRouter);
+    app.use("/api/records", recordRouter);
 
     const httpServer = createServer(app);
     const io = new Server(httpServer);
