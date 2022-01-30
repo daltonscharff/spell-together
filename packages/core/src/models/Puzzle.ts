@@ -8,4 +8,5 @@ export default class Puzzle extends Model {
   maxScore: number;
 
   static tableName = "puzzle";
+  static jsonAttributes = ["outerLetters"];
 }

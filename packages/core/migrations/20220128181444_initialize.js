@@ -12,7 +12,7 @@ exports.up = function (knex) {
   AS $$
     DECLARE
       _shortcode varchar;
-      valid_letters CONSTANT varchar := 'ACDEFGHJLMNPQRSTUVWXYZ02345679';
+      valid_letters CONSTANT varchar := 'acdefghjlmnpqrstuvwxyz02345679';
       random_number int;
       random_char char;
     BEGIN
@@ -35,7 +35,7 @@ exports.up = function (knex) {
     date            date UNIQUE NOT NULL DEFAULT NOW(),
     outer_letters   json NOT NULL,
     center_letter   char NOT NULL,
-    maxScore        int2 NOT NULL
+    max_score        int2 NOT NULL
   );
 
   CREATE TABLE room (

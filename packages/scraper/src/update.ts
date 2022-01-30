@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import { ScrapedData } from "./scrape";
-import { prisma } from "@daltonscharff/spelling-bee-core";
+import connect, { Puzzle, Word } from "@daltonscharff/spelling-bee-core";
 
 const lookupUrl = "https://wordsapiv1.p.rapidapi.com/words";
 
@@ -45,33 +45,29 @@ async function lookup(word: string): Promise<{
 }
 
 export default async function update(data: ScrapedData) {
-  await Promise.all([prisma.word.deleteMany(), prisma.puzzle.deleteMany()]);
+  const knex = await connect();
+  await Promise.all([Word.query().delete(), Puzzle.query().delete()]);
 
   const words = await Promise.all(
     data.words.map(async (word) => {
       const { definition, partOfSpeech, synonym } = await lookup(word);
-      return await prisma.word.create({
-        data: {
-          word: word,
-          pointValue: calculatePointValue(word),
-          isPangram: isPangram(word),
-          definition,
-          partOfSpeech,
-          synonym,
-        },
+      return await Word.query().insertAndFetch({
+        word,
+        pointValue: calculatePointValue(word),
+        isPangram: isPangram(word),
+        definition,
+        partOfSpeech,
+        synonym,
       });
     })
   );
 
-  const puzzle = await prisma.puzzle.create({
-    data: {
-      outerLetters: data.letters.filter(
-        (letter) => letter !== data.centerLetter
-      ),
-      centerLetter: data.centerLetter,
-      maxScore: words.reduce((total, word) => (total += word.pointValue), 0),
-    },
+  const puzzle = await Puzzle.query().insertAndFetch({
+    outerLetters: data.letters.filter((letter) => letter !== data.centerLetter),
+    centerLetter: data.centerLetter,
+    maxScore: words.reduce((total, word) => (total += word.pointValue), 0),
   });
 
+  knex.destroy();
   return { puzzle, words };
 }

@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 
 export class ScrapedData {
   date: string;
