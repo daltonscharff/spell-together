@@ -1,5 +1,7 @@
 export interface Room {
-  code: string;
+  createdAt: string;
+  lastPlayed: string;
+  shortcode: string;
   name?: string;
 }
 

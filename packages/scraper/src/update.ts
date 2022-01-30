@@ -68,6 +68,6 @@ export default async function update(data: ScrapedData) {
     maxScore: words.reduce((total, word) => (total += word.pointValue), 0),
   });
 
-  knex.destroy();
+  await knex.destroy();
   return { puzzle, words };
 }

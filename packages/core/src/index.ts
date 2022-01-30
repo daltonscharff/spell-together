@@ -6,13 +6,16 @@ import Record from "./models/Record";
 import Room from "./models/Room";
 import Word from "./models/Word";
 
-export default function connect() {
+export default async function connect() {
   const knex =
     process.env.NODE_ENV === "production"
       ? Knex(knexConfig.production)
       : Knex(knexConfig.development);
 
+  await knex.raw("SELECT 1");
+
   Model.knex(knex);
+
   return knex;
 }
 
