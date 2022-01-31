@@ -4,5 +4,6 @@ import type {
   Room,
   Word,
 } from "@daltonscharff/spelling-bee-core";
+import type { Guess, BaseGuess } from "./guess.interface";
 
-export { Puzzle, Record, Room, Word };
+export { Puzzle, Record, Room, Word, Guess, BaseGuess };

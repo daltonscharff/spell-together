@@ -1,7 +1,7 @@
 import { Router } from "express";
-import puzzleRouter from "./puzzle.router";
-import recordRouter from "./record.router";
-import roomRouter from "./room.router";
+import puzzleRouter from "./puzzle.route";
+import recordRouter from "./record.route";
+import roomRouter from "./room.route";
 
 const router: Router = Router();
 router.use("/api/rooms", roomRouter);

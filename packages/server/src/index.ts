@@ -1,10 +1,10 @@
 import express from "express";
-import { createServer } from "http";
 import cors from "cors";
 import helmet from "helmet";
+import { createServer } from "http";
 import { Server } from "socket.io";
 import router from "./routes";
-import wsHandler from "./ws/handler";
+import wsHandler from "./handlers";
 import connect from "@daltonscharff/spelling-bee-core";
 
 connect()
@@ -21,7 +21,7 @@ connect()
     const httpServer = createServer(app);
     const io = new Server(httpServer);
 
-    // io.on("connection", wsHandler);
+    io.on("connection", wsHandler.bind(this, io));
 
     httpServer.listen(port, hostname, () => {
       console.log(`Listening at http://${hostname}:${port}`);
