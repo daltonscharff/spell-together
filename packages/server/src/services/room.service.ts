@@ -1,7 +1,7 @@
 import * as models from "@daltonscharff/spelling-bee-core";
-import { Room, Rooms } from "./room.interface";
+import { Room } from "../interfaces";
 
-export async function findAll(): Promise<Rooms> {
+export async function findAll(): Promise<Room[]> {
   return await models.Room.query();
 }
 

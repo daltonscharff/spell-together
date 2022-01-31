@@ -3,9 +3,7 @@ import { createServer } from "http";
 import cors from "cors";
 import helmet from "helmet";
 import { Server } from "socket.io";
-import roomRouter from "./api/rooms/room.router";
-import puzzleRouter from "./api/puzzles/puzzle.router";
-import recordRouter from "./api/records/record.router";
+import router from "./routes";
 import wsHandler from "./ws/handler";
 import connect from "@daltonscharff/spelling-bee-core";
 
@@ -18,14 +16,12 @@ connect()
     app.use(helmet());
     app.use(cors());
     app.use(express.json());
-    app.use("/api/rooms", roomRouter);
-    app.use("/api/puzzles", puzzleRouter);
-    app.use("/api/records", recordRouter);
+    app.use(router);
 
     const httpServer = createServer(app);
     const io = new Server(httpServer);
 
-    io.on("connection", wsHandler);
+    // io.on("connection", wsHandler);
 
     httpServer.listen(port, hostname, () => {
       console.log(`Listening at http://${hostname}:${port}`);
