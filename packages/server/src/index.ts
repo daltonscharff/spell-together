@@ -21,7 +21,7 @@ connect()
     const httpServer = createServer(app);
     const io = new Server(httpServer);
 
-    io.on("connection", wsHandler.bind(this, io));
+    io.on("connection", wsHandler);
 
     httpServer.listen(port, hostname, () => {
       console.log(`Listening at http://${hostname}:${port}`);
