@@ -1,9 +1,12 @@
 import * as models from "@daltonscharff/spelling-bee-core";
 import { Record } from "../interfaces";
 
-export async function findAllInRoom(shortcode: string): Promise<Record[]> {
+export async function findAllInRoom(
+  shortcode: string,
+  graphJoinString: string = ""
+): Promise<Record[]> {
   return await models.Record.query()
-    .withGraphJoined("[word, room]")
+    .withGraphJoined(graphJoinString)
     .where(
       "roomId",
       "=",
