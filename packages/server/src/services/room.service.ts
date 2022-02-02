@@ -28,3 +28,17 @@ export async function remove(shortcode: string): Promise<Room> {
     .returning("*")
     .first();
 }
+
+export async function updateByShortcode(
+  shortcode: string,
+  room: Partial<Room>
+): Promise<Room> {
+  delete room.id;
+  delete room.createdAt;
+  delete room.shortcode;
+  return await models.Room.query()
+    .patch(room)
+    .where({ shortcode })
+    .returning("*")
+    .first();
+}

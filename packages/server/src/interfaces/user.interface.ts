@@ -6,9 +6,3 @@ export interface User {
 export interface Guess extends User {
   word: string;
 }
-
-export interface CorrectGuess extends Guess {
-  foundAt: string;
-  pointValue: number;
-  isPangram: boolean;
-}

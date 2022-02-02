@@ -5,7 +5,7 @@ const dbSettings = {
   client: "postgresql",
   connection: process.env.DB_CONNECTION_STRING,
   pool: {
-    min: 0,
+    min: 1,
     max: 5,
   },
   migrations: {

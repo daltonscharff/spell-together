@@ -1,6 +1,6 @@
 {
   "name": "@daltonscharff/spelling-bee-web-client",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev",

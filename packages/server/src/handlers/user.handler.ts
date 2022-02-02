@@ -1,39 +1,58 @@
 import type { Socket } from "socket.io";
-import { Guess, User } from "../interfaces";
-import { recordService } from "../services";
+import emitError from "../helpers/emitError";
+import { Guess, User, Record } from "../interfaces";
+import { recordService, roomService } from "../services";
 
-export function onGuess(guess: Guess) {
+export async function onGuess(guess: Guess) {
   const socket: Socket = this;
   const shortcode = guess.shortcode;
-  const record = recordService.create(
-    guess.word,
-    guess.shortcode,
-    guess.username
-  );
-  if (record) {
-    socket.emit("correctGuess", guess);
-    socket
-      .to(shortcode)
-      .emit("updateFoundWords", recordService.findAllInRoom(shortcode, "word"));
-  } else {
-    socket.emit("incorrectGuess", guess);
+
+  let record;
+  try {
+    record = await recordService.create(
+      guess.word,
+      guess.shortcode,
+      guess.username
+    );
+  } catch (e) {
+    return emitError(socket, "could not create record");
   }
+
+  if (!record) return socket.emit("incorrectGuess", guess);
+  socket.emit("correctGuess", guess);
+
+  let foundWords: Record[];
+  try {
+    foundWords = await recordService.findAllInRoom(shortcode, "word");
+  } catch (e) {
+    return emitError(socket, "could not get found words");
+  }
+  socket.emit("updateFoundWords", foundWords);
+  socket.to(shortcode).emit("updateFoundWords", foundWords);
 }
 
-export function onJoinRoom(user: User) {
+export async function onJoinRoom({ shortcode }: User) {
   const socket: Socket = this;
-  const shortcode = user.shortcode;
   socket.join(shortcode);
-  socket.emit(
-    "updateFoundWords",
-    recordService.findAllInRoom(shortcode, "word")
-  );
-  // socket.broadcast.to(shortcode).emit("room:userJoined", user.username);
+  try {
+    roomService.updateByShortcode(shortcode, {
+      lastPlayed: new Date().toISOString(),
+    });
+  } catch (e) {
+    return emitError(socket, "could not update room");
+  }
+
+  let foundWords: Record[];
+  try {
+    foundWords = await recordService.findAllInRoom(shortcode, "word");
+  } catch (e) {
+    return emitError(socket, "could not get found words");
+  }
+  socket.emit("updateFoundWords", foundWords);
 }
 
-export function onLeaveRoom(user: User) {
+export function onLeaveRoom({ shortcode }: User) {
   const socket: Socket = this;
-  const shortcode = user.shortcode;
   socket.leave(shortcode);
 }
 

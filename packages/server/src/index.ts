@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import morgan from "morgan";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import router from "./routes";
@@ -16,6 +17,7 @@ connect()
     app.use(helmet());
     app.use(cors());
     app.use(express.json());
+    app.use(morgan("tiny"));
     app.use(router);
 
     const httpServer = createServer(app);
