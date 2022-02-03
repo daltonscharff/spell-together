@@ -15,6 +15,7 @@
     "socket.io": "^4.4.1"
   },
   "devDependencies": {
+    "@daltonscharff/spelling-bee-shared": "^0.0.0",
     "@types/express": "^4.17.13",
     "@types/node": "^17.0.13",
     "dotenv": "^14.3.2",
