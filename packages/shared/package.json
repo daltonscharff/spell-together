@@ -1,0 +1,12 @@
+{
+  "name": "@daltonscharff/spelling-bee-shared",
+  "version": "0.0.0",
+  "main": "lib/index.js",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^4.4.3"
+  }
+}
