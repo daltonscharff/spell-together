@@ -1,10 +1,12 @@
+import type { Socket } from "socket.io-client";
+
 export const addLetterToInput = (
   letter: string,
   inputLetters: string,
   setInputLetters: (inputLetters: string) => void
 ) => {
   if (inputLetters.length > 20) return;
-  setInputLetters(inputLetters + letter.toUpperCase());
+  setInputLetters(inputLetters + letter.toLowerCase());
 };
 
 export const deleteLetterFromInput = (
@@ -13,18 +15,25 @@ export const deleteLetterFromInput = (
 ) => setInputLetters(inputLetters.slice(0, inputLetters.length - 1));
 
 export const submitInput = (
+  username: string,
+  shortcode: string,
+  socket: Socket,
+  inputLetters: string,
   setInputLetters: (inputLetters: string) => void
 ) => {
-  // socket.emit("submitWord", {
-  //   username,
-  //   roomCode,
-  //   word: inputLetters,
-  // });
+  socket.emit("user:guess", {
+    username,
+    shortcode,
+    word: inputLetters,
+  });
   setInputLetters("");
 };
 
 export const handleLetterInput = (
   key: string,
+  username: string,
+  shortcode: string,
+  socket: Socket,
   inputLetters: string,
   setInputLetters: (inputLetters: string) => void
 ) => {
@@ -33,6 +42,6 @@ export const handleLetterInput = (
   } else if (key === "Backspace") {
     deleteLetterFromInput(inputLetters, setInputLetters);
   } else if (key === "Enter") {
-    submitInput(setInputLetters);
+    submitInput(username, shortcode, socket, inputLetters, setInputLetters);
   }
 };

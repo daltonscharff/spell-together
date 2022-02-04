@@ -1,4 +1,4 @@
-import { FC, RefObject, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 type Props = {
   value: string;
@@ -52,30 +52,33 @@ const LetterInput: FC<Props> = ({
   }, []);
 
   return (
-    <div className="font-black text-3xl text-center py-3 flex flex-wrap justify-center">
-      {value.split("").map((letter, i) => {
-        const category = checkLetterCategory(
-          letter,
-          outerLetters,
-          centerLetter
-        );
-        let color = "";
-        switch (category) {
-          case "center":
-            color = "text-yellow-300";
-            break;
-          case "valid":
-            color = "text-black";
-            break;
-          default:
-            color = "text-zinc-300";
-        }
-        return (
-          <span key={i} className={`${color}`}>
-            {letter}
-          </span>
-        );
-      })}
+    <div className="font-black text-3xl text-center py-3 flex flex-wrap justify-center rounded">
+      {value
+        .toUpperCase()
+        .split("")
+        .map((letter, i) => {
+          const category = checkLetterCategory(
+            letter,
+            outerLetters,
+            centerLetter
+          );
+          let color = "";
+          switch (category) {
+            case "center":
+              color = "text-yellow-300";
+              break;
+            case "valid":
+              color = "text-black";
+              break;
+            default:
+              color = "text-zinc-300";
+          }
+          return (
+            <span key={i} className={`${color}`}>
+              {letter}
+            </span>
+          );
+        })}
 
       <div
         className={`animate-blink mx-[2px] h-9 w-[2px] bg-yellow-200 ${
