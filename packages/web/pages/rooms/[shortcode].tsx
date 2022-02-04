@@ -48,7 +48,6 @@ const Room: NextPage = () => {
   );
 
   useEffect(() => {
-    console.log("shortcode updated");
     socket.emit("user:joinRoom", {
       username,
       shortcode,
@@ -79,7 +78,6 @@ const Room: NextPage = () => {
   useSocket("updateFoundWords", (data: Record[]) => {
     setFoundWords(data);
   });
-  console.log({ socket });
 
   // console.log({ recordData, recordError });
   // console.log({ puzzleData, puzzleError, shuffledLetters, puzzle, shortcode });
