@@ -8,7 +8,7 @@ export async function fetcherWithShortcode(
   endpoint: string,
   shortcode?: string | string[]
 ) {
-  if (!shortcode) return undefined;
+  if (!shortcode) throw new Error("Shortcode not provided");
   if (typeof shortcode !== "string") return [];
   return fetcher(`${endpoint}/${shortcode}`);
 }

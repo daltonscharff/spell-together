@@ -12,7 +12,7 @@ import Header from "../../components/Header";
 import Loader from "../../components/Loader";
 import useSWR from "swr";
 import shuffle from "../../utils/shuffle";
-import fetcher from "../../utils/fetcher";
+import fetcher, { fetcherWithShortcode } from "../../utils/fetcher";
 import type {
   Puzzle,
   Record,
@@ -26,20 +26,24 @@ import {
 
 const Room: NextPage = () => {
   const router = useRouter();
-  const { shortcode } = router.query;
+  const shortcode = router.query.shortcode;
+  const username = "";
+
   const [puzzle, setPuzzle] = useState<Puzzle>();
   const [foundWords, setFoundWords] = useState<Record[]>();
-  const score = 0;
-  const username = "";
-  const roomCode = "";
-
   const [shuffledLetters, setShuffledLetters] = useState([] as string[]);
   const [inputLetters, setInputLetters] = useState("");
+  const [score, setScore] = useState(0);
 
   const { data: puzzleData, error: puzzleError } = useSWR<Puzzle[]>(
     "/api/puzzles",
     fetcher
   );
+
+  const { data: recordData } = useSWR<Record[]>(`/api/records`, (endpoint) =>
+    fetcherWithShortcode(endpoint, shortcode)
+  );
+
   useEffect(() => {
     if (puzzleData) {
       setPuzzle(puzzleData[0]);
@@ -47,19 +51,21 @@ const Room: NextPage = () => {
     }
   }, [puzzleData]);
 
-  const { data: recordData, error: recordError } = useSWR<Record[]>(
-    `/api/records/${shortcode}`,
-    fetcher
-  );
-
   useEffect(() => {
     if (recordData) {
       setFoundWords(recordData);
     }
   }, [recordData]);
 
-  useEffect(() => {}, [foundWords]);
+  useEffect(() => {
+    if (foundWords) {
+      setScore(
+        foundWords.reduce((total, record) => total + record.word!.pointValue, 0)
+      );
+    }
+  }, [foundWords]);
 
+  // console.log({ recordData, recordError });
   // console.log({ puzzleData, puzzleError, shuffledLetters, puzzle, shortcode });
 
   // if (puzzleError) {
