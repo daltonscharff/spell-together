@@ -30,7 +30,7 @@ const Room: NextPage = () => {
   const username = "";
 
   const [puzzle, setPuzzle] = useState<Puzzle>();
-  const [foundWords, setFoundWords] = useState<Record[]>();
+  const [records, setRecords] = useState<Record[]>([]);
   const [shuffledLetters, setShuffledLetters] = useState([] as string[]);
   const [inputLetters, setInputLetters] = useState("");
   const [score, setScore] = useState(0);
@@ -54,17 +54,17 @@ const Room: NextPage = () => {
 
   useEffect(() => {
     if (recordData) {
-      setFoundWords(recordData);
+      setRecords(recordData);
     }
   }, [recordData]);
 
   useEffect(() => {
-    if (foundWords) {
+    if (records) {
       setScore(
-        foundWords.reduce((total, record) => total + record.word!.pointValue, 0)
+        records.reduce((total, record) => total + record.word!.pointValue, 0)
       );
     }
-  }, [foundWords]);
+  }, [records]);
 
   // console.log({ recordData, recordError });
   // console.log({ puzzleData, puzzleError, shuffledLetters, puzzle, shortcode });
@@ -72,7 +72,7 @@ const Room: NextPage = () => {
   // if (puzzleError) {
   //   throw Error(puzzleError);
   // }
-  if (!puzzle || !shortcode || foundWords === undefined) {
+  if (!puzzle || !shortcode || records === undefined) {
     return <h1>Loading</h1>;
   }
 
@@ -83,10 +83,10 @@ const Room: NextPage = () => {
         <div className="flex flex-grow flex-col gap-4">
           <ProgressBar currentScore={score} maxScore={puzzle.maxScore} />
           <div className="hidden sm:block h-full">
-            <FoundWords words={[]} />
+            <FoundWords records={records} />
           </div>
           <div className="sm:hidden">
-            <FoundWords words={[]} collapsible />
+            <FoundWords records={records} collapsible />
           </div>
         </div>
         <div className="flex flex-col gap-4 justify-center">

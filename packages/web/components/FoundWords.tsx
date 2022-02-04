@@ -1,11 +1,12 @@
+import { Record } from "@daltonscharff/spelling-bee-shared/lib/interfaces";
 import { FC, useState } from "react";
 
 type Props = {
-  words: any[];
+  records: Record[];
   collapsible?: boolean;
 };
 
-const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
+const FoundWords: FC<Props> = ({ records, collapsible = false }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   if (collapsible && isCollapsed)
     return (
@@ -13,17 +14,17 @@ const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
         className={`flex-grow flex flex-row border rounded-lg p-3 capitalize`}
       >
         <div className={`flex flex-row flex-grow overflow-hidden`}>
-          {[...words]
-            .sort((a, b) => (a.foundAt < b.foundAt ? 1 : -1))
-            .map((word, i) => (
+          {[...records]
+            .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+            .map((record, i) => (
               <div
-                className={`px-1 ${word.isPangram && "bg-yellow-300"}`}
+                className={`px-1 ${record.word?.isPangram && "bg-yellow-300"}`}
                 key={i}
               >
-                {word.word?.toLowerCase()}
+                {record.word?.word.toLowerCase()}
               </div>
             ))}
-          {words.length === 0 && (
+          {records.length === 0 && (
             <div className="text-zinc-300 normal-case">Your words...</div>
           )}
         </div>
@@ -37,7 +38,8 @@ const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
     <div className={`flex-grow border rounded-lg p-3 capitalize h-full`}>
       <div className={`flex`}>
         <div className="flex-grow normal-case mb-3">
-          You have found {words.length} {words.length === 1 ? "word" : "words"}
+          You have found {records.length}{" "}
+          {records.length === 1 ? "word" : "words"}
         </div>
         {collapsible && (
           <div
@@ -49,16 +51,17 @@ const FoundWords: FC<Props> = ({ words, collapsible = false }) => {
         )}
       </div>
       <div className="grid grid-cols-2 gap-2">
-        {[...words]
-          .sort((a, b) => (a.word > b.word ? 1 : -1))
-          .map((word, i) => (
-            <div key={i} className="border-b my-1">
-              <span className={`px-1 ${word.isPangram && "bg-yellow-300"}`}>
-                {word.word?.toLowerCase()}
-              </span>
+        {[...records]
+          .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+          .map((record, i) => (
+            <div
+              className={`px-1 ${record.word?.isPangram && "bg-yellow-300"}`}
+              key={i}
+            >
+              {record.word?.word.toLowerCase()}
             </div>
           ))}
-        {words.length === 0 && (
+        {records.length === 0 && (
           <div className="text-zinc-300 normal-case">Your words...</div>
         )}
       </div>
