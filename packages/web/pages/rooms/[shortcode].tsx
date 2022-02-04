@@ -23,14 +23,16 @@ import {
   handleLetterInput,
   submitInput,
 } from "../../utils/letterInput";
+import { useSocket, socket } from "../../hooks/useSocket";
+import GuessIndicator from "../../components/GuessIndicator";
 
 const Room: NextPage = () => {
   const router = useRouter();
-  const shortcode = router.query.shortcode;
+  const shortcode = router.query.shortcode?.toString();
   const username = "";
 
   const [puzzle, setPuzzle] = useState<Puzzle>();
-  const [records, setRecords] = useState<Record[]>([]);
+  const [foundWords, setFoundWords] = useState<Record[]>([]);
   const [shuffledLetters, setShuffledLetters] = useState([] as string[]);
   const [inputLetters, setInputLetters] = useState("");
   const [score, setScore] = useState(0);
@@ -46,6 +48,14 @@ const Room: NextPage = () => {
   );
 
   useEffect(() => {
+    console.log("shortcode updated");
+    socket.emit("user:joinRoom", {
+      username,
+      shortcode,
+    });
+  }, [shortcode]);
+
+  useEffect(() => {
     if (puzzleData) {
       setPuzzle(puzzleData[0]);
       setShuffledLetters(puzzleData[0].outerLetters);
@@ -54,17 +64,25 @@ const Room: NextPage = () => {
 
   useEffect(() => {
     if (recordData) {
-      setRecords(recordData);
+      setFoundWords(recordData);
     }
   }, [recordData]);
 
   useEffect(() => {
-    if (records) {
+    if (foundWords) {
       setScore(
-        records.reduce((total, record) => total + record.word!.pointValue, 0)
+        foundWords.reduce((total, record) => total + record.word!.pointValue, 0)
       );
     }
-  }, [records]);
+  }, [foundWords]);
+
+  useSocket("updateFoundWords", (data: Record[]) => {
+    setFoundWords(data);
+  });
+  console.log({ socket });
+
+  useSocket("error", (data) => console.log("error", data));
+  useSocket("incorrectGuess", (data) => console.log("incorrectGuess", data));
 
   // console.log({ recordData, recordError });
   // console.log({ puzzleData, puzzleError, shuffledLetters, puzzle, shortcode });
@@ -72,7 +90,7 @@ const Room: NextPage = () => {
   // if (puzzleError) {
   //   throw Error(puzzleError);
   // }
-  if (!puzzle || !shortcode || records === undefined) {
+  if (!puzzle || !shortcode || foundWords === undefined) {
     return <h1>Loading</h1>;
   }
 
@@ -83,21 +101,31 @@ const Room: NextPage = () => {
         <div className="flex flex-grow flex-col gap-4">
           <ProgressBar currentScore={score} maxScore={puzzle.maxScore} />
           <div className="hidden sm:block h-full">
-            <FoundWords records={records} />
+            <FoundWords foundWords={foundWords} />
           </div>
           <div className="sm:hidden">
-            <FoundWords records={records} collapsible />
+            <FoundWords foundWords={foundWords} collapsible />
           </div>
         </div>
         <div className="flex flex-col gap-4 justify-center">
-          <LetterInput
-            value={inputLetters}
-            outerLetters={puzzle.outerLetters}
-            centerLetter={puzzle.centerLetter}
-            onChange={(value) =>
-              handleLetterInput(value, inputLetters, setInputLetters)
-            }
-          />
+          <div>
+            <LetterInput
+              value={inputLetters}
+              outerLetters={puzzle.outerLetters}
+              centerLetter={puzzle.centerLetter}
+              onChange={(value) =>
+                handleLetterInput(
+                  value,
+                  username,
+                  shortcode,
+                  socket,
+                  inputLetters,
+                  setInputLetters
+                )
+              }
+            />
+            <GuessIndicator />
+          </div>
           <Hive
             outerLetters={shuffledLetters}
             centerLetter={puzzle.centerLetter}
@@ -118,7 +146,19 @@ const Room: NextPage = () => {
                 setShuffledLetters(shuffle(shuffledLetters));
               }}
             />
-            <Button onClick={() => submitInput(setInputLetters)}>Enter</Button>
+            <Button
+              onClick={() =>
+                submitInput(
+                  username,
+                  shortcode,
+                  socket,
+                  inputLetters,
+                  setInputLetters
+                )
+              }
+            >
+              Enter
+            </Button>
           </div>
         </div>
       </div>

@@ -2,11 +2,11 @@ import { Record } from "@daltonscharff/spelling-bee-shared/lib/interfaces";
 import { FC, useState } from "react";
 
 type Props = {
-  records: Record[];
+  foundWords: Record[];
   collapsible?: boolean;
 };
 
-const FoundWords: FC<Props> = ({ records, collapsible = false }) => {
+const FoundWords: FC<Props> = ({ foundWords, collapsible = false }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   if (collapsible && isCollapsed)
     return (
@@ -14,7 +14,7 @@ const FoundWords: FC<Props> = ({ records, collapsible = false }) => {
         className={`flex-grow flex flex-row border rounded-lg p-3 capitalize`}
       >
         <div className={`flex flex-row flex-grow overflow-hidden`}>
-          {[...records]
+          {[...foundWords]
             .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
             .map((record, i) => (
               <div
@@ -24,7 +24,7 @@ const FoundWords: FC<Props> = ({ records, collapsible = false }) => {
                 {record.word?.word.toLowerCase()}
               </div>
             ))}
-          {records.length === 0 && (
+          {foundWords.length === 0 && (
             <div className="text-zinc-300 normal-case">Your words...</div>
           )}
         </div>
@@ -38,8 +38,8 @@ const FoundWords: FC<Props> = ({ records, collapsible = false }) => {
     <div className={`flex-grow border rounded-lg p-3 capitalize h-full`}>
       <div className={`flex`}>
         <div className="flex-grow normal-case mb-3">
-          You have found {records.length}{" "}
-          {records.length === 1 ? "word" : "words"}
+          You have found {foundWords.length}{" "}
+          {foundWords.length === 1 ? "word" : "words"}
         </div>
         {collapsible && (
           <div
@@ -51,7 +51,7 @@ const FoundWords: FC<Props> = ({ records, collapsible = false }) => {
         )}
       </div>
       <div className="grid grid-cols-2 gap-2">
-        {[...records]
+        {[...foundWords]
           .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
           .map((record, i) => (
             <div
@@ -61,7 +61,7 @@ const FoundWords: FC<Props> = ({ records, collapsible = false }) => {
               {record.word?.word.toLowerCase()}
             </div>
           ))}
-        {records.length === 0 && (
+        {foundWords.length === 0 && (
           <div className="text-zinc-300 normal-case">Your words...</div>
         )}
       </div>
