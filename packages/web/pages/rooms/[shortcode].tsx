@@ -12,7 +12,7 @@ import Header from "../../components/Header";
 import Loader from "../../components/Loader";
 import useSWR from "swr";
 import shuffle from "../../utils/shuffle";
-import fetcher, { fetcherWithShortcode } from "../../utils/fetcher";
+import fetcher from "../../utils/fetcher";
 import type {
   Puzzle,
   Record,
@@ -41,11 +41,8 @@ const Room: NextPage = () => {
   );
 
   const { data: recordData } = useSWR<Record[]>(
-    `/api/records`,
-    (endpoint) => fetcherWithShortcode(endpoint, shortcode),
-    {
-      errorRetryInterval: 300,
-    }
+    shortcode ? `/api/records/${shortcode}` : null,
+    fetcher
   );
 
   useEffect(() => {

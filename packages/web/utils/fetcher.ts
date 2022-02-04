@@ -3,12 +3,3 @@ export default async function fetcher(endpoint: string) {
   const res = await fetch(`${url}${endpoint}`);
   return res.json();
 }
-
-export async function fetcherWithShortcode(
-  endpoint: string,
-  shortcode?: string | string[]
-) {
-  if (!shortcode) throw new Error("Shortcode not provided");
-  if (typeof shortcode !== "string") return [];
-  return fetcher(`${endpoint}/${shortcode}`);
-}
