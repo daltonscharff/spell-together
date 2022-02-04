@@ -1,15 +1,14 @@
 import { FC, PropsWithChildren } from "react";
 
 type Props = PropsWithChildren<{
-  className?: string;
   onClick?: () => void;
 }>;
 
-const Button: FC<Props> = ({ className, onClick, children }) => {
+const Button: FC<Props> = ({ onClick, children }) => {
   return (
     <button
       onClick={onClick}
-      className={`p-3 px-6 rounded-full border ${className}`}
+      className={`p-3 px-6 rounded-full border xs:w-24`}
     >
       {children}
     </button>
