@@ -1,5 +1,5 @@
 export default async function fetcher(endpoint: string) {
-  const url = "http://localhost:4000";
-  const res = await fetch(`${url}${endpoint}`);
+  const base = process.env.NEXT_PUBLIC_SOCKET_URL || "";
+  const res = await fetch(new URL(endpoint, base).href);
   return res.json();
 }
