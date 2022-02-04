@@ -81,9 +81,6 @@ const Room: NextPage = () => {
   });
   console.log({ socket });
 
-  useSocket("error", (data) => console.log("error", data));
-  useSocket("incorrectGuess", (data) => console.log("incorrectGuess", data));
-
   // console.log({ recordData, recordError });
   // console.log({ puzzleData, puzzleError, shuffledLetters, puzzle, shortcode });
 

@@ -52,7 +52,7 @@ const FoundWords: FC<Props> = ({ foundWords, collapsible = false }) => {
       </div>
       <div className="grid grid-cols-2 gap-2">
         {[...foundWords]
-          .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+          .sort((a, b) => (a.word?.word! > b.word?.word! ? 1 : -1))
           .map((record, i) => (
             <div
               className={`px-1 ${record.word?.isPangram && "bg-yellow-300"}`}
