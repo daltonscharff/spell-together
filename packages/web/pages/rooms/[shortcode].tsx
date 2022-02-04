@@ -40,8 +40,12 @@ const Room: NextPage = () => {
     fetcher
   );
 
-  const { data: recordData } = useSWR<Record[]>(`/api/records`, (endpoint) =>
-    fetcherWithShortcode(endpoint, shortcode)
+  const { data: recordData } = useSWR<Record[]>(
+    `/api/records`,
+    (endpoint) => fetcherWithShortcode(endpoint, shortcode),
+    {
+      errorRetryInterval: 300,
+    }
   );
 
   useEffect(() => {
