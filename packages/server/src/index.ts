@@ -21,7 +21,12 @@ connect()
     app.use(router);
 
     const httpServer = createServer(app);
-    const io = new Server(httpServer);
+    const io = new Server(httpServer, {
+      cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+      },
+    });
 
     io.on("connection", wsHandler);
 
