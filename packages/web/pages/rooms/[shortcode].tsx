@@ -85,8 +85,9 @@ const Room: NextPage = () => {
   // if (puzzleError) {
   //   throw Error(puzzleError);
   // }
+
   if (!puzzle || !shortcode || foundWords === undefined) {
-    return <h1>Loading</h1>;
+    return <Loader />;
   }
 
   return (

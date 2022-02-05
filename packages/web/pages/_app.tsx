@@ -1,5 +1,4 @@
 import "../styles/globals.css";
-import "../styles/loader.css";
 import "boxicons/css/boxicons.min.css";
 import type { AppProps } from "next/app";
 
