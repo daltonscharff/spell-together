@@ -34,19 +34,18 @@ export async function onGuess(guess: Guess) {
 export async function onJoinRoom({ shortcode }: User) {
   const socket: Socket = this;
   socket.join(shortcode);
-  try {
-    roomService.updateByShortcode(shortcode, {
+
+  roomService
+    .updateByShortcode(shortcode, {
       lastPlayed: new Date().toISOString(),
-    });
-  } catch (e) {
-    return emitError(socket, "could not update room");
-  }
+    })
+    .catch(() => emitError(socket, `could not update room ${shortcode}`));
 
   let foundWords: Record[];
   try {
     foundWords = await recordService.findAllInRoom(shortcode, "word");
   } catch (e) {
-    return emitError(socket, "could not get found words");
+    return emitError(socket, `could not get found words for ${shortcode}`);
   }
   socket.emit("updateFoundWords", foundWords);
 }

@@ -5,6 +5,7 @@ const socketUrl = process.env.NEXT_PUBLIC_SERVER_URL || "";
 export const socket = io(socketUrl);
 
 // socket.on("connect_error", (error) => socket.disconnect());
+socket.on("error", (error) => console.log(error));
 
 const isBrowser = typeof window !== "undefined";
 if (!isBrowser) {
