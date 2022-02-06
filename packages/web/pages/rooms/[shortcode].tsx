@@ -105,22 +105,23 @@ const Room: NextPage = () => {
           </div>
           <div className="flex flex-grow flex-col gap-4 justify-center">
             <div>
-              <LetterInput
-                value={inputLetters}
-                outerLetters={puzzle.outerLetters}
-                centerLetter={puzzle.centerLetter}
-                onChange={(value) =>
-                  handleLetterInput(
-                    value,
-                    username,
-                    shortcode,
-                    socket,
-                    inputLetters,
-                    setInputLetters
-                  )
-                }
-              />
-              <GuessIndicator />
+              <GuessIndicator>
+                <LetterInput
+                  value={inputLetters}
+                  outerLetters={puzzle.outerLetters}
+                  centerLetter={puzzle.centerLetter}
+                  onChange={(value) =>
+                    handleLetterInput(
+                      value,
+                      username,
+                      shortcode,
+                      socket,
+                      inputLetters,
+                      setInputLetters
+                    )
+                  }
+                />
+              </GuessIndicator>
             </div>
             <Hive
               outerLetters={shuffledLetters}
