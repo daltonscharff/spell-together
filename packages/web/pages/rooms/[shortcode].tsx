@@ -7,7 +7,6 @@ import Button from "../../components/Button";
 import ShuffleButton from "../../components/ShuffleButton";
 import FoundWords from "../../components/FoundWords";
 import ProgressBar from "../../components/ProgressBar";
-import Layout from "../../components/Layout";
 import Header from "../../components/Header";
 import Loader from "../../components/Loader";
 import useSWR from "swr";
@@ -29,7 +28,7 @@ import GuessIndicator from "../../components/GuessIndicator";
 const Room: NextPage = () => {
   const router = useRouter();
   const shortcode = router.query.shortcode?.toString();
-  const username = "";
+  const username = "test user";
 
   const [puzzle, setPuzzle] = useState<Puzzle>();
   const [foundWords, setFoundWords] = useState<Record[]>([]);
@@ -91,74 +90,76 @@ const Room: NextPage = () => {
   }
 
   return (
-    <Layout className="font-Roboto min-w-[260px]">
+    <div className="flex flex-col gap-4">
       <Header date={puzzle.date} username={username} />
-      <div className="flex flex-col gap-4 sm:gap-8 sm:flex-row-reverse">
-        <div className="flex flex-grow flex-col gap-4">
-          <ProgressBar currentScore={score} maxScore={puzzle.maxScore} />
-          <div className="hidden sm:block h-full">
-            <FoundWords foundWords={foundWords} />
+      <div className="font-Roboto min-w-[260px] w-full max-w-screen-lg mx-auto px-3">
+        <div className="flex flex-col gap-4 sm:gap-8 sm:flex-row-reverse">
+          <div className="flex flex-grow flex-col gap-4">
+            <ProgressBar currentScore={score} maxScore={puzzle.maxScore} />
+            <div className="hidden sm:block h-full">
+              <FoundWords foundWords={foundWords} />
+            </div>
+            <div className="sm:hidden">
+              <FoundWords foundWords={foundWords} collapsible />
+            </div>
           </div>
-          <div className="sm:hidden">
-            <FoundWords foundWords={foundWords} collapsible />
-          </div>
-        </div>
-        <div className="flex flex-col gap-4 justify-center">
-          <div>
-            <LetterInput
-              value={inputLetters}
-              outerLetters={puzzle.outerLetters}
+          <div className="flex flex-grow flex-col gap-4 justify-center">
+            <div>
+              <LetterInput
+                value={inputLetters}
+                outerLetters={puzzle.outerLetters}
+                centerLetter={puzzle.centerLetter}
+                onChange={(value) =>
+                  handleLetterInput(
+                    value,
+                    username,
+                    shortcode,
+                    socket,
+                    inputLetters,
+                    setInputLetters
+                  )
+                }
+              />
+              <GuessIndicator />
+            </div>
+            <Hive
+              outerLetters={shuffledLetters}
               centerLetter={puzzle.centerLetter}
-              onChange={(value) =>
-                handleLetterInput(
-                  value,
-                  username,
-                  shortcode,
-                  socket,
-                  inputLetters,
-                  setInputLetters
-                )
+              onClick={(letter) =>
+                addLetterToInput(letter, inputLetters, setInputLetters)
               }
             />
-            <GuessIndicator />
-          </div>
-          <Hive
-            outerLetters={shuffledLetters}
-            centerLetter={puzzle.centerLetter}
-            onClick={(letter) =>
-              addLetterToInput(letter, inputLetters, setInputLetters)
-            }
-          />
-          <div className="flex flex-col xs:flex-row gap-4 justify-center my-6">
-            <Button
-              onClick={() =>
-                deleteLetterFromInput(inputLetters, setInputLetters)
-              }
-            >
-              Delete
-            </Button>
-            <ShuffleButton
-              onClick={() => {
-                setShuffledLetters(shuffle(shuffledLetters));
-              }}
-            />
-            <Button
-              onClick={() =>
-                submitInput(
-                  username,
-                  shortcode,
-                  socket,
-                  inputLetters,
-                  setInputLetters
-                )
-              }
-            >
-              Enter
-            </Button>
+            <div className="flex flex-col xs:flex-row gap-4 justify-center my-6">
+              <Button
+                onClick={() =>
+                  deleteLetterFromInput(inputLetters, setInputLetters)
+                }
+              >
+                Delete
+              </Button>
+              <ShuffleButton
+                onClick={() => {
+                  setShuffledLetters(shuffle(shuffledLetters));
+                }}
+              />
+              <Button
+                onClick={() =>
+                  submitInput(
+                    username,
+                    shortcode,
+                    socket,
+                    inputLetters,
+                    setInputLetters
+                  )
+                }
+              >
+                Enter
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 };
 

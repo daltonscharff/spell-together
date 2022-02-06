@@ -8,14 +8,14 @@ type Props = {
 
 const Header: FC<Props> = ({ date, username }) => {
   return (
-    <header className="pb-4 border-b">
-      <div className="font-RobotoSlab text-3xl text-left mb-3">
-        Spell Together
+    <header className="py-4 px-3 border-b flex flex-row items-end">
+      <div className="flex flex-col sm:gap-4 sm:flex-row pr-4 flex-grow sm:items-end">
+        <div className="font-RobotoSlab text-3xl">Spell Together</div>
+        <div className="font-light text-xl">
+          {dayjs(date).format("MMMM D, YYYY")}
+        </div>
       </div>
-      <div className="flex justify-between gap-4 font-light">
-        <div>{dayjs(date).format("MMMM D, YYYY")}</div>
-        {username && <div>{username}</div>}
-      </div>
+      {username && <div className="font-light">{username}</div>}
     </header>
   );
 };
