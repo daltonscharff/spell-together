@@ -77,7 +77,7 @@ const FoundWords: FC<Props> = ({ currentScore, maxScore }) => {
               {i === levelIndex ? currentScore : ""}
             </span>
             {i !== levels.length - 1 ? (
-              <span className="border flex-grow" />
+              <span className="border border-zinc-200 flex-grow" />
             ) : (
               ""
             )}

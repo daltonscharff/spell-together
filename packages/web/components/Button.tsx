@@ -8,7 +8,7 @@ const Button: FC<Props> = ({ onClick, children }) => {
   return (
     <button
       onClick={onClick}
-      className={`p-3 px-6 rounded-full border xs:w-24`}
+      className={`p-3 px-6 rounded-full border border-zinc-300 xs:w-24`}
     >
       {children}
     </button>

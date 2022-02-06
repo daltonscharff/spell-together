@@ -8,7 +8,7 @@ type Props = {
 
 const Header: FC<Props> = ({ date, username }) => {
   return (
-    <header className="py-4 px-3 border-b flex flex-row items-end">
+    <header className="py-4 px-3 border-b border-zinc-300 flex flex-row items-end">
       <div className="flex flex-col sm:gap-4 sm:flex-row pr-4 flex-grow sm:items-end">
         <div className="font-RobotoSlab text-3xl">Spell Together</div>
         <div className="font-light text-xl">

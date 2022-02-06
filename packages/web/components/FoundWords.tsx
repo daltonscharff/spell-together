@@ -11,7 +11,7 @@ const FoundWords: FC<Props> = ({ foundWords, collapsible = false }) => {
   if (collapsible && isCollapsed)
     return (
       <div
-        className={`flex-grow flex flex-row border rounded-lg p-3 capitalize`}
+        className={`flex-grow flex flex-row border border-zinc-300 rounded-lg p-3 capitalize`}
       >
         <div className={`flex flex-row flex-grow overflow-hidden`}>
           {[...foundWords]
@@ -41,7 +41,9 @@ const FoundWords: FC<Props> = ({ foundWords, collapsible = false }) => {
     );
 
   return (
-    <div className={`flex-grow border rounded-lg p-3 capitalize h-full`}>
+    <div
+      className={`flex-grow border border-zinc-300 rounded-lg p-3 capitalize h-full`}
+    >
       <div className={`flex`}>
         <div className="flex-grow normal-case mb-3">
           You have found {foundWords.length}{" "}

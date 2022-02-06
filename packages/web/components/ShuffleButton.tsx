@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from "react";
+import { FC } from "react";
 
 type Props = {
   onClick?: () => void;
@@ -8,7 +8,7 @@ const ShuffleButton: FC<Props> = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
-      className={`p-3 rounded-full border flex justify-center`}
+      className={`p-3 rounded-full border border-zinc-300 flex justify-center`}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
