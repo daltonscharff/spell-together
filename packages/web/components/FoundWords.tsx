@@ -28,8 +28,14 @@ const FoundWords: FC<Props> = ({ foundWords, collapsible = false }) => {
             <div className="text-zinc-300 normal-case">Your words...</div>
           )}
         </div>
-        <div className="px-1 ml-2" onClick={() => setIsCollapsed(!isCollapsed)}>
-          <i className={`bx bxs-chevron-down`}></i>
+        <div className="relative">
+          <div className="absolute right-8 bg-gradient-to-l from-white w-4 h-full" />
+          <div
+            className="px-1 ml-2"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+          >
+            <i className={`bx bxs-chevron-down`}></i>
+          </div>
         </div>
       </div>
     );
