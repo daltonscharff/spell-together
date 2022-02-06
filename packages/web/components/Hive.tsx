@@ -74,7 +74,7 @@ const Hive: FC<Props> = ({
             <use
               href="#hexagon"
               style={hexagonStyle}
-              className="fill-zinc-100"
+              className="fill-zinc-200"
             />
             <text
               x="50%"
