@@ -56,8 +56,8 @@ const FoundWords: FC<Props> = ({ currentScore, maxScore }) => {
   const levelIndex = findLevelIndex(currentScore, maxScore);
   const rank = levels[levelIndex].rank;
   return (
-    <div className="flex items-center">
-      <span className="capitalize font-black mr-3">{rank}</span>
+    <div className="flex items-center text-sm">
+      <span className="capitalize font-black mr-3 w-28">{rank}</span>
       <span className="flex justify-between items-center w-full">
         {levels.map((_, i) => (
           <div
@@ -69,9 +69,9 @@ const FoundWords: FC<Props> = ({ currentScore, maxScore }) => {
             <span
               key={i}
               className={`text-center align-middle ${
-                i === levelIndex ? "w-8 h-8 leading-8" : "w-3 h-3"
+                i === levelIndex ? "w-7 h-7 leading-7" : "w-2 h-2"
               } ${i < levels.length - 1 ? "rounded-full" : "rounded-none"} ${
-                i <= levelIndex ? "bg-yellow-300" : "bg-gray-200"
+                i <= levelIndex ? "bg-yellow-300" : "bg-zinc-200"
               }`}
             >
               {i === levelIndex ? currentScore : ""}
