@@ -90,7 +90,7 @@ const Room: NextPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4 max-h-screen">
+    <div className="flex flex-col gap-4">
       <Header date={puzzle.date} username={username} />
       <div className="min-w-[260px] w-full max-w-screen-lg mx-auto px-3">
         <div className="flex flex-col gap-4 sm:gap-8 sm:flex-row-reverse">
@@ -103,7 +103,7 @@ const Room: NextPage = () => {
               <FoundWords foundWords={foundWords} collapsible />
             </div>
           </div>
-          <div className="flex flex-grow flex-col gap-4 justify-start">
+          <div className="flex flex-grow flex-col gap-4 justify-center">
             <div>
               <LetterInput
                 value={inputLetters}
