@@ -1,34 +1,41 @@
-import {
-  Record,
-  Word,
-} from "@daltonscharff/spelling-bee-shared/lib/interfaces";
-import { FC, useState } from "react";
+import { Record as RecordType } from "@daltonscharff/spelling-bee-shared/lib/interfaces";
+import { FC } from "react";
 
 type Props = {
-  record: Record;
+  record: RecordType;
+  isExpanded?: boolean;
 };
 
-const expandedContent = (word: Word) => {
-  return (
-    <div className="text-sm py-1">
-      <span className="italic">{word.partOfSpeech}: </span>
-      <span>{word.definition}</span>
-    </div>
-  );
+const abbreviationMapping: Record<string, string> = {
+  adjective: "adj.",
+  adverb: "adv.",
+  conjunction: "conj.",
+  interjection: "interj.",
+  noun: "n.",
+  preposition: "prep.",
+  pronoun: "pron.",
+  verb: "v.",
 };
 
-const FoundWord: FC<Props> = ({ record }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const FoundWord: FC<Props> = ({ record, isExpanded = true }) => {
   return (
-    <div
-      className={"border shadow-sm border-zinc-300 px-2 rounded-md w-full"}
-      onClick={() => setIsExpanded(!isExpanded)}
-    >
-      <div className="flex items-end pb-1">
-        <div className="flex-grow">{record.word?.word}</div>
-        <div className="font-light text-sm">{record.username}</div>
+    <div className={"border-b border-zinc-100 px-2 w-full"}>
+      <div className="flex items-end">
+        <div className={`flex-grow`}>
+          <span className={`${record.word?.isPangram && "bg-yellow-300"}`}>
+            {record.word?.word}
+          </span>
+        </div>
+        <div className="font-light">{record.username}</div>
       </div>
-      {isExpanded && expandedContent(record.word!)}
+      {record.word?.partOfSpeech && record.word?.definition && isExpanded && (
+        <div className="text-sm pb-1 font-light">
+          <span className="pr-1">
+            {abbreviationMapping[record.word.partOfSpeech]},
+          </span>
+          <span>{record.word.definition}</span>
+        </div>
+      )}
     </div>
   );
 };

@@ -90,9 +90,9 @@ const Room: NextPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 max-h-screen">
       <Header date={puzzle.date} username={username} />
-      <div className="font-Roboto min-w-[260px] w-full max-w-screen-lg mx-auto px-3">
+      <div className="min-w-[260px] w-full max-w-screen-lg mx-auto px-3">
         <div className="flex flex-col gap-4 sm:gap-8 sm:flex-row-reverse">
           <div className="flex flex-grow flex-col gap-4 sm:max-w-[50%]">
             <ProgressBar currentScore={score} maxScore={puzzle.maxScore} />
@@ -103,7 +103,7 @@ const Room: NextPage = () => {
               <FoundWords foundWords={foundWords} collapsible />
             </div>
           </div>
-          <div className="flex flex-grow flex-col gap-4 justify-center">
+          <div className="flex flex-grow flex-col gap-4 justify-start">
             <div>
               <LetterInput
                 value={inputLetters}

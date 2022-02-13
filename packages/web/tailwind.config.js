@@ -11,7 +11,6 @@ module.exports = {
         xs: "320px",
       },
       fontFamily: {
-        Roboto: ["Roboto", "sans-serif"],
         RobotoSlab: ["Roboto Slab", "serif"],
       },
       animation: {

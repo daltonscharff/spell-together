@@ -57,16 +57,10 @@ const FoundWords: FC<Props> = ({ foundWords, collapsible = false }) => {
           </div>
         )}
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap max-h-[500px] overflow-auto">
         {[...foundWords]
           .sort((a, b) => (a.word?.word! > b.word?.word! ? 1 : -1))
           .map((record, i) => (
-            // <div
-            //   className={`px-1 ${record.word?.isPangram && "bg-yellow-300"}`}
-            //   key={i}
-            // >
-            //   {record.word?.word.toLowerCase()}
-            // </div>
             <FoundWord record={record} />
           ))}
         {foundWords.length === 0 && (
