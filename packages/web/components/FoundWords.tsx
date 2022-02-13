@@ -45,7 +45,7 @@ const FoundWords: FC<Props> = ({ foundWords, collapsible = false }) => {
     <div className={`flex-grow border border-zinc-300 rounded-lg p-3 h-full`}>
       <div className={`flex`}>
         <div className="flex-grow mb-3">
-          You have found {foundWords.length}{" "}
+          This room has found {foundWords.length}{" "}
           {foundWords.length === 1 ? "word" : "words"}
         </div>
         {collapsible && (
