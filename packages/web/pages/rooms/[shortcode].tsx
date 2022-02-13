@@ -94,7 +94,7 @@ const Room: NextPage = () => {
       <Header date={puzzle.date} username={username} />
       <div className="font-Roboto min-w-[260px] w-full max-w-screen-lg mx-auto px-3">
         <div className="flex flex-col gap-4 sm:gap-8 sm:flex-row-reverse">
-          <div className="flex flex-grow flex-col gap-4">
+          <div className="flex flex-grow flex-col gap-4 sm:max-w-[50%]">
             <ProgressBar currentScore={score} maxScore={puzzle.maxScore} />
             <div className="hidden sm:block h-full">
               <FoundWords foundWords={foundWords} />
@@ -105,23 +105,22 @@ const Room: NextPage = () => {
           </div>
           <div className="flex flex-grow flex-col gap-4 justify-center">
             <div>
-              <GuessIndicator>
-                <LetterInput
-                  value={inputLetters}
-                  outerLetters={puzzle.outerLetters}
-                  centerLetter={puzzle.centerLetter}
-                  onChange={(value) =>
-                    handleLetterInput(
-                      value,
-                      username,
-                      shortcode,
-                      socket,
-                      inputLetters,
-                      setInputLetters
-                    )
-                  }
-                />
-              </GuessIndicator>
+              <LetterInput
+                value={inputLetters}
+                outerLetters={puzzle.outerLetters}
+                centerLetter={puzzle.centerLetter}
+                onChange={(value) =>
+                  handleLetterInput(
+                    value,
+                    username,
+                    shortcode,
+                    socket,
+                    inputLetters,
+                    setInputLetters
+                  )
+                }
+              />
+              <GuessIndicator />
             </div>
             <Hive
               outerLetters={shuffledLetters}
