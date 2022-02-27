@@ -61,7 +61,7 @@ const FoundWords: FC<Props> = ({ foundWords, collapsible = false }) => {
         {[...foundWords]
           .sort((a, b) => (a.word?.word! > b.word?.word! ? 1 : -1))
           .map((record, i) => (
-            <FoundWord record={record} />
+            <FoundWord key={record.id} record={record} />
           ))}
         {foundWords.length === 0 && (
           <div className="text-zinc-300">Your words...</div>
