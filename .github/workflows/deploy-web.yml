@@ -1,4 +1,4 @@
-name: Deploy Web
+name: deploy-web
 
 on:
   pull_request:
