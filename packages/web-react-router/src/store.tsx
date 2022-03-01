@@ -4,12 +4,18 @@ import { combine } from "zustand/middleware";
 export const useStore = create(
   combine(
     {
-      username: "Abcde",
-      shortcode: "abc123",
+      username: localStorage.getItem("username") || "",
+      shortcode: localStorage.getItem("shortcode") || "",
     },
     (set) => ({
-      setUsername: (username: string) => set((state) => ({ username })),
-      setShortcode: (shortcode: string) => set((state) => ({ shortcode })),
+      setUsername: (username: string) => {
+        set((_) => ({ username }));
+        localStorage.setItem("username", username);
+      },
+      setShortcode: (shortcode: string) => {
+        set((_) => ({ shortcode }));
+        localStorage.setItem("shortcode", shortcode);
+      },
     })
   )
 );
