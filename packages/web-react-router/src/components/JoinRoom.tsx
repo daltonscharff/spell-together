@@ -1,24 +1,63 @@
-import { useState } from "react";
 import { useStore } from "../store";
+import { useForm } from "react-hook-form";
 
 export function JoinRoom() {
-  const [username, setUsername] = useState<string>(
-    useStore((state) => state.username)
-  );
-  const [shortcode, setShortcode] = useState<string>(
-    useStore((state) => state.shortcode)
-  );
-  const setGlobalUsername = useStore((state) => state.setUsername);
-  const setGlobalShortcode = useStore((state) => state.setShortcode);
-  const onSubmit = () => {
-    setGlobalUsername(username);
-    setGlobalShortcode(shortcode);
+  const setUsername = useStore((state) => state.setUsername);
+  const setShortcode = useStore((state) => state.setShortcode);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      username: useStore((state) => state.username),
+      shortcode: useStore((state) => state.shortcode),
+    },
+  });
+
+  const onSubmit = (data: { username: string; shortcode: string }) => {
+    if (Object.entries(errors).length !== 0) {
+      return;
+    }
+    setUsername(data.username);
+    setShortcode(data.shortcode);
   };
+
   return (
-    <div>
-      <input type="text" value={username} />
-      <input type="text" value={shortcode} />
-      <button>Submit</button>
-    </div>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div>
+        <input
+          type="text"
+          placeholder="Your Name"
+          {...register("username", {
+            required: {
+              value: true,
+              message: "Please provide your name",
+            },
+            maxLength: {
+              value: 24,
+              message: "Please limit your name to 24 characters",
+            },
+          })}
+        />
+        {errors.username?.message}
+      </div>
+      <div>
+        <input
+          type="text"
+          placeholder="Room Code"
+          {...register("shortcode", {
+            required: true,
+            pattern: {
+              value: /[A-Za-z0-9]{6}/i,
+              message: "Please provide a valid, 6 character room code",
+            },
+          })}
+        />
+        {errors.shortcode?.message}
+      </div>
+      <input type="submit" />
+    </form>
   );
 }

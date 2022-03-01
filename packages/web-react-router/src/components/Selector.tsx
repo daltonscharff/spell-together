@@ -9,9 +9,13 @@ export function Selector({ items, selectedIndex, setSelectedIndex }: Props) {
     <div>
       {items.map((item, i) => {
         return i === selectedIndex ? (
-          <b onClick={() => setSelectedIndex(i)}>{item}</b>
+          <b key={`${i}${item}`} onClick={() => setSelectedIndex(i)}>
+            {item}
+          </b>
         ) : (
-          <div onClick={() => setSelectedIndex(i)}>{item}</div>
+          <div key={`${i}${item}`} onClick={() => setSelectedIndex(i)}>
+            {item}
+          </div>
         );
       })}
     </div>
