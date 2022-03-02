@@ -3,17 +3,22 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+type Props = {
+  createdShortcode: string;
+  setCreatedShortcode: (shortcode: string) => void;
+};
+
 function generateRoomUrl(shortcode: string) {
   const { protocol, host } = window.location;
   return `${protocol}//${host}/rooms/${shortcode.toUpperCase()}`;
 }
 
-export function CreateRoom() {
+export function CreateRoom(props: Props) {
   const navigate = useNavigate();
   const setGlobalUsername = useStore((state) => state.setUsername);
   const setGlobalShortcode = useStore((state) => state.setShortcode);
 
-  const [shortcode, setShortcode] = useState<string>("");
+  const [shortcode, setShortcode] = useState<string>(props.createdShortcode);
   const [roomUrl, setRoomUrl] = useState<string>("");
 
   useEffect(() => {
@@ -35,6 +40,7 @@ export function CreateRoom() {
       return;
     }
     setGlobalUsername(data.username);
+    props.setCreatedShortcode("abc123");
     setShortcode("abc123");
     setGlobalShortcode("abc123");
   };
