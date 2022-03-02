@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CreateRoom } from "../components/CreateRoom";
 import { JoinRoom } from "../components/JoinRoom";
 import { Selector } from "../components/Selector";
 
@@ -9,7 +10,7 @@ const pages = [
   },
   {
     name: "Create",
-    page: <div>Create Room</div>,
+    page: <CreateRoom />,
   },
 ];
 
