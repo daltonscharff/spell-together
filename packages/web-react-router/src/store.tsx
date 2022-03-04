@@ -13,6 +13,7 @@ export const useStore = create(
         localStorage.setItem("username", username);
       },
       setShortcode: (shortcode: string) => {
+        shortcode = shortcode.toLowerCase();
         set((_) => ({ shortcode }));
         localStorage.setItem("shortcode", shortcode);
       },

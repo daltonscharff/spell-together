@@ -1,7 +1,9 @@
 import { useStore } from "../store";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 export function JoinRoom() {
+  const navigate = useNavigate();
   const setUsername = useStore((state) => state.setUsername);
   const setShortcode = useStore((state) => state.setShortcode);
 
@@ -22,6 +24,7 @@ export function JoinRoom() {
     }
     setUsername(data.username);
     setShortcode(data.shortcode);
+    navigate(`/rooms/${data.shortcode}`);
   };
 
   return (
