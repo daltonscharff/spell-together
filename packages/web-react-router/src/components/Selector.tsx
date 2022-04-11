@@ -1,20 +1,22 @@
 type Props = {
-  items: string[];
-  selectedIndex: number;
-  setSelectedIndex: (i: number) => void;
+  items: {
+    value: string;
+    onClick?: () => void;
+  }[];
+  selectedIndex?: number;
 };
 
-export function Selector({ items, selectedIndex, setSelectedIndex }: Props) {
+export function Selector({ items, selectedIndex = 0 }: Props) {
   return (
     <div>
       {items.map((item, i) => {
         return i === selectedIndex ? (
-          <b key={`${i}${item}`} onClick={() => setSelectedIndex(i)}>
-            {item}
+          <b key={`${i}${item}`} onClick={item.onClick}>
+            {item.value}
           </b>
         ) : (
-          <div key={`${i}${item}`} onClick={() => setSelectedIndex(i)}>
-            {item}
+          <div key={`${i}${item}`} onClick={item.onClick}>
+            {item.value}
           </div>
         );
       })}

@@ -1,10 +1,11 @@
-import { useStore } from "../store";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../contexts/UserContext";
+import useStore from "../store";
 
 export function JoinRoom() {
   const navigate = useNavigate();
-  const setUsername = useStore((state) => state.setUsername);
+  const { username, setUsername } = useUser();
   const setShortcode = useStore((state) => state.setShortcode);
 
   const {
@@ -13,7 +14,7 @@ export function JoinRoom() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      username: useStore((state) => state.username),
+      username: username ?? "",
       shortcode: useStore((state) => state.shortcode),
     },
   });
