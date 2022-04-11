@@ -1,11 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { UserProvider } from "./contexts/UserContext";
 import "./index.css";
-import { Router } from "./components/Router";
+import { Router } from "./router";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router />
+    <UserProvider>
+      <Router />
+    </UserProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

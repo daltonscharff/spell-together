@@ -2,6 +2,7 @@ import { useStore } from "../store";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../contexts/UserContext";
 
 type Props = {
   createdShortcode: string;
@@ -15,7 +16,8 @@ function generateRoomUrl(shortcode: string) {
 
 export function CreateRoom(props: Props) {
   const navigate = useNavigate();
-  const setGlobalUsername = useStore((state) => state.setUsername);
+  const { username, setUsername } = useUser();
+  // const setGlobalUsername = useStore((state) => state.setUsername);
   const setGlobalShortcode = useStore((state) => state.setShortcode);
 
   const [shortcode, setShortcode] = useState<string>(props.createdShortcode);
@@ -31,7 +33,7 @@ export function CreateRoom(props: Props) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      username: useStore((state) => state.username),
+      username: username ?? "",
     },
   });
 
@@ -39,7 +41,8 @@ export function CreateRoom(props: Props) {
     if (Object.entries(errors).length !== 0) {
       return;
     }
-    setGlobalUsername(data.username);
+    // setGlobalUsername(data.username);
+    setUsername(data.username);
     props.setCreatedShortcode("abc123");
     setShortcode("abc123");
     setGlobalShortcode("abc123");

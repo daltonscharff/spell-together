@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home, Room } from "../pages";
+import { Home, Room } from "./pages";
 
 export const Router = () => {
   return (
