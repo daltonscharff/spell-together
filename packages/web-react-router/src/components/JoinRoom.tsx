@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../hooks/useUser";
+import { useStore } from "../hooks/useStore";
 
 export function JoinRoom() {
   const navigate = useNavigate();
-  const { username, setUsername, shortcode, setShortcode } = useUser();
+  const { username, setUsername, shortcode, setShortcode } = useStore();
 
   const {
     register,

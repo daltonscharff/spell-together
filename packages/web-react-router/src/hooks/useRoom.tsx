@@ -1,14 +1,11 @@
-export type RoomType = {
-  shortcode: string | null;
+import useSWR from "swr";
+import fetcher from "../utils/fetcher";
+
+export type Room = {
+  shortcode: string;
   name: string | null;
-  createdAt: string | null;
-  lastPlayed: string | null;
-  puzzle: {
-    date: string;
-    outerLetters: string[];
-    centerLetter: string;
-    maxScore: number;
-  } | null;
+  createdAt: string;
+  lastPlayed: string;
   records:
     | {
         createdAt: string;
@@ -19,13 +16,13 @@ export type RoomType = {
         definition: string | null;
         partOfSpeech: string | null;
         synonym: string | null;
-      }[]
-    | null;
-};
+      }[];
+} | null;
 
-export const useRoom = () => {
-  // get data from API using SWR
-  // include `loading` in return value
+export const useRoom = (shortcode: string) => {
+  const { error, data } = useSWR<Room>(`/api/rooms/${shortcode}`, fetcher);
 
-  return {};
+  return {
+    loading: !(error || data),
+  };
 };
