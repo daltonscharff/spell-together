@@ -1,28 +1,38 @@
 import useSWR from "swr";
 import fetcher from "../utils/fetcher";
-
-export type Room = {
-  shortcode: string;
-  name: string | null;
-  createdAt: string;
-  lastPlayed: string;
-  records:
-    | {
-        createdAt: string;
-        username: string;
-        word: string;
-        pointValue: string;
-        isPangram: boolean;
-        definition: string | null;
-        partOfSpeech: string | null;
-        synonym: string | null;
-      }[];
-} | null;
+import {
+  Room,
+  Record,
+  Puzzle,
+} from "@daltonscharff/spelling-bee-shared/lib/interfaces";
 
 export const useRoom = (shortcode: string) => {
-  const { error, data } = useSWR<Room>(`/api/rooms/${shortcode}`, fetcher);
+  // move these to `loadRoom`, `loadPuzzle`, `loadRecords` functions
+  const { error: roomError, data: roomData } = useSWR<Room>(
+    `/api/rooms/${shortcode}`,
+    fetcher
+  );
+  const { error: puzzleError, data: puzzleData } = useSWR<Puzzle>(
+    `/api/puzzles/newest`,
+    fetcher
+  );
+  const { error: recordsError, data: recordsData } = useSWR<Record[]>(
+    `/api/records/${shortcode}`,
+    fetcher
+  );
+
+  const loading =
+    !(roomError || roomData) &&
+    !(puzzleError || puzzleData) &&
+    !(recordsError || recordsData);
 
   return {
-    loading: !(error || data),
+    roomData,
+    roomError,
+    puzzleData,
+    puzzleError,
+    recordsData,
+    recordsError,
+    loading,
   };
 };
