@@ -1,38 +1,37 @@
-import useSWR from "swr";
 import fetcher from "../utils/fetcher";
 import {
   Room,
   Record,
   Puzzle,
 } from "@daltonscharff/spelling-bee-shared/lib/interfaces";
+import { useState } from "react";
 
 export const useRoom = (shortcode: string) => {
-  // move these to `loadRoom`, `loadPuzzle`, `loadRecords` functions
-  const { error: roomError, data: roomData } = useSWR<Room>(
-    `/api/rooms/${shortcode}`,
-    fetcher
-  );
-  const { error: puzzleError, data: puzzleData } = useSWR<Puzzle>(
-    `/api/puzzles/newest`,
-    fetcher
-  );
-  const { error: recordsError, data: recordsData } = useSWR<Record[]>(
-    `/api/records/${shortcode}`,
-    fetcher
-  );
+  const [loading, setLoading] = useState<boolean>(false);
+  const [roomData, setRoomData] = useState<Room | null>(null);
+  const [puzzleData, setPuzzleData] = useState<Puzzle | null>(null);
+  const [recordsData, setRecordsData] = useState<Record[] | null>(null);
 
-  const loading =
-    !(roomError || roomData) &&
-    !(puzzleError || puzzleData) &&
-    !(recordsError || recordsData);
+  async function loadRoom() {
+    setLoading(true);
+
+    setRoomData(await fetcher(`/api/rooms/${shortcode}`));
+    setPuzzleData(await fetcher(`/api/puzzles/newest`));
+    setRecordsData(await fetcher(`/api/records/${shortcode}`));
+
+    setLoading(false);
+  }
+
+  async function clearRecords() {
+    setRecordsData([]);
+  }
 
   return {
-    roomData,
-    roomError,
-    puzzleData,
-    puzzleError,
-    recordsData,
-    recordsError,
     loading,
+    loadRoom,
+    roomData,
+    puzzleData,
+    recordsData,
+    clearRecords,
   };
 };
