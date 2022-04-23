@@ -1,12 +1,15 @@
 import { GameInput } from "./GameInput";
 import { GameOutput } from "./GameOutput";
-import { SelectRoomModal } from "./SelectRoomModal";
+import { SelectRoom } from "../SelectRoom";
+import { ModalWrapper } from "../../components/ModalWrapper";
 
-export function GamePage() {
+export function GameRoom() {
   return (
     <>
-      GamePage
-      <SelectRoomModal />
+      GameRoom
+      <ModalWrapper>
+        <SelectRoom />
+      </ModalWrapper>
       <GameInput />
       <GameOutput />
     </>

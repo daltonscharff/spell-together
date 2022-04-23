@@ -1,3 +1,5 @@
+import styled from "styled-components";
+
 type Props = {
   items: {
     value: string;
@@ -6,18 +8,30 @@ type Props = {
   selectedIndex?: number;
 };
 
+const Container = styled.div`
+  display: flex;
+`;
+
+const Tab = styled.div`
+  font-weight: ${(props: { selected?: boolean }) =>
+    props.selected ? "bold" : "normal"};
+  flex-grow: 1;
+  text-align: center;
+  cursor: pointer;
+`;
+
 export function Selector({ items, selectedIndex = 0 }: Props) {
   return (
-    <div>
+    <Container>
       {items.map((item, i) => (
-        <div
+        <Tab
           key={`${i}${item}`}
           onClick={item.onClick}
-          style={i === selectedIndex ? { fontWeight: "bold" } : {}}
+          selected={i === selectedIndex}
         >
           {item.value}
-        </div>
+        </Tab>
       ))}
-    </div>
+    </Container>
   );
 }
