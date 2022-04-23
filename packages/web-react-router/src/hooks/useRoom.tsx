@@ -6,9 +6,11 @@ import {
 } from "@daltonscharff/spelling-bee-shared/lib/interfaces";
 import { useState } from "react";
 
-export const useRoom = (shortcode: string) => {
+export const useRoom = async (shortcode: string) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [roomData, setRoomData] = useState<Room | null>(null);
+  const [roomData, setRoomData] = useState<Room>(
+    await fetcher(`/api/rooms/${shortcode}`)
+  );
   const [puzzleData, setPuzzleData] = useState<Puzzle | null>(null);
   const [recordsData, setRecordsData] = useState<Record[] | null>(null);
 
