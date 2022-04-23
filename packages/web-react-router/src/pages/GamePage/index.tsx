@@ -1,6 +1,6 @@
 import { GameInput } from "./GameInput";
 import { GameOutput } from "./GameOutput";
-import { SelectRoomModal } from "../SelectRoomModal";
+import { SelectRoomModal } from "./SelectRoomModal";
 
 export function GamePage() {
   return (

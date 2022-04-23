@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 type Props = PropsWithChildren<{}>;
 
-const Div = styled.div`
+const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
   position: absolute;
@@ -11,16 +11,10 @@ const Div = styled.div`
   left: 0;
   background-color: #fff8;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
 `;
 
 export function ModalWrapper({ children }: Props) {
-  return (
-    <Div>
-      ModalWrapper
-      {children}
-    </Div>
-  );
+  return <Wrapper>{children}</Wrapper>;
 }
