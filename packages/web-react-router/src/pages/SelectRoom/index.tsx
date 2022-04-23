@@ -5,7 +5,6 @@ import { CreateRoom } from "./CreateRoom";
 import { JoinRoom } from "./JoinRoom";
 
 const selectableItems = ["Join", "Create"];
-
 const Container = styled.div`
   max-width: 500px;
 `;

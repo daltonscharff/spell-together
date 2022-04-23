@@ -3,13 +3,19 @@ import { GameOutput } from "./GameOutput";
 import { SelectRoom } from "../SelectRoom";
 import { ModalWrapper } from "../../components/ModalWrapper";
 
-export function GameRoom() {
+type Props = {
+  showSelectRoomModal?: boolean;
+};
+
+export function GameRoom({ showSelectRoomModal }: Props) {
   return (
     <>
       GameRoom
-      <ModalWrapper>
-        <SelectRoom />
-      </ModalWrapper>
+      {showSelectRoomModal && (
+        <ModalWrapper>
+          <SelectRoom />
+        </ModalWrapper>
+      )}
       <GameInput />
       <GameOutput />
     </>
