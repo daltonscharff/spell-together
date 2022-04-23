@@ -9,17 +9,15 @@ type Props = {
 export function Selector({ items, selectedIndex = 0 }: Props) {
   return (
     <div>
-      {items.map((item, i) => {
-        return i === selectedIndex ? (
-          <b key={`${i}${item}`} onClick={item.onClick}>
-            {item.value}
-          </b>
-        ) : (
-          <div key={`${i}${item}`} onClick={item.onClick}>
-            {item.value}
-          </div>
-        );
-      })}
+      {items.map((item, i) => (
+        <div
+          key={`${i}${item}`}
+          onClick={item.onClick}
+          style={i === selectedIndex ? { fontWeight: "bold" } : {}}
+        >
+          {item.value}
+        </div>
+      ))}
     </div>
   );
 }
