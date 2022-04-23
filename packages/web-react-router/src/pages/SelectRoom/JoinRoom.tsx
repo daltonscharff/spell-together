@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useStore } from "../../hooks/useStore";
+import { useStore } from "../../hooks/useUser";
 
 export function JoinRoom() {
   const navigate = useNavigate();

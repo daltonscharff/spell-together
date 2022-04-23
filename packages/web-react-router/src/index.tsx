@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { StoreProvider } from "./contexts/StoreContext";
+import { StoreProvider } from "./contexts/UserContext";
 import "./index.css";
 import { Router } from "./router";
 

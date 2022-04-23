@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useStore } from "../../hooks/useStore";
+import { useStore } from "../../hooks/useUser";
 
 function generateRoomUrl(shortcode: string) {
   const { protocol, host } = window.location;
