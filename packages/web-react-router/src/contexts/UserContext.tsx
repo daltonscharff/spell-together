@@ -1,30 +1,30 @@
 import { createContext, PropsWithChildren, useState } from "react";
 
-export type StoreContextProps = PropsWithChildren<{}>;
+export type UserContextProps = PropsWithChildren<{}>;
 
-export type StoreType = {
+export type UserType = {
   username: string | null;
   shortcode: string | null;
 };
 
-const defaultUser: StoreType = {
+const defaultUser: UserType = {
   username: null,
   shortcode: null,
 };
 
-export const StoreContext = createContext<
-  [StoreType, (state: StoreType) => void]
->([defaultUser, () => {}]);
+export const UserContext = createContext<[UserType, (state: UserType) => void]>(
+  [defaultUser, () => {}]
+);
 
-export const StoreProvider = (props: StoreContextProps) => {
-  const [state, setState] = useState<StoreType>({
+export const UserProvider = (props: UserContextProps) => {
+  const [state, setState] = useState<UserType>({
     ...defaultUser,
     username: localStorage.getItem("username"),
     shortcode: localStorage.getItem("shortcode"),
   });
   return (
-    <StoreContext.Provider value={[state, setState]}>
+    <UserContext.Provider value={[state, setState]}>
       {props.children}
-    </StoreContext.Provider>
+    </UserContext.Provider>
   );
 };
