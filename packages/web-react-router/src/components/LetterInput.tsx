@@ -8,6 +8,7 @@ type Props = {
   onAddLetter: (key: string) => void;
   onBackspace: () => void;
   onEnter: () => void;
+  disabled?: boolean;
 };
 
 type LetterCategory = "outer" | "invalid" | "center";
@@ -68,10 +69,12 @@ const LetterInput = ({
   onAddLetter,
   onBackspace,
   onEnter,
+  disabled,
 }: Props) => {
   const [isFocused, setIsFocused] = useState(true);
 
   useEffect(() => {
+    if (disabled) return;
     const registerEvent = ({ key }: KeyboardEvent) => {
       if (/[a-zA-Z]/.test(key) && key.length === 1) {
         onAddLetter(key);
@@ -85,9 +88,10 @@ const LetterInput = ({
     return () => {
       window.removeEventListener("keydown", registerEvent);
     };
-  }, [onAddLetter, onBackspace, onEnter]);
+  }, [onAddLetter, onBackspace, onEnter, disabled]);
 
   useEffect(() => {
+    if (disabled) return setIsFocused(false);
     const handleInFocus = () => setIsFocused(true);
     const handleOutFocus = () => setIsFocused(false);
     window.addEventListener("focus", handleInFocus);
@@ -96,7 +100,7 @@ const LetterInput = ({
       window.removeEventListener("focus", handleInFocus);
       window.removeEventListener("blur", handleOutFocus);
     };
-  }, []);
+  }, [disabled]);
 
   return (
     <Container>
