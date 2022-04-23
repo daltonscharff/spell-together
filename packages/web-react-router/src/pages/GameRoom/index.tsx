@@ -28,7 +28,7 @@ export function GameRoom({ showSelectRoomModal }: Props) {
         </SelectRoomModal>
       )}
       <LetterInputProvider>
-        <GameInput />
+        <GameInput disabled={showSelectRoomModal} />
       </LetterInputProvider>
       <GameOutput />
     </>

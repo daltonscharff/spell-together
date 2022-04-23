@@ -1,7 +1,11 @@
 import LetterInput from "../../components/LetterInput";
 import { useLetterInput } from "../../hooks/useLetterInput";
 
-export function GameInput() {
+type Props = {
+  disabled?: boolean;
+};
+
+export function GameInput({ disabled }: Props) {
   const { letters, addLetter, removeLetter, clearLetters } = useLetterInput();
   return (
     <div>
@@ -13,6 +17,7 @@ export function GameInput() {
         onAddLetter={addLetter}
         onBackspace={removeLetter}
         onEnter={clearLetters}
+        disabled={disabled}
       />
     </div>
   );

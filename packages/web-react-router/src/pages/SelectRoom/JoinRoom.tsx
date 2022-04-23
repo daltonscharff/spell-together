@@ -1,6 +1,35 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import { useUser } from "../../hooks/useUser";
+
+const Input = styled.input`
+  display: block;
+  font-size: 2em;
+  font-weight: light;
+  padding: 0.25em;
+  border: none;
+  border-bottom: 1px solid #0002;
+`;
+const InputGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const ErrorMessage = styled.div`
+  font-size: 0.8em;
+  font-weight: light;
+  height: 1.5em;
+`;
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5em;
+`;
+const Button = styled.input`
+  padding: 1em 2em;
+  border: none;
+  text-transform: uppercase;
+`;
 
 export function JoinRoom() {
   const navigate = useNavigate();
@@ -27,9 +56,9 @@ export function JoinRoom() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <input
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <InputGroup>
+        <Input
           type="text"
           placeholder="Your Name"
           {...register("username", {
@@ -43,10 +72,10 @@ export function JoinRoom() {
             },
           })}
         />
-        {errors.username?.message}
-      </div>
-      <div>
-        <input
+        <ErrorMessage>{errors.username?.message}</ErrorMessage>
+      </InputGroup>
+      <InputGroup>
+        <Input
           type="text"
           placeholder="Room Code"
           {...register("shortcode", {
@@ -57,9 +86,11 @@ export function JoinRoom() {
             },
           })}
         />
-        {errors.shortcode?.message}
+        <ErrorMessage>{errors.shortcode?.message}</ErrorMessage>
+      </InputGroup>
+      <div>
+        <Button type="submit" value="Submit" />
       </div>
-      <input type="submit" value="Submit" />
-    </form>
+    </Form>
   );
 }
