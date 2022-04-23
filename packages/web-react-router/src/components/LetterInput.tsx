@@ -5,7 +5,9 @@ type Props = {
   value: string;
   outerLetters: string[];
   centerLetter: string;
-  onChange: (key: string) => void;
+  onAddLetter: (key: string) => void;
+  onBackspace: () => void;
+  onEnter: () => void;
 };
 
 type LetterCategory = "outer" | "invalid" | "center";
@@ -63,19 +65,27 @@ const LetterInput = ({
   value,
   outerLetters,
   centerLetter,
-  onChange,
+  onAddLetter,
+  onBackspace,
+  onEnter,
 }: Props) => {
   const [isFocused, setIsFocused] = useState(true);
 
   useEffect(() => {
-    const registerEvent = (event: KeyboardEvent) => {
-      onChange(event.key);
+    const registerEvent = ({ key }: KeyboardEvent) => {
+      if (/[a-zA-Z]/.test(key) && key.length === 1) {
+        onAddLetter(key);
+      } else if (key === "Backspace") {
+        onBackspace();
+      } else if (key === "Enter") {
+        onEnter();
+      }
     };
     window.addEventListener("keydown", registerEvent);
     return () => {
       window.removeEventListener("keydown", registerEvent);
     };
-  }, [onChange]);
+  }, [onAddLetter, onBackspace, onEnter]);
 
   useEffect(() => {
     const handleInFocus = () => setIsFocused(true);

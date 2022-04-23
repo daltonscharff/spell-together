@@ -2,6 +2,7 @@ import { GameInput } from "./GameInput";
 import { GameOutput } from "./GameOutput";
 import { SelectRoom } from "../SelectRoom";
 import { ModalWrapper } from "../../components/ModalWrapper";
+import { LetterInputProvider } from "../../contexts/LetterInputContext";
 
 type Props = {
   showSelectRoomModal?: boolean;
@@ -16,7 +17,9 @@ export function GameRoom({ showSelectRoomModal }: Props) {
           <SelectRoom />
         </ModalWrapper>
       )}
-      <GameInput />
+      <LetterInputProvider>
+        <GameInput />
+      </LetterInputProvider>
       <GameOutput />
     </>
   );

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useStore } from "../../hooks/useUser";
+import { useUser } from "../../hooks/useUser";
 
 function generateRoomUrl(shortcode: string) {
   const { protocol, host } = window.location;
@@ -10,7 +10,7 @@ function generateRoomUrl(shortcode: string) {
 
 export function CreateRoom() {
   const navigate = useNavigate();
-  const { username, setUsername } = useStore();
+  const { username, setUsername } = useUser();
 
   const [shortcode, setShortcode] = useState<string>("");
   const [roomUrl, setRoomUrl] = useState<string>("");

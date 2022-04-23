@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 
-export const useStore = () => {
+export const useUser = () => {
   const [state, setState] = useContext(UserContext);
 
   function setUsername(username: string) {
