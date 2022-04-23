@@ -1,7 +1,9 @@
 import { PropsWithChildren } from "react";
 import styled from "styled-components";
 
-type Props = PropsWithChildren<{}>;
+type Props = PropsWithChildren<{
+  className?: string;
+}>;
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -15,6 +17,10 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-export function ModalWrapper({ children }: Props) {
-  return <Wrapper>{children}</Wrapper>;
+export function ModalWrapper({ children, className }: Props) {
+  return (
+    <Wrapper>
+      <div className={className}>{children}</div>
+    </Wrapper>
+  );
 }

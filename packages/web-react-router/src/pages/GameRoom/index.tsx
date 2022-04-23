@@ -3,19 +3,29 @@ import { GameOutput } from "./GameOutput";
 import { SelectRoom } from "../SelectRoom";
 import { ModalWrapper } from "../../components/ModalWrapper";
 import { LetterInputProvider } from "../../contexts/LetterInputContext";
+import styled from "styled-components";
 
 type Props = {
   showSelectRoomModal?: boolean;
 };
+
+const SelectRoomModal = styled(ModalWrapper)`
+  background: white;
+  max-width: 600px;
+  width: 80%;
+  padding: 1em;
+  margin-top: 3em;
+  box-shadow: 0px 0px 8px 0px #0002;
+`;
 
 export function GameRoom({ showSelectRoomModal }: Props) {
   return (
     <>
       GameRoom
       {showSelectRoomModal && (
-        <ModalWrapper>
+        <SelectRoomModal>
           <SelectRoom />
-        </ModalWrapper>
+        </SelectRoomModal>
       )}
       <LetterInputProvider>
         <GameInput />
