@@ -6,7 +6,9 @@ import { JoinRoom } from "./JoinRoom";
 
 const selectableItems = ["Join", "Create"];
 const Container = styled.div`
-  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 `;
 
 export function SelectRoom() {
