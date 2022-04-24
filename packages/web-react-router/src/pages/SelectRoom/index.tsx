@@ -1,11 +1,12 @@
 import { useState } from "react";
-import styled from "styled-components";
 import { Selector } from "../../components/Selector";
 import { CreateRoom } from "./CreateRoom";
 import { JoinRoom } from "./JoinRoom";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
 
 const selectableItems = ["Join", "Create"];
-const Container = styled.div`
+const Container = styled(Box)`
   display: flex;
   flex-direction: column;
   gap: 1em;

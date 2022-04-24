@@ -2,6 +2,19 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../hooks/useUser";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+
+const Form = styled("form")`
+  display: flex;
+  flex-direction: column;
+  row-gap: 1em;
+`;
 
 function generateRoomUrl(shortcode: string) {
   const { protocol, host } = window.location;
@@ -14,6 +27,7 @@ export function CreateRoom() {
 
   const [shortcode, setShortcode] = useState<string>("");
   const [roomUrl, setRoomUrl] = useState<string>("");
+  console.log({ roomUrl });
 
   useEffect(() => {
     setRoomUrl(generateRoomUrl(shortcode));
@@ -44,31 +58,59 @@ export function CreateRoom() {
   return (
     <>
       {shortcode ? (
-        <>
-          <div>{roomUrl}</div>
-          <button onClick={onGoToRoomClick}>Go to room</button>
-        </>
+        <Form>
+          <TextField
+            InputProps={{
+              readOnly: true,
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="copy room URL"
+                    onClick={() => {
+                      navigator.clipboard.writeText(roomUrl);
+                    }}
+                    edge="end"
+                  >
+                    <ContentCopyIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            value={roomUrl}
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{ margin: "auto" }}
+            onClick={onGoToRoomClick}
+          >
+            Go to room
+          </Button>
+        </Form>
       ) : (
-        <form onSubmit={handleSubmit(onCreateRoomSubmit)}>
-          <div>
-            <input
-              type="text"
-              placeholder="Your Name"
-              {...register("username", {
-                required: {
-                  value: true,
-                  message: "Please provide your name",
-                },
-                maxLength: {
-                  value: 24,
-                  message: "Please limit your name to 24 characters",
-                },
-              })}
-            />
-            {errors.username?.message}
-          </div>
-          <input type="submit" value="Submit" />
-        </form>
+        <Form onSubmit={handleSubmit(onCreateRoomSubmit)}>
+          <TextField
+            error={!!errors.username}
+            label="Username"
+            variant="standard"
+            helperText={errors.username?.message}
+            {...register("username", {
+              required: {
+                value: true,
+                message: "Please provide a username",
+              },
+              maxLength: {
+                value: 24,
+                message: "Please limit your username to 24 characters",
+              },
+            })}
+          />
+          <Box sx={{ display: "flex", mt: "1em" }}>
+            <Button type="submit" variant="contained" sx={{ margin: "auto" }}>
+              Create Room
+            </Button>
+          </Box>
+        </Form>
       )}
     </>
   );

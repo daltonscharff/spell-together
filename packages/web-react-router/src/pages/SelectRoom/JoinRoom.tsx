@@ -1,34 +1,15 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import { useUser } from "../../hooks/useUser";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
-const Input = styled.input`
-  display: block;
-  font-size: 2em;
-  font-weight: light;
-  padding: 0.25em;
-  border: none;
-  border-bottom: 1px solid #0002;
-`;
-const InputGroup = styled.div`
+const Form = styled("form")`
   display: flex;
   flex-direction: column;
-`;
-const ErrorMessage = styled.div`
-  font-size: 0.8em;
-  font-weight: light;
-  height: 1.5em;
-`;
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  row-gap: 0.5em;
-`;
-const Button = styled.input`
-  padding: 1em 2em;
-  border: none;
-  text-transform: uppercase;
+  row-gap: 1em;
 `;
 
 export function JoinRoom() {
@@ -57,40 +38,43 @@ export function JoinRoom() {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <InputGroup>
-        <Input
-          type="text"
-          placeholder="Your Name"
-          {...register("username", {
-            required: {
-              value: true,
-              message: "Please provide your name",
-            },
-            maxLength: {
-              value: 24,
-              message: "Please limit your name to 24 characters",
-            },
-          })}
-        />
-        <ErrorMessage>{errors.username?.message}</ErrorMessage>
-      </InputGroup>
-      <InputGroup>
-        <Input
-          type="text"
-          placeholder="Room Code"
-          {...register("shortcode", {
-            required: true,
-            pattern: {
-              value: /[A-Za-z0-9]{6}/i,
-              message: "Please provide a valid, 6 character room code",
-            },
-          })}
-        />
-        <ErrorMessage>{errors.shortcode?.message}</ErrorMessage>
-      </InputGroup>
-      <div>
-        <Button type="submit" value="Submit" />
-      </div>
+      <TextField
+        error={!!errors.username}
+        label="Username"
+        variant="standard"
+        helperText={errors.username?.message}
+        {...register("username", {
+          required: {
+            value: true,
+            message: "Please provide a username",
+          },
+          maxLength: {
+            value: 24,
+            message: "Please limit your username to 24 characters",
+          },
+        })}
+      />
+      <TextField
+        error={!!errors.shortcode}
+        label="Room Code"
+        variant="standard"
+        helperText={errors.shortcode?.message}
+        {...register("shortcode", {
+          required: {
+            value: true,
+            message: "Please provide the code of a room to join",
+          },
+          pattern: {
+            value: /^[A-Za-z0-9]{6}$/,
+            message: "Please provide a valid, 6 character room code",
+          },
+        })}
+      />
+      <Box sx={{ display: "flex", mt: "1em" }}>
+        <Button type="submit" variant="contained" sx={{ margin: "auto" }}>
+          Join Room
+        </Button>
+      </Box>
     </Form>
   );
 }

@@ -12,8 +12,8 @@ type Props = {
 const SelectRoomModal = styled(ModalWrapper)`
   background: white;
   max-width: 600px;
-  width: 80%;
-  padding: 1em;
+  width: 75%;
+  padding: 2em 1.5em;
   margin-top: 3em;
   box-shadow: 0px 0px 8px 0px #0002;
 `;
