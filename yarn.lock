@@ -10651,11 +10651,6 @@ swr@^1.2.1:
   resolved "https://registry.yarnpkg.com/swr/-/swr-1.2.1.tgz#c21a4fe2139cb1c4630450589b5b5add947a9d41"
   integrity sha512-1cuWXqJqXcFwbgONGCY4PHZ8v05009JdHsC3CIC6u7d00kgbMswNr1sHnnhseOBxtzVqcCNpOHEgVDciRer45w==
 
-swr@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/swr/-/swr-1.2.2.tgz#6cae09928d30593a7980d80f85823e57468fac5d"
-  integrity sha512-ky0BskS/V47GpW8d6RU7CPsr6J8cr7mQD6+do5eky3bM0IyJaoi3vO8UhvrzJaObuTlGhPl2szodeB2dUd76Xw==
-
 symbol-tree@^3.2.4:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
@@ -11786,8 +11781,3 @@ zustand@^3.6.8:
   version "3.6.9"
   resolved "https://registry.yarnpkg.com/zustand/-/zustand-3.6.9.tgz#f61a756ddea9f95c7ee7cfd3af2f88c10078afbc"
   integrity sha512-OvDNu/jEWpRnEC7k8xh8GKjqYog7td6FZrLMuHs/IeI8WhrCwV+FngVuwMIFhp5kysZXr6emaeReMqjLGaldAQ==
-
-zustand@^3.7.0:
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-3.7.0.tgz#a5c68fb06bdee9c63ad829de2432635be6d0ce69"
-  integrity sha512-USzVzLGrvZ8VK1/sEsOAmeqa8N7D3OBdZskVaL7DL89Q4QLTYD053iIlZ5KDidyZ+Od80Dttin/f8ZulOLFFDQ==
