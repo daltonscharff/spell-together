@@ -49,10 +49,10 @@ const blink = keyframes`
 `;
 
 const BlinkingCursor = styled(Box)`
-  color: gold;
   animation: ${blink} 1200ms steps(1, end) infinite;
   margin-left: 1px;
   user-select: none;
+  font-weight: 100;
 `;
 
 const PlaceholderText = styled(Box)`
@@ -62,7 +62,9 @@ const PlaceholderText = styled(Box)`
 const Container = styled(Box)`
   display: flex;
   font-size: 2em;
-  align-items: baseline;
+  padding-bottom: 0.15em;
+  border-bottom: 1px solid black;
+  justify-content: center;
 `;
 
 const LetterInput = ({
