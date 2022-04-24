@@ -13,7 +13,7 @@ const Container = styled("svg")`
   margin: 0 auto;
 `;
 const Hexagon = styled("use")`
-  stroke-width: 1px;
+  stroke-width: 3px;
   stroke: black;
   box-shadow: 0 0 1px 0 black;
   cursor: pointer;
@@ -78,12 +78,16 @@ export const Hive: FC<Props> = ({
       viewBox="0 0 250 259.8"
     >
       <defs>
-        <symbol id="hexagon">
-          <polygon points={"25 0, 75 0, 100 43.3, 75 86.6, 25 86.6, 0 43.3"} />
-        </symbol>
+        <polygon
+          id="hexagon"
+          points={"25 0, 75 0, 100 43.3, 75 86.6, 25 86.6, 0 43.3"}
+        />
+        <clipPath id="insideHexagon">
+          <use href="#hexagon" />
+        </clipPath>
         {outerLetters.map((letter, i) => (
           <symbol key={letter + i} id={cells[i].id}>
-            <Hexagon href="#hexagon" />
+            <Hexagon href="#hexagon" clipPath="url(#insideHexagon)" />
             <Text x="50%" y="55%">
               {letter}
             </Text>
