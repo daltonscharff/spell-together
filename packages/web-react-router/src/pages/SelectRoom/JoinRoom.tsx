@@ -70,7 +70,7 @@ export function JoinRoom() {
           },
         })}
       />
-      <Box sx={{ display: "flex", mt: "1em" }}>
+      <Box sx={{ display: "flex", mt: ".5em" }}>
         <Button type="submit" variant="contained" sx={{ margin: "auto" }}>
           Join Room
         </Button>

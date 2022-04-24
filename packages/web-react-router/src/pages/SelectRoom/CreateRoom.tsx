@@ -59,6 +59,7 @@ export function CreateRoom() {
       {shortcode ? (
         <Form>
           <TextField
+            variant="standard"
             InputProps={{
               readOnly: true,
               endAdornment: (
@@ -80,7 +81,7 @@ export function CreateRoom() {
           <Button
             type="submit"
             variant="contained"
-            sx={{ margin: "auto" }}
+            sx={{ margin: "auto", mt: ".5em" }}
             onClick={onGoToRoomClick}
           >
             Go to room
@@ -104,7 +105,7 @@ export function CreateRoom() {
               },
             })}
           />
-          <Box sx={{ display: "flex", mt: "1em" }}>
+          <Box sx={{ display: "flex", mt: ".5em" }}>
             <Button type="submit" variant="contained" sx={{ margin: "auto" }}>
               Create Room
             </Button>
