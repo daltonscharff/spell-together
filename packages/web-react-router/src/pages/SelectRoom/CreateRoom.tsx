@@ -27,7 +27,6 @@ export function CreateRoom() {
 
   const [shortcode, setShortcode] = useState<string>("");
   const [roomUrl, setRoomUrl] = useState<string>("");
-  console.log({ roomUrl });
 
   useEffect(() => {
     setRoomUrl(generateRoomUrl(shortcode));

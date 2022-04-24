@@ -11,14 +11,7 @@ type Props = {
 };
 
 const Container = styled(Box)`
-  display: grid;
-  grid-template-columns: ${(props: { length: number }) => {
-    let columns = "";
-    for (let i = 0; i < props.length; i++) {
-      columns += "auto ";
-    }
-    return columns + ";";
-  }}
+  display: flex;
   border: 1px solid lightgrey;
   background: #eee;
   border-radius: 5px;
@@ -33,6 +26,7 @@ const Tab = styled(Box)`
   box-shadow: ${(props: { selected?: boolean }) =>
     props.selected ? "0px 0px 2px 0px #ddd;" : "none"};
   flex-grow: 1;
+  width: 0;
   text-align: center;
   cursor: pointer;
   padding: 0.25em 1em;
@@ -41,7 +35,7 @@ const Tab = styled(Box)`
 
 export function Selector({ items, selectedIndex = 0, className }: Props) {
   return (
-    <Container className={className} length={items.length}>
+    <Container className={className}>
       {items.map((item, i) => (
         <Tab
           key={`${i}${item}`}
