@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { isPropertySignature } from "typescript";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
 
 type Props = {
   items: {
@@ -10,7 +10,7 @@ type Props = {
   className?: string;
 };
 
-const Container = styled.div`
+const Container = styled(Box)`
   display: grid;
   grid-template-columns: ${(props: { length: number }) => {
     let columns = "";
@@ -25,7 +25,7 @@ const Container = styled.div`
   column-gap: 2px;
 `;
 
-const Tab = styled.div`
+const Tab = styled(Box)`
   color: ${(props: { selected?: boolean }) =>
     props.selected ? "black" : "grey"};
   background: ${(props: { selected?: boolean }) =>

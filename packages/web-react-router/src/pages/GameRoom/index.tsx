@@ -3,7 +3,7 @@ import { GameOutput } from "./GameOutput";
 import { SelectRoom } from "../SelectRoom";
 import { ModalWrapper } from "../../components/ModalWrapper";
 import { LetterInputProvider } from "../../contexts/LetterInputContext";
-import styled from "styled-components";
+import { styled } from "@mui/material/styles";
 
 type Props = {
   showSelectRoomModal?: boolean;

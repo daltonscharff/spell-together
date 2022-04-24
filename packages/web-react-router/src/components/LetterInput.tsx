@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import styled, { keyframes } from "styled-components";
+import { keyframes } from "@emotion/react";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
 
 type Props = {
   value: string;
@@ -25,7 +27,7 @@ function checkLetterCategory(
   return "invalid";
 }
 
-const Letter = styled.span`
+const Letter = styled("span")`
   color: ${(props: { category: LetterCategory }) => {
     const colors = {
       outer: "black",
@@ -46,17 +48,18 @@ const blink = keyframes`
   }
 `;
 
-const BlinkingCursor = styled.span`
+const BlinkingCursor = styled(Box)`
   color: gold;
   animation: ${blink} 1200ms steps(1, end) infinite;
   margin-left: 1px;
+  user-select: none;
 `;
 
-const PlaceholderText = styled.div`
+const PlaceholderText = styled(Box)`
   color: lightgrey;
 `;
 
-const Container = styled.div`
+const Container = styled(Box)`
   display: flex;
   font-size: 2em;
   align-items: baseline;

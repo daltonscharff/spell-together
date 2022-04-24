@@ -1,11 +1,12 @@
 import { PropsWithChildren } from "react";
-import styled from "styled-components";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
 
 type Props = PropsWithChildren<{
   className?: string;
 }>;
 
-const Wrapper = styled.div`
+const Wrapper = styled(Box)`
   width: 100vw;
   height: 100vh;
   position: absolute;
