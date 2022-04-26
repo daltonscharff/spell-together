@@ -1,6 +1,4 @@
-import { CSSProperties, FC } from "react";
 import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
 
 type Props = {
   outerLetters: string[];
@@ -9,18 +7,17 @@ type Props = {
 };
 
 const Container = styled("svg")`
-  max-width: 280px;
+  max-width: 300px;
   margin: 0 auto;
 `;
-const Hexagon = styled("use")`
-  stroke-width: 3px;
+const Hexagon = styled("path")`
+  stroke-width: 2px;
   stroke: black;
-  box-shadow: 0 0 1px 0 black;
   cursor: pointer;
   fill: white;
 `;
 const CenterHexagon = styled(Hexagon)`
-  fill: gold;
+  fill: #fee383;
 `;
 const Text = styled("text")`
   dominant-baseline: middle;
@@ -30,96 +27,65 @@ const Text = styled("text")`
   font-size: 2em;
 `;
 
-const cells = [
-  {
-    id: "top",
-    x: 75,
-    y: 0,
-  },
-  {
-    id: "top-left",
-    x: 0,
-    y: 43.3,
-  },
-  {
-    id: "top-right",
-    x: 0,
-    y: 129.9,
-  },
-  {
-    id: "bottom",
-    x: 75,
-    y: 173.2,
-  },
-  {
-    id: "bottom-left",
-    x: 150,
-    y: 43.3,
-  },
-  {
-    id: "bottom-right",
-    x: 150,
-    y: 129.9,
-  },
-];
-
-export const Hive: FC<Props> = ({
+export const Hive = ({
   outerLetters,
   centerLetter,
   onClick = (_: string) => {},
-}) => {
+}: Props) => {
   centerLetter = centerLetter.toUpperCase();
   outerLetters = outerLetters.map((letter) => letter.toUpperCase());
 
   return (
-    <Container
-      xmlns="http://www.w3.org/2000/svg"
-      version="1.1"
-      viewBox="0 0 250 259.8"
-    >
-      <defs>
-        <polygon
-          id="hexagon"
-          points={"25 0, 75 0, 100 43.3, 75 86.6, 25 86.6, 0 43.3"}
-        />
-        <clipPath id="insideHexagon">
-          <use href="#hexagon" />
-        </clipPath>
-        {outerLetters.map((letter, i) => (
-          <symbol key={letter + i} id={cells[i].id}>
-            <Hexagon href="#hexagon" clipPath="url(#insideHexagon)" />
-            <Text x="50%" y="55%">
-              {letter}
-            </Text>
-          </symbol>
-        ))}
-        <symbol id="center">
-          <CenterHexagon href="#hexagon" />
-          <Text x="50%" y="55%">
-            {centerLetter}
-          </Text>
-        </symbol>
-      </defs>
-
-      {outerLetters.map((letter, i) => (
-        <use
-          href={`#${cells[i].id}`}
-          onClick={() => onClick(letter)}
-          x={cells[i].x}
-          y={cells[i].y}
-          width="100"
-          height="86.6"
-          key={letter + i}
-        />
-      ))}
-      <use
-        href="#center"
+    <Container viewBox="0 0 286 307" xmlns="http://www.w3.org/2000/svg">
+      <CenterHexagon
+        d="M168.279 109.72L193.654 153.238L168.654 196.539L118.279 196.322L92.9042 152.805L117.904 109.503L168.279 109.72Z"
         onClick={() => onClick(centerLetter)}
-        x="75"
-        y="86.6"
-        width="100"
-        height="86.6"
       />
+      <Text x="143" y="157" onClick={() => onClick(centerLetter)}>
+        {centerLetter}
+      </Text>
+      <Hexagon
+        d="M191.286 68.536L240.509 68.7475L265.304 111.27L240.884 153.567L191.661 153.355L166.866 110.832L191.286 68.536Z"
+        onClick={() => onClick(outerLetters[0])}
+      />
+      <Text x="216.8" y="114.6" onClick={() => onClick(outerLetters[0])}>
+        {outerLetters[0]}
+      </Text>
+      <Hexagon
+        d="M192.026 153.256L241.249 153.467L266.043 195.99L241.624 238.286L192.401 238.075L167.606 195.552L192.026 153.256Z"
+        onClick={() => onClick(outerLetters[1])}
+      />
+      <Text x="216.8" y="199.4" onClick={() => onClick(outerLetters[1])}>
+        {outerLetters[1]}
+      </Text>
+      <Hexagon
+        d="M118.286 194.976L167.509 195.187L192.304 237.71L167.884 280.006L118.661 279.795L93.8665 237.272L118.286 194.976Z"
+        onClick={() => onClick(outerLetters[2])}
+      />
+      <Text x="143" y="241.8" onClick={() => onClick(outerLetters[2])}>
+        {outerLetters[2]}
+      </Text>
+      <Hexagon
+        d="M44.6745 152.476L93.8976 152.687L118.692 195.21L94.2726 237.506L45.0495 237.295L20.2547 194.772L44.6745 152.476Z"
+        onClick={() => onClick(outerLetters[3])}
+      />
+      <Text x="69.2" y="199.4" onClick={() => onClick(outerLetters[3])}>
+        {outerLetters[3]}
+      </Text>
+      <Hexagon
+        d="M43.9352 67.7558L93.1584 67.9674L117.953 110.49L93.5334 152.786L44.3102 152.575L19.5154 110.052L43.9352 67.7558Z"
+        onClick={() => onClick(outerLetters[4])}
+      />
+      <Text x="69.2" y="114.6" onClick={() => onClick(outerLetters[4])}>
+        {outerLetters[4]}
+      </Text>
+      <Hexagon
+        d="M117.674 26.036L166.898 26.2475L191.692 68.7703L167.273 111.067L118.049 110.855L93.2547 68.3323L117.674 26.036Z"
+        onClick={() => onClick(outerLetters[5])}
+      />
+      <Text x="143" y="72.2" onClick={() => onClick(outerLetters[5])}>
+        {outerLetters[5]}
+      </Text>
     </Container>
   );
 };
