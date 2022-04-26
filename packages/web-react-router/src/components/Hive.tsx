@@ -25,6 +25,7 @@ const Text = styled("text")`
   cursor: pointer;
   font-weight: bold;
   font-size: 2em;
+  user-select: none;
 `;
 
 export const Hive = ({
