@@ -48,11 +48,12 @@ const blink = keyframes`
   }
 `;
 
-const BlinkingCursor = styled(Box)`
+const BlinkingCursor = styled("span")`
   animation: ${blink} 1200ms steps(1, end) infinite;
   margin-left: 1px;
   user-select: none;
   font-weight: 100;
+  position: absolute;
 `;
 
 const PlaceholderText = styled(Box)`
@@ -60,11 +61,10 @@ const PlaceholderText = styled(Box)`
 `;
 
 const Container = styled(Box)`
-  display: flex;
   font-size: 2em;
   padding-bottom: 0.15em;
   border-bottom: 1px solid black;
-  justify-content: center;
+  text-align: center;
 `;
 
 const LetterInput = ({
@@ -126,9 +126,10 @@ const LetterInput = ({
         })}
 
       {isFocused && <BlinkingCursor>|</BlinkingCursor>}
-
-      {!isFocused && value.length === 0 && (
+      {!isFocused && value.length === 0 ? (
         <PlaceholderText>Type or click...</PlaceholderText>
+      ) : (
+        <wbr />
       )}
     </Container>
   );
