@@ -7,7 +7,6 @@ type Props = {
 };
 
 const Container = styled("svg")`
-  max-width: 300px;
   margin: 0 auto;
 `;
 const Hexagon = styled("path")`
