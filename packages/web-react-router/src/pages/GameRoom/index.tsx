@@ -6,7 +6,7 @@ import { LetterInputProvider } from "../../contexts/LetterInputContext";
 import { styled } from "@mui/material/styles";
 
 type Props = {
-  showSelectRoomModal?: boolean;
+  shortcode?: string;
 };
 
 const SelectRoomModal = styled(ModalWrapper)`
@@ -18,23 +18,36 @@ const SelectRoomModal = styled(ModalWrapper)`
   box-shadow: 0px 0px 8px 0px #0002;
 `;
 
-export function GameRoom({ showSelectRoomModal }: Props) {
+const Container = styled("div")`
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 1em;
+
+  @media (max-width: 640px) {
+    grid-auto-flow: row;
+  }
+`;
+
+export function GameRoom({ shortcode }: Props) {
   return (
     <>
-      {showSelectRoomModal && (
+      {!shortcode && (
         <SelectRoomModal>
           <SelectRoom />
         </SelectRoomModal>
       )}
-      <LetterInputProvider>
-        <GameInput
-          outerLetters={["b", "c", "d", "e", "f", "g"]}
-          centerLetter={"a"}
-          onSubmit={() => {}}
-          disabled={showSelectRoomModal}
-        />
-      </LetterInputProvider>
-      <GameOutput />
+      <Container>
+        <LetterInputProvider>
+          <GameInput
+            outerLetters={["b", "c", "d", "e", "f", "g"]}
+            centerLetter={"a"}
+            onSubmit={() => {}}
+            disabled={!shortcode}
+          />
+        </LetterInputProvider>
+        <GameOutput />
+      </Container>
     </>
   );
 }
