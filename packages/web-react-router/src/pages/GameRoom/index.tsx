@@ -21,14 +21,18 @@ const SelectRoomModal = styled(ModalWrapper)`
 export function GameRoom({ showSelectRoomModal }: Props) {
   return (
     <>
-      GameRoom
       {showSelectRoomModal && (
         <SelectRoomModal>
           <SelectRoom />
         </SelectRoomModal>
       )}
       <LetterInputProvider>
-        <GameInput disabled={showSelectRoomModal} />
+        <GameInput
+          outerLetters={["b", "c", "d", "e", "f", "g"]}
+          centerLetter={"a"}
+          onSubmit={() => {}}
+          disabled={showSelectRoomModal}
+        />
       </LetterInputProvider>
       <GameOutput />
     </>

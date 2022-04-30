@@ -5,8 +5,12 @@ import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import LoopIcon from "@mui/icons-material/Loop";
 import Container from "@mui/material/Container";
+import { useCallback, useState } from "react";
 
 type Props = {
+  outerLetters: string[];
+  centerLetter: string;
+  onSubmit: () => void;
   disabled?: boolean;
 };
 
@@ -16,20 +20,39 @@ const ButtonContainer = styled(Container)`
   grid-template-columns: 40% 20% 40%;
 `;
 
-export function GameInput({ disabled }: Props) {
+function shuffle(items: any[]): any[] {
+  items = [...items];
+  for (let i in items) {
+    const j = Math.floor(Math.random() * parseInt(i, 10));
+    const temp = items[i];
+    items[i] = items[j];
+    items[j] = temp;
+  }
+  return items;
+}
+
+export function GameInput({
+  centerLetter,
+  onSubmit,
+  disabled = false,
+  ...rest
+}: Props) {
+  const [outerLetters, setOuterLetters] = useState(rest.outerLetters);
   const { letters, addLetter, removeLetter, clearLetters } = useLetterInput();
-  const outerLetters = ["b", "c", "d", "e", "f", "g"];
-  const centerLetter = "a";
+  const onEnter = useCallback(() => {
+    onSubmit();
+    clearLetters();
+  }, [onSubmit, clearLetters]);
+
   return (
     <div>
-      GameInput
       <LetterInput
         value={letters}
         outerLetters={outerLetters}
         centerLetter={centerLetter}
         onAddLetter={addLetter}
         onBackspace={removeLetter}
-        onEnter={clearLetters}
+        onEnter={onEnter}
         disabled={disabled}
       />
       <Hive
@@ -39,10 +62,13 @@ export function GameInput({ disabled }: Props) {
       />
       <ButtonContainer>
         <Button onClick={removeLetter}>Delete</Button>
-        <Button aria-label="Shuffle">
+        <Button
+          aria-label="Shuffle"
+          onClick={() => setOuterLetters(shuffle(outerLetters))}
+        >
           <LoopIcon />
         </Button>
-        <Button>Enter</Button>
+        <Button onClick={onEnter}>Enter</Button>
       </ButtonContainer>
     </div>
   );
