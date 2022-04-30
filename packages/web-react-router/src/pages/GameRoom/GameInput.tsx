@@ -61,14 +61,19 @@ export function GameInput({
         onClick={addLetter}
       />
       <ButtonContainer>
-        <Button onClick={removeLetter}>Delete</Button>
+        <Button onClick={removeLetter} disabled={disabled}>
+          Delete
+        </Button>
         <Button
           aria-label="Shuffle"
           onClick={() => setOuterLetters(shuffle(outerLetters))}
+          disabled={disabled}
         >
           <LoopIcon />
         </Button>
-        <Button onClick={onEnter}>Enter</Button>
+        <Button onClick={onEnter} disabled={disabled}>
+          Enter
+        </Button>
       </ButtonContainer>
     </div>
   );
