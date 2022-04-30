@@ -67,7 +67,7 @@ const Container = styled(Box)`
   text-align: center;
 `;
 
-const LetterInput = ({
+export const LetterInput = ({
   value,
   outerLetters,
   centerLetter,
@@ -134,5 +134,3 @@ const LetterInput = ({
     </Container>
   );
 };
-
-export default LetterInput;

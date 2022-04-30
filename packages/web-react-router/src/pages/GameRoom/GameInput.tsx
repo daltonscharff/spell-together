@@ -1,5 +1,5 @@
 import { Hive } from "../../components/Hive";
-import LetterInput from "../../components/LetterInput";
+import { LetterInput } from "../../components/LetterInput";
 import { useLetterInput } from "../../hooks/useLetterInput";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
@@ -38,8 +38,8 @@ export function GameInput({ disabled }: Props) {
         onClick={addLetter}
       />
       <ButtonContainer>
-        <Button>Delete</Button>
-        <Button aria-label="Shuffle Letters">
+        <Button onClick={removeLetter}>Delete</Button>
+        <Button aria-label="Shuffle">
           <LoopIcon />
         </Button>
         <Button>Enter</Button>
