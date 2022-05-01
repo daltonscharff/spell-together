@@ -4,6 +4,13 @@ import { SelectRoom } from "../SelectRoom";
 import { ModalWrapper } from "../../components/ModalWrapper";
 import { LetterInputProvider } from "../../contexts/LetterInputContext";
 import { styled } from "@mui/material/styles";
+import useSWR from "swr";
+import fetcher from "../../utils/fetcher";
+import {
+  Puzzle,
+  Record,
+  Room,
+} from "@daltonscharff/spelling-bee-shared/lib/interfaces";
 
 type Props = {
   shortcode?: string;
@@ -30,6 +37,34 @@ const Container = styled("div")`
 `;
 
 export function GameRoom({ shortcode }: Props) {
+  const { data: roomData, error: roomError } = useSWR<Room>(
+    `/api/rooms/${shortcode}`,
+    fetcher
+  );
+  const { data: puzzleData, error: puzzleError } = useSWR<Puzzle>(
+    `/api/puzzles/newest`,
+    fetcher
+  );
+  const { data: recordsData, error: recordsError } = useSWR<Record[]>(
+    `/api/records/${shortcode}`,
+    fetcher
+  );
+
+  const loading =
+    (!roomData && !roomError) ||
+    (!puzzleData && !puzzleError) ||
+    (!recordsData && !recordsError);
+
+  const error = roomError || puzzleError || recordsError;
+
+  console.log({
+    roomData,
+    puzzleData,
+    recordsData,
+    loading,
+    error,
+  });
+  if (loading) return <div>Loading</div>;
   return (
     <>
       {!shortcode && (
@@ -40,10 +75,10 @@ export function GameRoom({ shortcode }: Props) {
       <Container>
         <LetterInputProvider>
           <GameInput
-            outerLetters={["b", "c", "d", "e", "f", "g"]}
-            centerLetter={"a"}
+            outerLetters={puzzleData?.outerLetters ?? []}
+            centerLetter={puzzleData?.centerLetter || ""}
             onSubmit={() => {}}
-            disabled={!shortcode}
+            disabled={!shortcode || error}
           />
         </LetterInputProvider>
         <GameOutput />
