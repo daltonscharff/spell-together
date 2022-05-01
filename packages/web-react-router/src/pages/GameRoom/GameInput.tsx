@@ -6,11 +6,12 @@ import Button from "@mui/material/Button";
 import LoopIcon from "@mui/icons-material/Loop";
 import Container from "@mui/material/Container";
 import { useCallback, useState } from "react";
+import { shuffle } from "../../utils/shuffle";
 
 type Props = {
   outerLetters: string[];
   centerLetter: string;
-  onSubmit: () => void;
+  onSubmit?: () => void;
   disabled?: boolean;
 };
 
@@ -20,20 +21,9 @@ const ButtonContainer = styled(Container)`
   grid-template-columns: 40% 20% 40%;
 `;
 
-function shuffle(items: any[]): any[] {
-  items = [...items];
-  for (let i in items) {
-    const j = Math.floor(Math.random() * parseInt(i, 10));
-    const temp = items[i];
-    items[i] = items[j];
-    items[j] = temp;
-  }
-  return items;
-}
-
 export function GameInput({
   centerLetter,
-  onSubmit,
+  onSubmit = () => {},
   disabled = false,
   ...rest
 }: Props) {
