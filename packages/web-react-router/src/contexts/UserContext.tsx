@@ -1,6 +1,4 @@
-import { createContext, PropsWithChildren, useState } from "react";
-
-export type UserContextProps = PropsWithChildren<{}>;
+import { createContext, FC, useState } from "react";
 
 export type UserType = {
   username: string | null;
@@ -16,7 +14,7 @@ export const UserContext = createContext<[UserType, (state: UserType) => void]>(
   [defaultUser, () => {}]
 );
 
-export const UserProvider = (props: UserContextProps) => {
+export const UserProvider: FC = ({ children }) => {
   const [state, setState] = useState<UserType>({
     ...defaultUser,
     username: localStorage.getItem("username"),
@@ -24,7 +22,7 @@ export const UserProvider = (props: UserContextProps) => {
   });
   return (
     <UserContext.Provider value={[state, setState]}>
-      {props.children}
+      {children}
     </UserContext.Provider>
   );
 };
