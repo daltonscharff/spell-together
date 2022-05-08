@@ -9,16 +9,33 @@ type Room = {
   shortcode: string;
   name: string | null;
 };
+type Word = {
+  id: string;
+  word: string;
+  pointValue: number;
+  isPangram: boolean;
+  definition: string | null;
+  partOfSpeech: string | null;
+  synonym: string | null;
+};
 type Record = {
   id: string;
   createdAt: string;
   username: string;
-  roomId: string;
-  wordId: string;
+  word: Word;
+};
+
+const defaultRoom: Room & { records: Record[] } = {
+  id: "",
+  createdAt: "",
+  lastPlayed: "",
+  shortcode: "",
+  name: null,
+  records: [],
 };
 
 export const useRoom = (shortcode?: string) => {
-  const [room, setRoom] = useState({});
+  const [room, setRoom] = useState(defaultRoom);
 
   const { data: roomData, error: roomError } = useSWR<Room>(
     `/api/rooms/${shortcode}`,
