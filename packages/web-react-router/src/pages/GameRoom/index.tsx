@@ -4,13 +4,7 @@ import { SelectRoom } from "../SelectRoom";
 import { ModalWrapper } from "../../components/ModalWrapper";
 import { LetterInputProvider } from "../../contexts/LetterInputContext";
 import { styled } from "@mui/material/styles";
-import useSWR from "swr";
-import fetcher from "../../utils/fetcher";
-import {
-  Puzzle,
-  Record,
-  Room,
-} from "@daltonscharff/spelling-bee-shared/lib/interfaces";
+import { usePuzzle } from "../../hooks/usePuzzle";
 
 type Props = {
   shortcode?: string;
@@ -37,34 +31,38 @@ const Container = styled("div")`
 `;
 
 export function GameRoom({ shortcode }: Props) {
-  const { data: roomData, error: roomError } = useSWR<Room>(
-    `/api/rooms/${shortcode}`,
-    fetcher
-  );
-  const { data: puzzleData, error: puzzleError } = useSWR<Puzzle>(
-    `/api/puzzles/newest`,
-    fetcher
-  );
-  const { data: recordsData, error: recordsError } = useSWR<Record[]>(
-    `/api/records/${shortcode}`,
-    fetcher
-  );
+  // const { data: roomData, error: roomError } = useSWR<Room>(
+  //   `/api/rooms/${shortcode}`,
+  //   fetcher
+  // );
+  // const { data: puzzleData, error: puzzleError } = useSWR<Puzzle>(
+  //   `/api/puzzles/newest`,
+  //   fetcher
+  // );
+  // const { data: recordsData, error: recordsError } = useSWR<Record[]>(
+  //   `/api/records/${shortcode}`,
+  //   fetcher
+  // );
 
-  const loading =
-    (!roomData && !roomError) ||
-    (!puzzleData && !puzzleError) ||
-    (!recordsData && !recordsError);
+  // const loading =
+  //   (!roomData && !roomError) ||
+  //   (!puzzleData && !puzzleError) ||
+  //   (!recordsData && !recordsError);
 
-  const error = roomError || puzzleError || recordsError;
+  // const error = roomError || puzzleError || recordsError;
 
-  console.log({
-    roomData,
-    puzzleData,
-    recordsData,
-    loading,
-    error,
-  });
-  if (loading) return <div>Loading</div>;
+  // console.log({
+  //   roomData,
+  //   puzzleData,
+  //   recordsData,
+  //   loading,
+  //   error,
+  // });
+  // if (loading) return <div>Loading</div>;
+  const { outerLetters, centerLetter, loadData } = usePuzzle();
+  const disabled =
+    !shortcode || outerLetters.length !== 6 || centerLetter.length !== 1;
+
   return (
     <>
       {!shortcode && (
@@ -75,50 +73,15 @@ export function GameRoom({ shortcode }: Props) {
       <Container>
         <LetterInputProvider>
           <GameInput
-            outerLetters={puzzleData?.outerLetters ?? []}
-            centerLetter={puzzleData?.centerLetter || ""}
+            outerLetters={outerLetters}
+            centerLetter={centerLetter}
             onSubmit={() => {}}
-            disabled={!shortcode || error}
+            disabled={disabled}
           />
         </LetterInputProvider>
         <GameOutput />
       </Container>
+      <button onClick={loadData}>Load Data</button>
     </>
   );
 }
-
-// const shortcode = "vqlslp";
-// const { loadRoom, roomData, puzzleData, recordsData, clearRecords } =
-//   useRoom(shortcode);
-
-// useEffect(() => {
-//   loadRoom();
-// }, []);
-// // let params = useParams();
-// // const setShortcode = useStore((state) => state.setShortcode);
-// // if (params.shortcode) setShortcode(params.shortcode);
-// // const shortcode = useStore((state) => state.shortcode);
-
-// // const { data: puzzleData, error: puzzleError } = useSWR(
-// //   "api/puzzles/newest",
-// //   fetcher
-// // );
-
-// // console.log({ puzzleData, puzzleError });
-
-// // const { data: roomData, error: roomError } = useSWR(
-// //   `api/rooms/${shortcode}`,
-// //   fetcher
-// // );
-
-// // console.log({ roomData, roomError });
-
-// return (
-//   <>
-//     {shortcode}
-//     Puzzle: {JSON.stringify(puzzleData)}
-//     Room: {JSON.stringify(roomData)}
-//     Records: {JSON.stringify(recordsData)}
-//     <button onClick={clearRecords}>Clear</button>
-//   </>
-// );

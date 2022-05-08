@@ -5,7 +5,7 @@ import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import LoopIcon from "@mui/icons-material/Loop";
 import Container from "@mui/material/Container";
-import { useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 import { shuffle } from "../../utils/shuffle";
 
 type Props = {
@@ -22,17 +22,22 @@ const ButtonContainer = styled(Container)`
 `;
 
 export function GameInput({
+  outerLetters,
   centerLetter,
   onSubmit = () => {},
   disabled = false,
-  ...rest
 }: Props) {
-  const [outerLetters, setOuterLetters] = useState(rest.outerLetters);
   const { letters, addLetter, removeLetter, clearLetters } = useLetterInput();
-  const onEnter = useCallback(() => {
+  const onEnter = () => {
     onSubmit();
     clearLetters();
-  }, [onSubmit, clearLetters]);
+  };
+  const [shuffledLetters, setShuffledLetters] =
+    useState<string[]>(outerLetters);
+
+  useEffect(() => {
+    setShuffledLetters(outerLetters);
+  }, [outerLetters]);
 
   return (
     <div>
@@ -46,7 +51,7 @@ export function GameInput({
         disabled={disabled}
       />
       <Hive
-        outerLetters={outerLetters}
+        outerLetters={shuffledLetters}
         centerLetter={centerLetter}
         onClick={addLetter}
       />
@@ -56,7 +61,7 @@ export function GameInput({
         </Button>
         <Button
           aria-label="Shuffle"
-          onClick={() => setOuterLetters(shuffle(outerLetters))}
+          onClick={() => setShuffledLetters(shuffle(shuffledLetters))}
           disabled={disabled}
         >
           <LoopIcon />
