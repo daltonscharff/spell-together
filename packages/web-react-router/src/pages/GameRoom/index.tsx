@@ -59,7 +59,7 @@ export function GameRoom({ shortcode }: Props) {
   //   error,
   // });
   // if (loading) return <div>Loading</div>;
-  const { outerLetters, centerLetter, loadData } = usePuzzle();
+  const { outerLetters, centerLetter } = usePuzzle();
   const disabled =
     !shortcode || outerLetters.length !== 6 || centerLetter.length !== 1;
 
@@ -81,7 +81,6 @@ export function GameRoom({ shortcode }: Props) {
         </LetterInputProvider>
         <GameOutput />
       </Container>
-      <button onClick={loadData}>Load Data</button>
     </>
   );
 }

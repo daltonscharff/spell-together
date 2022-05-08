@@ -1,20 +1,19 @@
-import { useContext } from "react";
-import { PuzzleContext } from "../contexts/PuzzleContext";
+import { useContext, useEffect } from "react";
+import useSWR from "swr";
+import { Puzzle, PuzzleContext } from "../contexts/PuzzleContext";
+import fetcher from "../utils/fetcher";
 
 export const usePuzzle = () => {
   const [puzzle, setPuzzle] = useContext(PuzzleContext);
 
-  function loadData() {
-    console.log("Loading Data");
-    setPuzzle({
-      ...puzzle,
-      outerLetters: ["a", "b", "c", "d", "e", "f"],
-      centerLetter: "g",
-    });
-  }
+  const { data, error } = useSWR<Puzzle>(`/api/puzzles/newest`, fetcher);
+
+  useEffect(() => {
+    if (data) setPuzzle(data);
+  }, [data, setPuzzle]);
 
   return {
     ...puzzle,
-    loadData,
+    error,
   };
 };
