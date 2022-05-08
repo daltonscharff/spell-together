@@ -1,27 +1,28 @@
 import { createContext, FC, useState } from "react";
 
-export type UserType = {
+export type User = {
   username: string | null;
   shortcode: string | null;
 };
 
-const defaultUser: UserType = {
+const defaultUser: User = {
   username: null,
   shortcode: null,
 };
 
-export const UserContext = createContext<[UserType, (state: UserType) => void]>(
-  [defaultUser, () => {}]
-);
+export const UserContext = createContext<[User, (state: User) => void]>([
+  defaultUser,
+  () => {},
+]);
 
 export const UserProvider: FC = ({ children }) => {
-  const [state, setState] = useState<UserType>({
+  const [user, setUser] = useState<User>({
     ...defaultUser,
     username: localStorage.getItem("username"),
     shortcode: localStorage.getItem("shortcode"),
   });
   return (
-    <UserContext.Provider value={[state, setState]}>
+    <UserContext.Provider value={[user, setUser]}>
       {children}
     </UserContext.Provider>
   );
