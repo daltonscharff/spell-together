@@ -5,6 +5,7 @@ import { ModalWrapper } from "../../components/ModalWrapper";
 import { LetterInputProvider } from "../../contexts/LetterInputContext";
 import { styled } from "@mui/material/styles";
 import { usePuzzle } from "../../hooks/usePuzzle";
+import { useRoom } from "../../hooks/useRoom";
 
 type Props = {
   shortcode?: string;
@@ -31,37 +32,13 @@ const Container = styled("div")`
 `;
 
 export function GameRoom({ shortcode }: Props) {
-  // const { data: roomData, error: roomError } = useSWR<Room>(
-  //   `/api/rooms/${shortcode}`,
-  //   fetcher
-  // );
-  // const { data: puzzleData, error: puzzleError } = useSWR<Puzzle>(
-  //   `/api/puzzles/newest`,
-  //   fetcher
-  // );
-  // const { data: recordsData, error: recordsError } = useSWR<Record[]>(
-  //   `/api/records/${shortcode}`,
-  //   fetcher
-  // );
+  const puzzle = usePuzzle();
+  const room = useRoom(shortcode);
 
-  // const loading =
-  //   (!roomData && !roomError) ||
-  //   (!puzzleData && !puzzleError) ||
-  //   (!recordsData && !recordsError);
+  const disabled = !shortcode || puzzle.error || room.error;
 
-  // const error = roomError || puzzleError || recordsError;
-
-  // console.log({
-  //   roomData,
-  //   puzzleData,
-  //   recordsData,
-  //   loading,
-  //   error,
-  // });
-  const { loading, outerLetters, centerLetter, error } = usePuzzle();
-  const disabled = !shortcode || error;
-
-  if (loading) return <div>Loading</div>;
+  if (puzzle.loading || room.loading) return <div>Loading</div>;
+  console.log(room);
 
   return (
     <>
@@ -73,8 +50,8 @@ export function GameRoom({ shortcode }: Props) {
       <Container>
         <LetterInputProvider>
           <GameInput
-            outerLetters={outerLetters}
-            centerLetter={centerLetter}
+            outerLetters={puzzle.outerLetters}
+            centerLetter={puzzle.centerLetter}
             onSubmit={() => {}}
             disabled={disabled}
           />
