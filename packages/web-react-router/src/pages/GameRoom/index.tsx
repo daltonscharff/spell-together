@@ -58,10 +58,10 @@ export function GameRoom({ shortcode }: Props) {
   //   loading,
   //   error,
   // });
-  // if (loading) return <div>Loading</div>;
-  const { outerLetters, centerLetter } = usePuzzle();
-  const disabled =
-    !shortcode || outerLetters.length !== 6 || centerLetter.length !== 1;
+  const { loading, outerLetters, centerLetter, error } = usePuzzle();
+  const disabled = !shortcode || error;
+
+  if (loading) return <div>Loading</div>;
 
   return (
     <>
