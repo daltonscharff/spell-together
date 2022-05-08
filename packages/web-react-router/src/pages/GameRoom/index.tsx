@@ -3,9 +3,11 @@ import { GameOutput } from "./GameOutput";
 import { SelectRoom } from "../SelectRoom";
 import { ModalWrapper } from "../../components/ModalWrapper";
 import { LetterInputProvider } from "../../contexts/LetterInputContext";
+import Container from "@mui/material/Container";
 import { styled } from "@mui/material/styles";
 import { usePuzzle } from "../../hooks/usePuzzle";
 import { useRoom } from "../../hooks/useRoom";
+import Grid from "@mui/material/Grid";
 
 type Props = {
   shortcode?: string;
@@ -18,17 +20,6 @@ const SelectRoomModal = styled(ModalWrapper)`
   padding: 2em 1.5em;
   margin-top: 3em;
   box-shadow: 0px 0px 8px 0px #0002;
-`;
-
-const Container = styled("div")`
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr;
-  gap: 1em;
-
-  @media (max-width: 640px) {
-    grid-auto-flow: row;
-  }
 `;
 
 export function GameRoom({ shortcode }: Props) {
@@ -48,15 +39,21 @@ export function GameRoom({ shortcode }: Props) {
         </SelectRoomModal>
       )}
       <Container>
-        <LetterInputProvider>
-          <GameInput
-            outerLetters={puzzle.outerLetters}
-            centerLetter={puzzle.centerLetter}
-            onSubmit={() => {}}
-            disabled={disabled}
-          />
-        </LetterInputProvider>
-        <GameOutput />
+        <Grid container>
+          <Grid item md={6}>
+            <LetterInputProvider>
+              <GameInput
+                outerLetters={puzzle.outerLetters}
+                centerLetter={puzzle.centerLetter}
+                onSubmit={() => {}}
+                disabled={disabled}
+              />
+            </LetterInputProvider>
+          </Grid>
+          <Grid item md={6}>
+            <GameOutput records={room.records} />
+          </Grid>
+        </Grid>
       </Container>
     </>
   );

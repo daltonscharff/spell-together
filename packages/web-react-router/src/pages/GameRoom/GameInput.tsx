@@ -2,6 +2,7 @@ import { Hive } from "../../components/Hive";
 import { LetterInput } from "../../components/LetterInput";
 import { useLetterInput } from "../../hooks/useLetterInput";
 import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import LoopIcon from "@mui/icons-material/Loop";
 import Container from "@mui/material/Container";
@@ -40,7 +41,7 @@ export function GameInput({
   }, [outerLetters]);
 
   return (
-    <div>
+    <Box>
       <LetterInput
         value={letters}
         outerLetters={outerLetters}
@@ -70,6 +71,6 @@ export function GameInput({
           Enter
         </Button>
       </ButtonContainer>
-    </div>
+    </Box>
   );
 }
