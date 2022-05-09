@@ -1,4 +1,4 @@
-import { createContext, FC, useState } from "react";
+import { createContext, FC, useState, Dispatch, SetStateAction } from "react";
 
 export type Word = {
   id: string;
@@ -34,10 +34,9 @@ export const defaultRoom: Room = {
   records: [],
 };
 
-export const RoomContext = createContext<[Room, (state: Room) => void]>([
-  defaultRoom,
-  () => {},
-]);
+export const RoomContext = createContext<
+  [Room, Dispatch<SetStateAction<Room>>]
+>([defaultRoom, () => {}]);
 
 export const RoomProvider: FC = ({ children }) => {
   const [room, setRoom] = useState<Room>(defaultRoom);
