@@ -24,7 +24,7 @@ export function GameOutput({ records }: Props) {
           <PaddedBox>
             <Stack divider={<Divider />} spacing={2}>
               {records.map((record) => (
-                <Box>
+                <Box key={record.word.id}>
                   {record.word.word}
                   {record.username}
                   {record.word.definition}
