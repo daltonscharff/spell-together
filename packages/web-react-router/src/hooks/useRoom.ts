@@ -1,43 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
+import {
+  Room,
+  Record,
+  RoomContext,
+  RoomWithoutRecords,
+} from "../contexts/RoomContext";
 import fetcher from "../utils/fetcher";
 
-type Room = {
-  id: string;
-  createdAt: string;
-  lastPlayed: string;
-  shortcode: string;
-  name: string | null;
-};
-type Word = {
-  id: string;
-  word: string;
-  pointValue: number;
-  isPangram: boolean;
-  definition: string | null;
-  partOfSpeech: string | null;
-  synonym: string | null;
-};
-type Record = {
-  id: string;
-  createdAt: string;
-  username: string;
-  word: Word;
-};
-
-const defaultRoom: Room & { records: Record[] } = {
-  id: "",
-  createdAt: "",
-  lastPlayed: "",
-  shortcode: "",
-  name: null,
-  records: [],
-};
-
 export const useRoom = (shortcode?: string) => {
-  const [room, setRoom] = useState(defaultRoom);
+  const [room, setRoom] = useContext(RoomContext);
 
-  const { data: roomData, error: roomError } = useSWR<Room>(
+  // TODO: only load if shortcode is not undefined
+  const { data: roomData, error: roomError } = useSWR<RoomWithoutRecords>(
     `/api/rooms/${shortcode}`,
     fetcher
   );
@@ -51,13 +26,15 @@ export const useRoom = (shortcode?: string) => {
 
   useEffect(() => {
     if (roomData) {
-      setRoom((room) => ({ ...room, ...roomData }));
+      // @ts-ignore
+      setRoom((room: Room) => ({ ...room, ...roomData }));
     }
   }, [setRoom, roomData]);
 
   useEffect(() => {
     if (recordsData) {
-      setRoom((room) => ({ ...room, records: recordsData }));
+      // @ts-ignore
+      setRoom((room: Room) => ({ ...room, records: recordsData }));
     }
   }, [setRoom, recordsData]);
 

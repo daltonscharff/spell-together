@@ -23,6 +23,7 @@ export type Room = {
   name: string | null;
   records: Record[];
 };
+export type RoomWithoutRecords = Omit<Room, "records">;
 
 export const defaultRoom: Room = {
   id: "",
