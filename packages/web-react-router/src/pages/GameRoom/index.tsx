@@ -39,8 +39,8 @@ export function GameRoom({ shortcode }: Props) {
         </SelectRoomModal>
       )}
       <Container>
-        <Grid container>
-          <Grid item md={6}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
             <LetterInputProvider>
               <GameInput
                 outerLetters={puzzle.outerLetters}
@@ -50,7 +50,7 @@ export function GameRoom({ shortcode }: Props) {
               />
             </LetterInputProvider>
           </Grid>
-          <Grid item md={6}>
+          <Grid item xs={12} md={6}>
             <GameOutput records={room.records} />
           </Grid>
         </Grid>
