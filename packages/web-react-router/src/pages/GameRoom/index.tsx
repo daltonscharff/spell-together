@@ -51,7 +51,7 @@ export function GameRoom({ shortcode }: Props) {
             </LetterInputProvider>
           </Grid>
           <Grid item xs={12} md={6}>
-            <GameOutput records={room.records} />
+            <GameOutput />
           </Grid>
         </Grid>
       </Container>
