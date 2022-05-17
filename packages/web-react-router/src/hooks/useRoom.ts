@@ -6,6 +6,7 @@ import {
   RoomWithoutRecords,
 } from "../contexts/RoomContext";
 import fetcher from "../utils/fetcher";
+import { socket, useSocket } from "./useSocket";
 
 export const useRoom = (shortcode?: string) => {
   const [room, setRoom] = useContext(RoomContext);
@@ -36,9 +37,31 @@ export const useRoom = (shortcode?: string) => {
     }
   }, [setRoom, recordsData]);
 
+  useEffect(() => {
+    if (shortcode) {
+      console.log("JOINING ROOM", shortcode);
+      socket.emit("user:joinRoom", {
+        username: "test",
+        shortcode,
+      });
+    }
+  }, [shortcode]);
+
+  function guessWord(word: string) {
+    console.log("Guessing");
+    socket.emit("user:guess", {
+      username: "test",
+      shortcode,
+      word,
+    });
+  }
+
+  useSocket("incorrectGuess", (data) => console.log("incorrectGuess", data));
+
   return {
     ...room,
     loading,
     error,
+    guessWord,
   };
 };
