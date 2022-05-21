@@ -9,14 +9,5 @@
   },
   "workspaces": [
     "packages/*"
-  ],
-  "scripts": {
-    "build:core": "cd ./packages/core && yarn build && cd ../..",
-    "build:shared": "cd ./packages/shared && yarn build && cd ../..",
-    "build:scraper": "yarn build:core && cd ./packages/scraper && yarn build && cd ../..",
-    "build:server": "yarn build:core && yarn build:shared && cd ./packages/server && yarn build && cd ../..",
-    "build:web": "yarn build:shared && cd ./packages/web && yarn build && cd ../..",
-    "dev:server": "cd ./packages/server && yarn dev",
-    "dev:web": "cd ./packages/web-react-router && yarn start"
-  }
+  ]
 }
