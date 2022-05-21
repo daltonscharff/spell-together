@@ -3,7 +3,7 @@
 -- and may require manual changes to the script to ensure changes are applied in the correct order.
 -- Please report an issue for any failure with the reproduction steps.
 
-CREATE POLICY "Enable access to all users"
+CREATE POLICY "Enable select access to all users"
     ON public.puzzle
     AS PERMISSIVE
     FOR SELECT
