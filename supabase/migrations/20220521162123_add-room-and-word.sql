@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS public.word
     is_pangram boolean NOT NULL,
     definition text COLLATE pg_catalog."default",
     part_of_speech character varying COLLATE pg_catalog."default",
-    synonym character varying COLLATE pg_catalog."default",
     CONSTRAINT word_pkey PRIMARY KEY (id)
 )
 
