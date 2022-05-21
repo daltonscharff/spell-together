@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS public.guess
     CONSTRAINT guess_word_id_fkey FOREIGN KEY (word_id)
         REFERENCES public.word (id) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT guess_room_id_word_id_key UNIQUE (room_id, word_id)
 )
 
 TABLESPACE pg_default;
