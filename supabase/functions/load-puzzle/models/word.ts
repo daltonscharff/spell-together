@@ -4,9 +4,9 @@ export class Word {
   word = "";
   point_value = 0;
   is_pangram = false;
-  definition = "";
-  part_of_speech = "";
-  puzzle_id = "";
+  definition?: string;
+  part_of_speech?: string;
+  puzzle_id?: string;
 
   constructor(word: string) {
     this.word = word.toLowerCase();
@@ -44,8 +44,10 @@ export class Word {
     );
 
     const { results } = await response.json();
-    this.definition = results[0].definition;
-    this.part_of_speech = results[0].partOfSpeech;
+    if (results) {
+      this.definition = results[0].definition;
+      this.part_of_speech = results[0].partOfSpeech;
+    }
   }
 
   static addPoints(words: Word[]): number {
@@ -53,16 +55,8 @@ export class Word {
   }
 
   static async saveAll(words: Word[], puzzleId?: string) {
-    const saveableWords = words.map((w) => ({
-      word: w.word,
-      point_value: w.point_value,
-      is_pangram: w.is_pangram,
-      definition: w.definition,
-      part_of_speech: w.part_of_speech,
-      puzzle_id: w.puzzle_id || puzzleId,
-    }));
-    const { error } = await supabaseClient.from("word").insert([saveableWords]);
-
+    if (puzzleId) words.forEach((w) => (w.puzzle_id = puzzleId));
+    const { error } = await supabaseClient.from("word").insert(words);
     if (error) throw new Error("Could not save words: " + error.message);
   }
 }
