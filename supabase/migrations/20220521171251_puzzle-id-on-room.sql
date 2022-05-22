@@ -4,9 +4,9 @@
 -- Please report an issue for any failure with the reproduction steps.
 
 ALTER TABLE IF EXISTS public.room
-    ADD COLUMN puzzle_id uuid NOT NULL;
+    ADD COLUMN puzzle_id uuid;
 ALTER TABLE IF EXISTS public.room
     ADD CONSTRAINT room_puzzle_id_fkey FOREIGN KEY (puzzle_id)
     REFERENCES public.puzzle (id) MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE CASCADE;
+    ON DELETE SET NULL;
