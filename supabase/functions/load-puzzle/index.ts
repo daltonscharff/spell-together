@@ -5,7 +5,13 @@
 import { serve } from "https://deno.land/std@0.131.0/http/server.ts";
 import { scrape } from "./scrape.ts";
 
-serve(async () => {
+serve(async (req) => {
+  if (
+    req.headers.get("Authorization") !==
+    `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`
+  ) {
+    return new Response(null, { status: 401 });
+  }
   try {
     const data = await scrape();
     console.log(data);
