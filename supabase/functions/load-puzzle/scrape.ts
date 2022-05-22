@@ -29,6 +29,7 @@ export async function scrape() {
   puzzle.center_letter = gameData.today.centerLetter;
   puzzle.outer_letters = gameData.today.outerLetters;
   puzzle.max_score = Word.addPoints(words);
+  puzzle.editor = gameData.today.editor;
 
   await puzzle.save();
   await Word.saveAll(words, puzzle.id);
