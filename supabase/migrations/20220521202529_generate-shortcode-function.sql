@@ -13,13 +13,15 @@ CREATE OR REPLACE FUNCTION public.generate_shortcode(
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
 const validLetters = "acdefghjlmnpqrstuvwxyz2345679";
-let shortcode = "";
-for (let i = 0; i < _length; i++) {
-  let randomNumber = Math.floor(Math.random() * validLetters.length);
-  shortcode += validLetters.charAt(randomNumber);
+let shortcode;
+while(!shortcode || plv8.execute("SELECT COUNT(*) FROM room WHERE shortcode = $1", [shortcode])[0].count > 0) {
+  shortcode = "";
+  for (let i = 0; i < _length; i++) {
+    let randomNumber = Math.floor(Math.random() * validLetters.length);
+    shortcode += validLetters.charAt(randomNumber);
+  }
 }
 return shortcode;
-
 $BODY$;
 
 ALTER FUNCTION public.generate_shortcode(integer)
