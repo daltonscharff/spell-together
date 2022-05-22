@@ -1,29 +1,33 @@
-import { Page } from "./models/page.ts";
 import { Puzzle } from "./models/puzzle.ts";
 import { Word } from "./models/word.ts";
-import { html } from "./fixtures/webpage.ts";
+import { gameData as mockGameData } from "./fixtures/gameData.ts";
 
 export async function scrape() {
-  const page = new Page();
+  let gameData;
 
-  if (Deno.env.get("ENVIRONMENT") !== "production") {
-    await page.load(html);
+  if (Deno.env.get("ENVIRONMENT") === "production") {
+    const request = await fetch("https://www.nytimes.com/puzzles/spelling-bee");
+    const html = await request.text();
+    const pattern = new RegExp("window.gameData = ({.*}})</script></div>", "g");
+    const matches = pattern.exec(html);
+    if (!matches) throw new Error("Could not find gameData");
+    gameData = JSON.parse(matches[1]);
   } else {
-    await page.load();
+    gameData = mockGameData;
   }
 
   const words = await Promise.all(
-    page.words.map(async (w) => {
-      const word = new Word(w);
+    gameData.today.answers.map(async (a: string) => {
+      const word = new Word(a);
       await word.lookup();
       return word;
     })
   );
 
   const puzzle = new Puzzle();
-  puzzle.date = page.date.toISOString();
-  puzzle.center_letter = page.centerLetter;
-  puzzle.outer_letters = page.outerLetters;
+  puzzle.date = gameData.today.printDate;
+  puzzle.center_letter = gameData.today.centerLetter;
+  puzzle.outer_letters = gameData.today.outerLetters;
   puzzle.max_score = Word.addPoints(words);
 
   await puzzle.save();

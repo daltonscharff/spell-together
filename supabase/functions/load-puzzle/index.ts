@@ -10,7 +10,7 @@ serve(async (req) => {
     req.headers.get("Authorization") !==
     `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`
   ) {
-    return new Response(null, { status: 401 });
+    return new Response("Service role token required", { status: 401 });
   }
   try {
     const data = await scrape();
