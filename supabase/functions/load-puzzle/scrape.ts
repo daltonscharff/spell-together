@@ -28,5 +28,5 @@ export async function scrape() {
 
   await puzzle.save();
   await Word.saveAll(words, puzzle.id);
-  console.log({ puzzle, words });
+  return { puzzle, words };
 }
