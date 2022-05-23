@@ -56,8 +56,8 @@ function findLevel(percent: number): Level {
 }
 
 export const PointDisplay = ({
-  currentScore = 10,
-  maxScore = 20,
+  currentScore = 0,
+  maxScore = 0,
 }: PointDisplayProps) => {
   const percent = (currentScore / maxScore) * 100;
   return (
