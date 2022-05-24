@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { definitions } from "../types/supabase";
+import { Guess } from "../types/supabase";
 import { supabase } from "../utils/supabaseClient";
 
 export const useGuesses = (roomId: string) => {
-  const [guesses, setGuesses] = useState<definitions["guess"][]>([]);
+  const [guesses, setGuesses] = useState<Guess[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export const useGuesses = (roomId: string) => {
     setLoading(false);
   }
 
-  function addGuesses(...newGuesses: definitions["guess"][]) {
+  function addGuesses(...newGuesses: Guess[]) {
     setGuesses((guesses) => [...guesses, ...newGuesses]);
   }
 

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { definitions } from "../types/supabase";
+import { Room } from "../types/supabase";
 import { supabase } from "../utils/supabaseClient";
 
 export const useRooms = () => {
-  const [rooms, setRooms] = useState<definitions["room"][]>([]);
+  const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export const useRooms = () => {
     setLoading(false);
   }
 
-  function addRooms(...newRooms: definitions["room"][]) {
+  function addRooms(...newRooms: Room[]) {
     setRooms((rooms) => [...rooms, ...newRooms]);
   }
 
