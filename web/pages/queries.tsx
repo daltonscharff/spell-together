@@ -1,36 +1,23 @@
-import { useEffect, useState } from "react";
-import { useRealtime } from "react-supabase";
-import { supabase } from "../utils/supabaseClient";
-import { definitions } from "../types/supabase";
 import Link from "next/link";
 import { useRooms } from "../hooks/useRooms";
 import { useGuesses } from "../hooks/useGuesses";
 
 export default function QueryPage() {
-  // const [rooms, setRooms] = useState<definitions["room"][]>([]);
-  // console.log("adding subscription", supabase.getSubscriptions());
+  const shortcode = "abcdef";
 
-  // useEffect(() => {
-  //   const roomSubscription = supabase
-  //     .from("room")
-  //     .on("INSERT", (payload) => {
-  //       console.log("Change received!", payload);
-  //       setRooms((rooms) => [...rooms, payload.new]);
-  //     })
-  //     .subscribe();
-  //   return () => {
-  //     console.log("removing subscription");
-  //     supabase.removeSubscription(roomSubscription);
-  //   };
-  // }, []);
-  const { rooms, loading } = useRooms();
-  const { guesses } = useGuesses("f70c2ac8-def9-4dc7-87f9-534124b156df");
+  const { rooms, loading: loadingRooms } = useRooms();
+  const {
+    correctGuesses,
+    loading: loadingCorrectGuesses,
+    submitGuess,
+  } = useGuesses(shortcode);
 
-  // loadRooms();
-
+  if (loadingCorrectGuesses || loadingRooms) return <div>Loading...</div>;
+  const words = ["officially", "colic", "local"];
   return (
     <>
-      <div>rooms: {loading && "Loading..."}</div>
+      <h1>Test api queries</h1>
+      <div>Rooms:</div>
       <ul>
         {rooms.map((room) => (
           <li key={room.id}>{room.shortcode}</li>
@@ -38,10 +25,29 @@ export default function QueryPage() {
       </ul>
       <div>Guesses:</div>
       <ul>
-        {guesses.map((guess) => (
-          <li key={guess.id}>{guess.word_id}</li>
+        {correctGuesses.map((guess) => (
+          <li key={guess.guess_id}>
+            {guess.word} | {guess.point_value}
+          </li>
         ))}
       </ul>
+      <div>
+        <button
+          onClick={async () => {
+            const index = Math.floor(Math.random() * words.length);
+            const word = words[index];
+            console.log("submitting", word);
+            const guess = await submitGuess({
+              username: "fromQueries",
+              word,
+              shortcode,
+            });
+            console.log(guess);
+          }}
+        >
+          Submit guess
+        </button>
+      </div>
       <Link href="/">Go away</Link>
     </>
   );

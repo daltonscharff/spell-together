@@ -12,6 +12,51 @@ export type paths = {
       };
     };
   };
+  "/correct_guess": {
+    get: {
+      parameters: {
+        query: {
+          guess_id?: parameters["rowFilter.correct_guess.guess_id"];
+          created_at?: parameters["rowFilter.correct_guess.created_at"];
+          is_correct?: parameters["rowFilter.correct_guess.is_correct"];
+          username?: parameters["rowFilter.correct_guess.username"];
+          room_id?: parameters["rowFilter.correct_guess.room_id"];
+          shortcode?: parameters["rowFilter.correct_guess.shortcode"];
+          name?: parameters["rowFilter.correct_guess.name"];
+          word_id?: parameters["rowFilter.correct_guess.word_id"];
+          word?: parameters["rowFilter.correct_guess.word"];
+          point_value?: parameters["rowFilter.correct_guess.point_value"];
+          is_pangram?: parameters["rowFilter.correct_guess.is_pangram"];
+          definition?: parameters["rowFilter.correct_guess.definition"];
+          part_of_speech?: parameters["rowFilter.correct_guess.part_of_speech"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["correct_guess"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+  };
   "/guess": {
     get: {
       parameters: {
@@ -476,6 +521,46 @@ export type paths = {
 };
 
 export type definitions = {
+  correct_guess: {
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    guess_id?: string;
+    /** Format: timestamp with time zone */
+    created_at?: string;
+    /** Format: boolean */
+    is_correct?: boolean;
+    /** Format: character varying */
+    username?: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    room_id?: string;
+    /** Format: character varying */
+    shortcode?: string;
+    /** Format: character varying */
+    name?: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    word_id?: string;
+    /** Format: character varying */
+    word?: string;
+    /** Format: smallint */
+    point_value?: number;
+    /** Format: boolean */
+    is_pangram?: boolean;
+    /** Format: text */
+    definition?: string;
+    /** Format: character varying */
+    part_of_speech?: string;
+  };
   guess: {
     /**
      * Format: uuid
@@ -630,6 +715,34 @@ export type parameters = {
   offset: string;
   /** @description Limiting and Pagination */
   limit: string;
+  /** @description correct_guess */
+  "body.correct_guess": definitions["correct_guess"];
+  /** Format: uuid */
+  "rowFilter.correct_guess.guess_id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.correct_guess.created_at": string;
+  /** Format: boolean */
+  "rowFilter.correct_guess.is_correct": string;
+  /** Format: character varying */
+  "rowFilter.correct_guess.username": string;
+  /** Format: uuid */
+  "rowFilter.correct_guess.room_id": string;
+  /** Format: character varying */
+  "rowFilter.correct_guess.shortcode": string;
+  /** Format: character varying */
+  "rowFilter.correct_guess.name": string;
+  /** Format: uuid */
+  "rowFilter.correct_guess.word_id": string;
+  /** Format: character varying */
+  "rowFilter.correct_guess.word": string;
+  /** Format: smallint */
+  "rowFilter.correct_guess.point_value": string;
+  /** Format: boolean */
+  "rowFilter.correct_guess.is_pangram": string;
+  /** Format: text */
+  "rowFilter.correct_guess.definition": string;
+  /** Format: character varying */
+  "rowFilter.correct_guess.part_of_speech": string;
   /** @description guess */
   "body.guess": definitions["guess"];
   /** Format: uuid */
@@ -697,6 +810,8 @@ export type parameters = {
 export type operations = {};
 
 export type external = {};
+
+export type CorrectGuess = definitions["correct_guess"];
 
 export type Guess = definitions["guess"];
 

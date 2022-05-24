@@ -1,41 +1,56 @@
 import { useEffect, useState } from "react";
-import { Guess } from "../types/supabase";
+import { CorrectGuess, Guess } from "../types/supabase";
 import { supabase } from "../utils/supabaseClient";
 
-export const useGuesses = (roomId: string) => {
-  const [guesses, setGuesses] = useState<Guess[]>([]);
+type SubmitGuess = {
+  username: string;
+  shortcode: string;
+  word: string;
+};
+
+export const useGuesses = (shortcode: string) => {
+  const [correctGuesses, setCorrectGuesses] = useState<CorrectGuess[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    loadGuesses();
-    console.log("adding subscription");
+    const loadGuesses = async (shortcode: string) => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from<CorrectGuess>("correct_guess")
+        .select("*")
+        .eq("shortcode", shortcode);
+      if (data) setCorrectGuesses(data);
+      setLoading(false);
+    };
+    loadGuesses(shortcode);
+
     const guessSubscription = supabase
-      .from(`guess:room_id=eq.${roomId}`)
+      .from<CorrectGuess>(`correct_guess:shortcode=eq.${shortcode}`)
       .on("INSERT", (payload) => {
         console.log("Change received!", payload);
-        addGuesses(payload.new);
+        addCorrectGuesses(payload.new);
       })
       .subscribe();
     return () => {
-      console.log("removing subscription");
       supabase.removeSubscription(guessSubscription);
     };
-  }, [roomId]);
+  }, [shortcode]);
 
-  async function loadGuesses() {
-    setLoading(true);
-    const guessQuery = await supabase.from("guess").select("*, word(*)");
-    console.log(guessQuery);
-    // if (data) setGuesses(data);
-    setLoading(false);
+  function addCorrectGuesses(...newCorrectGuesses: CorrectGuess[]) {
+    setCorrectGuesses((guesses) => [...guesses, ...newCorrectGuesses]);
   }
 
-  function addGuesses(...newGuesses: Guess[]) {
-    setGuesses((guesses) => [...guesses, ...newGuesses]);
+  async function submitGuess(guess: SubmitGuess) {
+    return supabase.rpc("submit_guess", {
+      _shortcode: guess.shortcode,
+      _username: guess.username,
+      _word: guess.word,
+    });
   }
 
   return {
-    guesses,
+    correctGuesses,
     loading,
+    submitGuess,
   };
 };

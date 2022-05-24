@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS public.guess
     is_correct boolean NOT NULL,
     username character varying COLLATE pg_catalog."default" NOT NULL,
     room_id uuid NOT NULL,
-    word_id uuid,
+    word_id uuid NOT NULL,
     CONSTRAINT guess_pkey PRIMARY KEY (id),
     CONSTRAINT guess_room_id_fkey FOREIGN KEY (room_id)
         REFERENCES public.room (id) MATCH SIMPLE
