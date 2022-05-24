@@ -12,13 +12,15 @@ async function extractTypes() {
     throw new Error("could not find definitions");
   const definitionsText = definitionsMatch[0];
 
-  const individualDefinitionPattern = /(\w+): {([^}]*)/g;
+  const individualDefinitionPattern = /(\w+): {[^}]*/g;
   const individualDefinitionMatches = [
     ...definitionsText.matchAll(individualDefinitionPattern),
   ];
   // console.log(individualDefinitionMatches);
   const types = individualDefinitionMatches.map((match, i) => {
-    return `export type ${pascalCase(match[1])} = {${match[2]}};`;
+    return `\r\nexport type ${pascalCase(match[1])} = definitions["${
+      match[1]
+    }"];`;
   });
 
   await fs.appendFile(filepath, types.join("\r\n"));
