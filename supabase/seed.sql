@@ -64,8 +64,8 @@ BEGIN
     ('cilia',5,FALSE,NULL,NULL,puzzle_id),
     ('cyclical',8,FALSE,'recurring in cycles','adjective',puzzle_id);
 
-  INSERT INTO guess (is_correct,username,room_id,word_id)
+  INSERT INTO guess (is_correct,username,room_id,word_id,puzzle_id)
   VALUES
-    (TRUE,'test user',(SELECT id FROM room WHERE shortcode='abcdef'),(SELECT id FROM word WHERE word='cool'));
+    (TRUE,'test user',(SELECT id FROM room WHERE shortcode='abcdef'),(SELECT id FROM word WHERE word='cool'),puzzle_id);
 
 END $$;
