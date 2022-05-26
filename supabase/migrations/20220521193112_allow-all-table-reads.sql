@@ -11,6 +11,13 @@ CREATE POLICY "Enable select access to all users"
     USING (true);
 
 CREATE POLICY "Enable select access to all users"
+    ON public.word
+    AS PERMISSIVE
+    FOR SELECT
+    TO public
+    USING (true);
+
+CREATE POLICY "Enable select access to all users"
     ON public.room
     AS PERMISSIVE
     FOR SELECT
