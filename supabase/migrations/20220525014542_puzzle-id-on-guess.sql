@@ -10,10 +10,10 @@ CREATE OR REPLACE FUNCTION public.submit_guess(
 	_puzzle_id uuid)
     RETURNS SETOF correct_guess 
     LANGUAGE 'plpgsql'
-    COST 100
-    VOLATILE PARALLEL UNSAFE
-    ROWS 1
-
+    VOLATILE SECURITY DEFINER
+    PARALLEL UNSAFE
+    COST 100    ROWS 1
+    SET search_path=public
 AS $BODY$
 DECLARE
   word_id uuid := (SELECT id FROM word WHERE word = _word);

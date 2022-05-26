@@ -3,14 +3,12 @@ import { useRooms } from "../hooks/useRooms";
 import { useGuesses } from "../hooks/useGuesses";
 
 export default function QueryPage() {
-  const shortcode = "abcdef";
-
   const { rooms, loading: loadingRooms } = useRooms();
   const {
     correctGuesses,
     loading: loadingCorrectGuesses,
     submitGuess,
-  } = useGuesses(shortcode);
+  } = useGuesses(rooms[0]?.id);
 
   if (loadingCorrectGuesses || loadingRooms) return <div>Loading...</div>;
   const words = ["officially", "colic", "local"];
@@ -40,7 +38,8 @@ export default function QueryPage() {
             const guess = await submitGuess({
               username: "fromQueries",
               word,
-              shortcode,
+              roomId: rooms[0].id,
+              puzzleId: "c63d6527-6930-4a97-b704-ccdc5c9b041f", //change this
             });
             console.log(guess);
           }}
@@ -48,7 +47,9 @@ export default function QueryPage() {
           Submit guess
         </button>
       </div>
-      <Link href="/">Go away</Link>
+      <Link href="/">
+        <button>Go away</button>
+      </Link>
     </>
   );
 }
