@@ -7,6 +7,7 @@ import { useLetterInput } from "../../hooks/useLetterInput";
 import { usePuzzle } from "../../hooks/usePuzzle";
 import { useRoom } from "../../hooks/useRoom";
 import shuffle from "../../utils/shuffle";
+import { Hive } from "../../components/Hive";
 
 export default function GameRoom() {
   const router = useRouter();
@@ -43,17 +44,11 @@ export default function GameRoom() {
       </section>
 
       <section>
-        {outerLetters.map((letter) => (
-          <button
-            key={`button_${letter}`}
-            onClick={() => addLetter(letter as string)}
-          >
-            {letter as string}
-          </button>
-        ))}
-        <button onClick={() => addLetter(puzzle?.center_letter as string)}>
-          {puzzle?.center_letter as string}
-        </button>
+        <Hive
+          outerLetters={outerLetters}
+          centerLetter={puzzle?.center_letter || ""}
+          onClick={(letter) => addLetter(letter)}
+        />
         <button onClick={removeLetter}>delete</button>
         <button
           onClick={() =>
