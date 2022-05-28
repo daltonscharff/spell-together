@@ -20,7 +20,6 @@ export const useGuesses = (roomId: string) => {
         .from<CorrectGuess>("correct_guess")
         .select("*")
         .eq("room_id", roomId);
-      console.log("loadGuessData", data);
       if (data) setCorrectGuesses(data);
       setLoading(false);
     };

@@ -1,3 +1,4 @@
+import { PostgrestError } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { Room } from "../types/supabase";
 import { supabase } from "../utils/supabaseClient";
@@ -5,15 +6,17 @@ import { supabase } from "../utils/supabaseClient";
 export const useRoom = (shortcode: string) => {
   const [room, setRoom] = useState<Room | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<PostgrestError | null>(null);
 
   useEffect(() => {
     async function loadRooms() {
       setLoading(true);
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from<Room>("room")
         .select("*")
         .eq("shortcode", shortcode);
       if (data) setRoom(data[0]);
+      if (error) setError(error);
       setLoading(false);
     }
 
@@ -25,5 +28,6 @@ export const useRoom = (shortcode: string) => {
   return {
     room,
     loading,
+    error,
   };
 };

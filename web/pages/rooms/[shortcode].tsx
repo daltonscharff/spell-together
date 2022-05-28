@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { FoundWordDisplay } from "../../components/FoundWordDisplay";
 import { PointDisplay } from "../../components/PointDisplay";
 import { useGuesses } from "../../hooks/useGuesses";
@@ -8,7 +9,9 @@ import { useRoom } from "../../hooks/useRoom";
 import shuffle from "../../utils/shuffle";
 
 export default function GameRoom() {
-  const shortcode = "abcdef";
+  const router = useRouter();
+  const shortcode = router.query.shortcode?.toString() || "";
+
   const { room, loading: loadingRoom } = useRoom(shortcode);
   const { puzzle, loading: loadingPuzzle } = usePuzzle(room?.puzzle_id || "");
   const {
@@ -26,11 +29,12 @@ export default function GameRoom() {
       setOuterLetters(puzzle.outer_letters as string[]);
   }, [puzzle?.outer_letters]);
 
-  useEffect(() => {
-    console.log({ room, puzzle, correctGuesses });
-  }, [room, puzzle, correctGuesses]);
-
   if (loadingRoom || loadingPuzzle || loadingGuesses) return <div>Loading</div>;
+
+  if (!room) {
+    if (shortcode) return <div>Room does not exist</div>;
+    return <div></div>;
+  }
 
   return (
     <div>
