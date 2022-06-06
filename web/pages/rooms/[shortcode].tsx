@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { FoundWordDisplay } from "../../components/FoundWordDisplay";
-import { PointDisplay } from "../../components/PointDisplay";
 import { useGuesses } from "../../hooks/useGuesses";
 import { useLetterInput } from "../../hooks/useLetterInput";
 import { usePuzzle } from "../../hooks/usePuzzle";
 import { useRoom } from "../../hooks/useRoom";
-import shuffle from "../../utils/shuffle";
+import { shuffle } from "../../utils/shuffle";
 import { Hive } from "../../components/Hive";
 import {
-  Paper,
-  TableContainer,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
+  Avatar,
+  Box,
   Button,
+  Chip,
+  Container,
+  Grid,
   Input,
+  Typography,
 } from "@mui/material";
 
 export default function GameRoom() {
@@ -48,73 +46,74 @@ export default function GameRoom() {
   }
 
   return (
-    <div>
-      <section>
-        <Input type="text" value={letters} onChange={() => {}} />
-      </section>
-
-      <section>
-        <Paper>
+    <Container>
+      <Grid container>
+        <Grid item sm={6}>
+          <Input type="text" value={letters} onChange={() => {}} />
           <Hive
             outerLetters={outerLetters}
             centerLetter={puzzle?.center_letter || ""}
             onClick={(letter) => addLetter(letter)}
           />
-
-          <Button onClick={removeLetter}>delete</Button>
-          <Button
-            onClick={() =>
-              setOuterLetters((outerLetters) => shuffle(outerLetters))
-            }
-          >
-            shuffle
-          </Button>
-          <Button
-            onClick={() => {
-              submitGuess({
-                word: letters,
-                username: "fromRoom",
-                puzzleId: puzzle?.id || "",
-                roomId: room?.id || "",
-              });
-              clearLetters();
-            }}
-          >
-            submit
-          </Button>
-        </Paper>
-      </section>
-
-      <section>
-        <Paper>
-          <TableContainer>
-            <TableHead>
-              <TableRow>
-                <TableCell>word</TableCell>
-                <TableCell>point value</TableCell>
-                <TableCell>username</TableCell>
-                <TableCell>part of speech</TableCell>
-                <TableCell>definition</TableCell>
-                <TableCell>pangram</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
+          <Grid container spacing={1} sx={{ textAlign: "center" }}>
+            <Grid item xs={4}>
+              <Button variant="outlined" onClick={removeLetter}>
+                delete
+              </Button>
+            </Grid>
+            <Grid item xs={4}>
+              <Button
+                variant="outlined"
+                onClick={() =>
+                  setOuterLetters((outerLetters) => shuffle(outerLetters))
+                }
+              >
+                shuffle
+              </Button>
+            </Grid>
+            <Grid item xs={4}>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  submitGuess({
+                    word: letters,
+                    username: "fromRoom",
+                    puzzleId: puzzle?.id || "",
+                    roomId: room?.id || "",
+                  });
+                  clearLetters();
+                }}
+              >
+                submit
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item sm={6}>
+          <Box>
+            <Typography variant="h2">Found Words:</Typography>
+            <Box>
               {correctGuesses.map((guess) => {
                 return (
-                  <TableRow key={guess.guess_id}>
-                    <TableCell>{guess.word}</TableCell>
-                    <TableCell>{guess.point_value}</TableCell>
-                    <TableCell>{guess.username}</TableCell>
-                    <TableCell>{guess.part_of_speech}</TableCell>
-                    <TableCell>{guess.definition}</TableCell>
-                    <TableCell>{guess.is_pangram?.toString()}</TableCell>
-                  </TableRow>
+                  <Chip
+                    key={guess.guess_id}
+                    variant="outlined"
+                    avatar={
+                      <Avatar>{guess.username?.charAt(0).toUpperCase()}</Avatar>
+                    }
+                    label={
+                      <>
+                        <span>{guess.word}_</span>
+                        <span>{guess.point_value}</span>
+                      </>
+                    }
+                  />
                 );
               })}
-            </TableBody>
-          </TableContainer>
-        </Paper>
-      </section>
-    </div>
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
