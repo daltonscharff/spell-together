@@ -2,8 +2,17 @@ import { useEffect, useState } from "react";
 import { Puzzle } from "../types/supabase";
 import { supabase } from "../utils/supabaseClient";
 
+export const defaultPuzzle: Puzzle = {
+  id: "",
+  created_at: "",
+  date: "",
+  outer_letters: [],
+  center_letter: "",
+  max_score: 0,
+};
+
 export const usePuzzle = (puzzleId: string) => {
-  const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
+  const [puzzle, setPuzzle] = useState<Puzzle>(defaultPuzzle);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
