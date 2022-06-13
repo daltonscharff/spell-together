@@ -1,4 +1,4 @@
-import { createContext, FC, useState } from "react";
+import { createContext, FC, PropsWithChildren, useState } from "react";
 
 export type User = {
   username: string | null;
@@ -15,7 +15,7 @@ export const UserContext = createContext<[User, (state: User) => void]>([
   () => {},
 ]);
 
-export const UserProvider: FC = ({ children }) => {
+export const UserProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
   const [user, setUser] = useState<User>({
     ...defaultUser,
     username: localStorage.getItem("username"),

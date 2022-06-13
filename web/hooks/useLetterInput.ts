@@ -1,8 +1,7 @@
-import { useContext } from "react";
-import { LetterInputContext } from "../contexts/LetterInputContext";
+import { useState } from "react";
 
 export const useLetterInput = () => {
-  const [letters, setLetters] = useContext(LetterInputContext);
+  const [letters, setLetters] = useState<string>("");
 
   function addLetter(letter: string) {
     setLetters(letters + letter.toLowerCase());

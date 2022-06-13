@@ -1,12 +1,12 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { LetterInputProvider } from "../contexts/LetterInputContext";
+// import { UserProvider } from "../contexts/UserContext";
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <LetterInputProvider>
-      <Component {...pageProps} />
-    </LetterInputProvider>
+    // <UserProvider>
+    <Component {...pageProps} />
+    // </UserProvider>
   );
 }
 
