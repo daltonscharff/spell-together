@@ -38,16 +38,15 @@ export const GameBoard = ({
     onSubmit({
       word: letters,
       username: "fromRoom",
-      puzzleId: puzzle?.id || "",
-      roomId: room?.id || "",
+      puzzleId: puzzle.id,
+      roomId: room.id,
     });
     clearLetters();
   }
 
   useEffect(() => {
-    if (puzzle?.outer_letters)
-      setOuterLetters(puzzle.outer_letters as string[]);
-  }, [puzzle?.outer_letters]);
+    if (puzzle.outer_letters) setOuterLetters(puzzle.outer_letters as string[]);
+  }, [puzzle.outer_letters]);
 
   return (
     <>
