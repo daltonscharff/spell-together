@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { Room, Puzzle, CorrectGuess } from "../types/supabase";
 import { useLetterInput } from "../hooks/useLetterInput";
-import { CaptureKeyboardEvents } from "./CaptureKeyboardEvents";
+import { useKeyboardEvents } from "../hooks/useKeyboardEvents";
 
 type GameBoardProps = {
   puzzle: Puzzle;
@@ -31,6 +31,12 @@ export const GameBoard = ({
   disabled = false,
 }: GameBoardProps) => {
   const { letters, addLetter, removeLetter, clearLetters } = useLetterInput();
+  useKeyboardEvents({
+    onLetter: addLetter,
+    onBackspace: removeLetter,
+    onEnter: handleSubmit,
+    disabled,
+  });
 
   const [outerLetters, setOuterLetters] = useState<string[]>([]);
 
@@ -50,13 +56,6 @@ export const GameBoard = ({
 
   return (
     <>
-      {!disabled && (
-        <CaptureKeyboardEvents
-          onBackspace={removeLetter}
-          onLetter={addLetter}
-          onEnter={handleSubmit}
-        />
-      )}
       <Container>
         <Grid container>
           <Grid item sm={6}>

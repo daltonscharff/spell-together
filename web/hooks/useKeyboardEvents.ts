@@ -1,17 +1,13 @@
-import { FC, useEffect } from "react";
+import { useEffect } from "react";
 
-type Props = {
-  onLetter?: (key: string) => void;
-  onBackspace?: () => void;
-  onEnter?: () => void;
-};
-
-export const CaptureKeyboardEvents: FC<Props> = ({
+export const useKeyboardEvents = ({
   onLetter = (_) => {},
   onBackspace = () => {},
   onEnter = () => {},
+  disabled = false,
 }) => {
   useEffect(() => {
+    if (disabled) return;
     const registerEvent = ({ key }: KeyboardEvent) => {
       if (/[a-zA-Z]/.test(key) && key.length === 1) {
         onLetter(key);
@@ -25,7 +21,5 @@ export const CaptureKeyboardEvents: FC<Props> = ({
     return () => {
       window.removeEventListener("keydown", registerEvent);
     };
-  }, [onLetter, onBackspace, onEnter]);
-
-  return <></>;
+  }, [onLetter, onBackspace, onEnter, disabled]);
 };
