@@ -1,8 +1,17 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext";
+import Router from "next/router";
 
-export const useUser = () => {
+export const useUser = ({ redirectTo = "" } = {}) => {
   const [state, setState] = useContext(UserContext);
+
+  useEffect(() => {
+    if (!redirectTo) return;
+
+    if (!state.username || !state.shortcode) {
+      Router.push(redirectTo);
+    }
+  }, [state, redirectTo]);
 
   function setUsername(username: string) {
     localStorage.setItem("username", username);
@@ -13,11 +22,6 @@ export const useUser = () => {
     localStorage.setItem("shortcode", shortcode);
     setState({ ...state, shortcode });
   }
-
-  // function validateShortcode() {
-  //   // validate shortcode with API
-  //   // throw error if not valid
-  // }
 
   return {
     ...state,

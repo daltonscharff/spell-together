@@ -3,6 +3,7 @@ import { useGuesses } from "../../hooks/useGuesses";
 import { usePuzzle } from "../../hooks/usePuzzle";
 import { useRoom } from "../../hooks/useRoom";
 import { GameBoard } from "../../components/GameBoard";
+import { useUser } from "../../hooks/useUser";
 
 export default function Room() {
   const router = useRouter();
@@ -15,6 +16,9 @@ export default function Room() {
     submitGuess,
     loading: loadingGuesses,
   } = useGuesses(room?.id || "");
+
+  const { username } = useUser();
+  console.log(username);
 
   if (loadingRoom || loadingPuzzle || loadingGuesses) return <div>Loading</div>;
 
