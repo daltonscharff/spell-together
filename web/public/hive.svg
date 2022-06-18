@@ -1,0 +1,22 @@
+<svg viewBox="0 0 253 261" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <g id="hexagon">
+      <path d="
+      M 25 87
+      L 76 87
+      L 101 43.5
+      L 76 0
+      L 25 0
+      L 0 43.5      
+      Z
+      "></path>
+    </g>
+  </defs>
+  <use href="#hexagon" x="76" y="0"></use>
+  <use href="#hexagon" x="152" y="43.5" fill="blue"></use>
+  <use href="#hexagon" x="152" y="130.5" fill="red"></use>
+  <use href="#hexagon" x="76" y="174" fill="green"></use>
+  <use href="#hexagon" x="0" y="130.5" fill="orange"></use>
+  <use href="#hexagon" x="0" y="43.5" fill="pink"></use>
+  <use href="#hexagon" x="76" y="87" fill="purple"></use>
+</svg>
