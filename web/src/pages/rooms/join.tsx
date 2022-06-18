@@ -1,5 +1,5 @@
 type JoinRoomProps = {};
 
-export const JoinRoom = ({}: JoinRoomProps) => {
+export const JoinRoom = () => {
   return <>join room page</>;
 };

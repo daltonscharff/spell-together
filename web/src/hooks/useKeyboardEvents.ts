@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 export const useKeyboardEvents = ({
-  onLetter = (_) => {},
+  onLetter = (letter: string) => {},
   onBackspace = () => {},
   onEnter = () => {},
   disabled = false,
