@@ -8,12 +8,13 @@ import {
   Chip,
   Container,
   Grid,
-  Input,
   Typography,
 } from "@mui/material";
+import LoopIcon from "@mui/icons-material/Loop";
 import { Room, Puzzle, CorrectGuess } from "../types/supabase";
 import { useLetterInput } from "../hooks/useLetterInput";
 import { useKeyboardEvents } from "../hooks/useKeyboardEvents";
+import { LetterInput } from "./LetterInput";
 
 type GameBoardProps = {
   puzzle: Puzzle;
@@ -58,7 +59,11 @@ export const GameBoard = ({
     <Container>
       <Grid container>
         <Grid item sm={6}>
-          <Input type="text" value={letters} onChange={() => {}} />
+          <LetterInput
+            value={letters}
+            outerLetters={outerLetters}
+            centerLetter={puzzle?.center_letter || ""}
+          />
           <Hive
             outerLetters={outerLetters}
             centerLetter={puzzle?.center_letter || ""}
@@ -66,24 +71,19 @@ export const GameBoard = ({
           />
           <Grid container spacing={1} sx={{ textAlign: "center" }}>
             <Grid item xs={4}>
-              <Button variant="outlined" onClick={removeLetter}>
-                delete
-              </Button>
+              <Button onClick={removeLetter}>Delete</Button>
             </Grid>
             <Grid item xs={4}>
               <Button
-                variant="outlined"
                 onClick={() =>
                   setOuterLetters((outerLetters) => shuffle(outerLetters))
                 }
               >
-                shuffle
+                <LoopIcon />
               </Button>
             </Grid>
             <Grid item xs={4}>
-              <Button variant="outlined" onClick={handleSubmit}>
-                submit
-              </Button>
+              <Button onClick={handleSubmit}>Submit</Button>
             </Grid>
           </Grid>
         </Grid>
