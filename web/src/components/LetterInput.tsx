@@ -28,7 +28,7 @@ const Letter = styled("span")`
   color: ${(props: { category: LetterCategory }) => {
     const colors = {
       outer: "black",
-      center: "gold",
+      center: "#FED74E",
       invalid: "lightgray",
     };
     return colors[props.category];
@@ -45,12 +45,13 @@ const blink = keyframes`
   }
 `;
 
-const BlinkingCursor = styled("span")`
+const Blinker = styled("span")`
   animation: ${blink} 1200ms steps(1, end) infinite;
   margin-left: 1px;
   user-select: none;
   font-weight: 100;
   position: absolute;
+  font-family: sans serif;
 `;
 
 const PlaceholderText = styled(Box)`
@@ -59,8 +60,6 @@ const PlaceholderText = styled(Box)`
 
 const Container = styled(Box)`
   font-size: 2em;
-  padding-bottom: 0.15em;
-  border-bottom: 1px solid black;
   text-align: center;
 `;
 
@@ -102,7 +101,7 @@ export const LetterInput = ({
           );
         })}
 
-      {isFocused && <BlinkingCursor>|</BlinkingCursor>}
+      {isFocused && <Blinker>|</Blinker>}
       {!isFocused && value.length === 0 ? (
         <PlaceholderText>Type or click...</PlaceholderText>
       ) : (
