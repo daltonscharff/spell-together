@@ -65,19 +65,14 @@ export const Hive = ({
         const handleClick = () => onClick(letter);
         return (
           <svg
+            key={`hexagon_${i}`}
             width="105"
             height="91"
             x={translations[i][0]}
             y={translations[i][1]}
           >
             <Hex href="#hexagon" onClick={handleClick} />
-            <Text
-              x="50%"
-              y="54%"
-              dominant-baseline="middle"
-              text-anchor="middle"
-              onClick={handleClick}
-            >
+            <Text x="50%" y="54%" onClick={handleClick}>
               {letter}
             </Text>
           </svg>
