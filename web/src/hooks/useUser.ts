@@ -1,19 +1,10 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
-import { useNavigate } from "react-router-dom";
+import { supabase } from "../utils/supabaseClient";
+import { Room } from "../types/supabase";
 
-export const useUser = ({ redirectTo = "" } = {}) => {
+export const useUser = () => {
   const [state, setState] = useContext(UserContext);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!redirectTo) return;
-
-    if (!state.username || !state.shortcode) {
-      // Router.push(redirectTo);
-      navigate(redirectTo, { replace: true });
-    }
-  }, [state, redirectTo, navigate]);
 
   function setUsername(username: string) {
     localStorage.setItem("username", username);
@@ -21,13 +12,23 @@ export const useUser = ({ redirectTo = "" } = {}) => {
   }
 
   function setShortcode(shortcode: string) {
+    if (shortcode === state.shortcode) return;
     localStorage.setItem("shortcode", shortcode);
     setState({ ...state, shortcode });
+  }
+
+  async function validateShortcode(shortcode: string) {
+    const { count } = await supabase
+      .from<Room>("room")
+      .select("*", { count: "exact" })
+      .eq("shortcode", shortcode);
+    return !!count;
   }
 
   return {
     ...state,
     setUsername,
     setShortcode,
+    validateShortcode,
   };
 };

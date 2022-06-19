@@ -1,14 +1,16 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGuesses } from "../../hooks/useGuesses";
 import { usePuzzle } from "../../hooks/usePuzzle";
 import { useRoom } from "../../hooks/useRoom";
 import { GameBoard } from "../../components/GameBoard";
 import { useUser } from "../../hooks/useUser";
+import { useEffect } from "react";
 
 export default function Room() {
-  const { shortcode } = useParams();
-
-  const { room, loading: loadingRoom } = useRoom(shortcode ?? "");
+  const params = useParams();
+  const shortcode = params.shortcode ?? "";
+  const navigate = useNavigate();
+  const { room, loading: loadingRoom } = useRoom(shortcode);
   const { puzzle, loading: loadingPuzzle } = usePuzzle(room?.puzzle_id || "");
   const {
     correctGuesses,
@@ -16,15 +18,26 @@ export default function Room() {
     loading: loadingGuesses,
   } = useGuesses(room?.id || "");
 
-  const { username } = useUser();
-  console.log(username);
+  const { username, setShortcode, validateShortcode } = useUser();
+
+  useEffect(() => {
+    (async () => {
+      const isValid = await validateShortcode(shortcode);
+      if (isValid) {
+        setShortcode(shortcode);
+      } else {
+        navigate("/rooms/join", { replace: true });
+      }
+    })();
+  }, [shortcode, validateShortcode, setShortcode, navigate]);
+
+  useEffect(() => {
+    if (!username) {
+      navigate("/rooms/join");
+    }
+  }, [username, navigate]);
 
   if (loadingRoom || loadingPuzzle || loadingGuesses) return <div>Loading</div>;
-
-  if (!room) {
-    if (shortcode) return <div>Room does not exist</div>;
-    return <div></div>;
-  }
 
   return (
     <GameBoard
