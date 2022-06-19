@@ -10,7 +10,7 @@ const Container = styled("svg")`
   margin: 0 auto;
 `;
 const Hexagon = styled("use")`
-  stroke-width: 1px;
+  stroke-width: 2px;
   stroke: black;
   cursor: pointer;
   fill: white;
