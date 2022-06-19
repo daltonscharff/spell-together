@@ -1,20 +1,14 @@
 import { useEffect, useState } from "react";
 import { shuffle } from "../utils/shuffle";
 import { Hive } from "./Hive";
-import {
-  Avatar,
-  Box,
-  Button,
-  Chip,
-  Container,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Button, Container, Grid, Card, Typography } from "@mui/material";
 import LoopIcon from "@mui/icons-material/Loop";
 import { Room, Puzzle, CorrectGuess } from "../types/supabase";
 import { useLetterInput } from "../hooks/useLetterInput";
 import { useKeyboardEvents } from "../hooks/useKeyboardEvents";
 import { LetterInput } from "./LetterInput";
+import { CorrectGuessList } from "./CorrectGuessList";
+import { PointDisplay } from "./PointDisplay";
 
 type GameBoardProps = {
   puzzle: Puzzle;
@@ -69,7 +63,12 @@ export const GameBoard = ({
             centerLetter={puzzle?.center_letter || ""}
             onClick={(letter) => addLetter(letter)}
           />
-          <Grid container spacing={1} sx={{ textAlign: "center" }}>
+          <Grid
+            container
+            spacing={1}
+            alignItems="center"
+            sx={{ textAlign: "center" }}
+          >
             <Grid item xs={4}>
               <Button onClick={removeLetter}>Delete</Button>
             </Grid>
@@ -79,37 +78,28 @@ export const GameBoard = ({
                   setOuterLetters((outerLetters) => shuffle(outerLetters))
                 }
               >
-                <LoopIcon />
+                <LoopIcon fontSize="large" />
               </Button>
             </Grid>
             <Grid item xs={4}>
-              <Button onClick={handleSubmit}>Submit</Button>
+              <Button onClick={handleSubmit}>Enter</Button>
             </Grid>
           </Grid>
         </Grid>
         <Grid item sm={6}>
-          <Box>
-            <Typography variant="h2">Found Words:</Typography>
-            <Box>
-              {correctGuesses.map((guess) => {
-                return (
-                  <Chip
-                    key={guess.guess_id}
-                    variant="outlined"
-                    avatar={
-                      <Avatar>{guess.username?.charAt(0).toUpperCase()}</Avatar>
-                    }
-                    label={
-                      <>
-                        <span>{guess.word}_</span>
-                        <span>{guess.point_value}</span>
-                      </>
-                    }
-                  />
-                );
-              })}
-            </Box>
-          </Box>
+          <Card variant="outlined">
+            <PointDisplay
+              currentScore={correctGuesses.reduce(
+                (total, guess) => (total += guess.point_value || 0),
+                0
+              )}
+              maxScore={puzzle.max_score}
+            />
+          </Card>
+          <Card variant="outlined">
+            <Typography>Found Words: {correctGuesses.length}</Typography>
+            <CorrectGuessList correctGuesses={correctGuesses} />
+          </Card>
         </Grid>
       </Grid>
     </Container>
