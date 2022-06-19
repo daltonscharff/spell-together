@@ -26,6 +26,7 @@ export default function Room() {
       if (isValid) {
         setShortcode(shortcode);
       } else {
+        setShortcode("");
         navigate("/rooms/join", { replace: true });
       }
     })();
