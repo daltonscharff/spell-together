@@ -1,4 +1,3 @@
-import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import LinearProgress from "@mui/material/LinearProgress";
 
@@ -14,40 +13,40 @@ type Level = {
 
 const levels = [
   {
-    rank: "beginner",
-    percent: 0,
-  },
-  {
-    rank: "good start",
-    percent: 2,
-  },
-  {
-    rank: "moving up",
-    percent: 5,
-  },
-  {
-    rank: "good",
-    percent: 8,
-  },
-  {
-    rank: "solid",
-    percent: 15,
-  },
-  {
-    rank: "nice",
-    percent: 25,
-  },
-  {
-    rank: "great",
-    percent: 40,
+    rank: "genius",
+    percent: 70,
   },
   {
     rank: "amazing",
     percent: 50,
   },
   {
-    rank: "genius",
-    percent: 70,
+    rank: "great",
+    percent: 40,
+  },
+  {
+    rank: "nice",
+    percent: 25,
+  },
+  {
+    rank: "solid",
+    percent: 15,
+  },
+  {
+    rank: "good",
+    percent: 8,
+  },
+  {
+    rank: "moving up",
+    percent: 5,
+  },
+  {
+    rank: "good start",
+    percent: 2,
+  },
+  {
+    rank: "beginner",
+    percent: 0,
   },
 ];
 
@@ -61,11 +60,11 @@ export const PointDisplay = ({
 }: PointDisplayProps) => {
   const percent = (currentScore / maxScore) * 100;
   return (
-    <Card>
+    <>
       <Typography>
         {findLevel(percent).rank}: {currentScore}/{maxScore}
       </Typography>
       <LinearProgress variant="determinate" value={percent} />
-    </Card>
+    </>
   );
 };
