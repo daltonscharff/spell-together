@@ -1,5 +1,6 @@
 import { useShortcode } from "../hooks/useShortcode";
 import { useUsername } from "../hooks/useUsername";
+import { LoginModal } from "./LoginModal";
 
 export const App = () => {
   const { username } = useUsername();
@@ -10,6 +11,7 @@ export const App = () => {
   if (!username || !shortcode || !isValid) {
     return (
       <div>
+        <LoginModal />
         <p>show sign in page</p>
         <p>show disabled game</p>
       </div>
