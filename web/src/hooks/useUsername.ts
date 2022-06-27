@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useContext } from "react";
+import { UsernameContext } from "../contexts/UsernameContext";
 
 export const useUsername = () => {
-  const [username, setUsernameState] = useState(
-    localStorage.getItem("username")
-  );
+  const [username, setUsernameState] = useContext(UsernameContext);
 
   function setUsername(username: string) {
     localStorage.setItem("username", username);

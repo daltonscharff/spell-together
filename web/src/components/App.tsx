@@ -4,7 +4,7 @@ import { LoginModal } from "./LoginModal";
 
 export const App = () => {
   const { username } = useUsername();
-  const { shortcode, isValid, loading } = useShortcode();
+  const { shortcode, isValid, loading, unsetShortcode } = useShortcode();
 
   if (loading) return <div>loading</div>;
 
@@ -21,6 +21,9 @@ export const App = () => {
   return (
     <h1 className="text-3xl font-bold underline">
       <p>show game</p>
+      <button className="border" onClick={unsetShortcode}>
+        change room
+      </button>
     </h1>
   );
 };

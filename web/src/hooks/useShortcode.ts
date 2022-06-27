@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 import { Room } from "../types/supabase";
+import { ShortcodeContext } from "../contexts/ShortcodeContext";
 
 export const useShortcode = () => {
-  const [shortcode, setShortcodeState] = useState(
-    localStorage.getItem("shortcode")
-  );
+  const [shortcode, setShortcodeState] = useContext(ShortcodeContext);
   const [isValid, setIsValid] = useState<boolean | undefined>(undefined);
   const [loading, setLoading] = useState(false);
 
@@ -17,6 +16,11 @@ export const useShortcode = () => {
   async function setShortcode(shortcode: string) {
     localStorage.setItem("shortcode", shortcode);
     setShortcodeState(shortcode);
+  }
+
+  async function unsetShortcode() {
+    localStorage.removeItem("shortcode");
+    setShortcodeState(null);
   }
 
   async function validateShortcode(shortcode: string) {
@@ -33,6 +37,7 @@ export const useShortcode = () => {
     shortcode,
     isValid,
     setShortcode,
+    unsetShortcode,
     loading,
   };
 };

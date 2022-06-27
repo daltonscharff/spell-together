@@ -1,6 +1,10 @@
 import { Dialog, Tab } from "@headlessui/react";
+import { useShortcode } from "../hooks/useShortcode";
+import { useUsername } from "../hooks/useUsername";
 
 export const LoginModal = () => {
+  const { setShortcode } = useShortcode();
+  const { setUsername } = useUsername();
   return (
     <Dialog open={true} onClose={() => {}}>
       <div className="fixed inset-0 bg-black/5" aria-hidden="true" />
@@ -25,6 +29,15 @@ export const LoginModal = () => {
               <Tab.Panel>
                 <Dialog.Title>Login</Dialog.Title>
                 <p>You can login here</p>
+                <button
+                  className="border"
+                  onClick={() => {
+                    setUsername("Dalton");
+                    setShortcode("abcdef");
+                  }}
+                >
+                  Login
+                </button>
               </Tab.Panel>
               <Tab.Panel>
                 <Dialog.Title>Create</Dialog.Title>
