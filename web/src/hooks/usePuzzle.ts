@@ -1,38 +1,16 @@
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { Puzzle } from "../types/supabase";
-import { supabase } from "../utils/supabaseClient";
+import fetcher from "../utils/fetcher";
 
-export const defaultPuzzle: Puzzle = {
-  id: "",
-  created_at: "",
-  date: "",
-  outer_letters: [],
-  center_letter: "",
-  max_score: 0,
-};
-
-export const usePuzzle = (puzzleId: string) => {
-  const [puzzle, setPuzzle] = useState<Puzzle>(defaultPuzzle);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    async function loadPuzzle() {
-      setLoading(true);
-      const { data } = await supabase
-        .from<Puzzle>("puzzle")
-        .select("*")
-        .eq("id", puzzleId);
-      if (data) setPuzzle(data[0]);
-      setLoading(false);
-    }
-
-    if (puzzleId) {
-      loadPuzzle();
-    }
-  }, [puzzleId]);
+export const usePuzzle = (puzzleId: string | undefined) => {
+  const { data, error } = useSWR<Puzzle[]>(
+    puzzleId ? `/rest/v1/puzzle?id=eq.${puzzleId}&select=*` : null,
+    fetcher
+  );
 
   return {
-    puzzle,
-    loading,
+    puzzle: data?.[0],
+    isLoading: !error && !data,
+    isError: error,
   };
 };

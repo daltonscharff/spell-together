@@ -1,12 +1,15 @@
+import { useRoom } from "../hooks/useRoom";
 import { useShortcode } from "../hooks/useShortcode";
 import { useUsername } from "../hooks/useUsername";
+import { Header } from "./Header";
 import { LoginModal } from "./LoginModal";
 
 export const App = () => {
   const { username } = useUsername();
-  const { shortcode, isValid, loading, unsetShortcode } = useShortcode();
+  const { shortcode, isValid, loading } = useShortcode();
+  const { room } = useRoom("abcdef");
 
-  if (loading) return <div>loading</div>;
+  if (loading) return <div></div>;
 
   if (!username || !shortcode || !isValid) {
     return (
@@ -19,12 +22,11 @@ export const App = () => {
   }
 
   return (
-    <h1 className="text-3xl font-bold underline">
-      <p>show game</p>
-      <button className="border" onClick={unsetShortcode}>
-        change room
-      </button>
-    </h1>
+    <>
+      <Header puzzleId={room?.puzzle_id} />
+      <h1 className="text-3xl font-bold underline">show game</h1>
+      {JSON.stringify(room)}
+    </>
   );
 };
 

@@ -1,40 +1,16 @@
-import { PostgrestError } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { Room } from "../types/supabase";
-import { supabase } from "../utils/supabaseClient";
-
-export const defaultRoom: Room = {
-  id: "",
-  created_at: "",
-  last_played: "",
-  shortcode: "",
-};
+import fetcher from "../utils/fetcher";
 
 export const useRoom = (shortcode: string) => {
-  const [room, setRoom] = useState<Room>(defaultRoom);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<PostgrestError | null>(null);
-
-  useEffect(() => {
-    async function loadRooms() {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from<Room>("room")
-        .select("*")
-        .eq("shortcode", shortcode);
-      if (data) setRoom(data[0]);
-      if (error) setError(error);
-      setLoading(false);
-    }
-
-    if (shortcode) {
-      loadRooms();
-    }
-  }, [shortcode]);
+  const { data, error } = useSWR<Room[]>(
+    `/rest/v1/room?shortcode=eq.${shortcode}&select=*`,
+    fetcher
+  );
 
   return {
-    room,
-    loading,
-    error,
+    room: data?.[0],
+    isLoading: !error && !data,
+    isError: error,
   };
 };
