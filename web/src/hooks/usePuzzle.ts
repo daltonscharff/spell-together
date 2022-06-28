@@ -16,7 +16,7 @@ export const usePuzzle = (puzzleId: string) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    async function loadRooms() {
+    async function loadPuzzle() {
       setLoading(true);
       const { data } = await supabase
         .from<Puzzle>("puzzle")
@@ -27,7 +27,7 @@ export const usePuzzle = (puzzleId: string) => {
     }
 
     if (puzzleId) {
-      loadRooms();
+      loadPuzzle();
     }
   }, [puzzleId]);
 
