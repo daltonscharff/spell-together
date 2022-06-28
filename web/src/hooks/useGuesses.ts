@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { CorrectGuess, Guess } from "../types/supabase";
+import fetcher from "../utils/fetcher";
 import { supabase } from "../utils/supabaseClient";
 
 type SubmitGuess = {
@@ -9,41 +11,29 @@ type SubmitGuess = {
   word: string;
 };
 
-export const useGuesses = (roomId: string) => {
+export const useGuesses = (roomId: string | undefined) => {
   const [correctGuesses, setCorrectGuesses] = useState<CorrectGuess[]>([]);
-  const [loading, setLoading] = useState(false);
+  const { data, error } = useSWR<CorrectGuess[]>(
+    roomId ? `/rest/v1/correct_guess?room_id=eq.${roomId}&select=*` : null,
+    fetcher
+  );
 
   useEffect(() => {
-    const loadGuesses = async (roomId: string) => {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from<CorrectGuess>("correct_guess")
-        .select("*")
-        .eq("room_id", roomId);
-      if (data) setCorrectGuesses(data);
-      setLoading(false);
-    };
-    if (roomId) loadGuesses(roomId);
-
     const guessSubscription = supabase
       .from<Guess>(`guess:room_id=eq.${roomId}`)
       .on("INSERT", async (guess) => {
         console.log("Change received!", guess);
-        const { data, error } = await supabase
+        const { data } = await supabase
           .from<CorrectGuess>("correct_guess")
           .select("*")
           .eq("guess_id", guess.new.id);
-        if (data) addCorrectGuesses(...data);
+        if (data) setCorrectGuesses((guesses) => [...guesses, ...data]);
       })
       .subscribe();
     return () => {
       supabase.removeSubscription(guessSubscription);
     };
   }, [roomId]);
-
-  function addCorrectGuesses(...newCorrectGuesses: CorrectGuess[]) {
-    setCorrectGuesses((guesses) => [...guesses, ...newCorrectGuesses]);
-  }
 
   async function submitGuess(guess: SubmitGuess) {
     return supabase.rpc<CorrectGuess>("submit_guess", {
@@ -55,8 +45,9 @@ export const useGuesses = (roomId: string) => {
   }
 
   return {
-    correctGuesses,
-    loading,
+    correctGuesses: { ...data, ...correctGuesses },
+    isLoading: !error && data === undefined,
+    isError: error,
     submitGuess,
   };
 };

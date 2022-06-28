@@ -1,3 +1,4 @@
+import { useGuesses } from "../hooks/useGuesses";
 import { useRoom } from "../hooks/useRoom";
 import { useShortcode } from "../hooks/useShortcode";
 import { useUsername } from "../hooks/useUsername";
@@ -8,6 +9,7 @@ export const App = () => {
   const { username } = useUsername();
   const { shortcode, isValid, loading } = useShortcode();
   const { room } = useRoom(shortcode);
+  const { correctGuesses } = useGuesses(room?.id);
 
   if (loading) return <div></div>;
 
@@ -24,8 +26,8 @@ export const App = () => {
   return (
     <>
       <Header puzzleId={room?.puzzle_id} />
-      <h1 className="text-3xl font-bold underline">show game</h1>
       {JSON.stringify(room)}
+      {JSON.stringify(correctGuesses)}
     </>
   );
 };
