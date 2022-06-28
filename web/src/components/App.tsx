@@ -7,7 +7,7 @@ import { LoginModal } from "./LoginModal";
 export const App = () => {
   const { username } = useUsername();
   const { shortcode, isValid, loading } = useShortcode();
-  const { room } = useRoom("abcdef");
+  const { room } = useRoom(shortcode);
 
   if (loading) return <div></div>;
 
