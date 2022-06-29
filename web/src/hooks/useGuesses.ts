@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useSWR from "swr";
 import { CorrectGuess, Guess } from "../types/supabase";
 import fetcher from "../utils/fetcher";
@@ -12,8 +12,7 @@ type SubmitGuess = {
 };
 
 export const useGuesses = (roomId: string | undefined) => {
-  const [correctGuesses, setCorrectGuesses] = useState<CorrectGuess[]>([]);
-  const { data, error } = useSWR<CorrectGuess[]>(
+  const { data, error, mutate } = useSWR<CorrectGuess[]>(
     roomId ? `/rest/v1/correct_guess?room_id=eq.${roomId}&select=*` : null,
     fetcher
   );
@@ -23,17 +22,13 @@ export const useGuesses = (roomId: string | undefined) => {
       .from<Guess>(`guess:room_id=eq.${roomId}`)
       .on("INSERT", async (guess) => {
         console.log("Change received!", guess);
-        const { data } = await supabase
-          .from<CorrectGuess>("correct_guess")
-          .select("*")
-          .eq("guess_id", guess.new.id);
-        if (data) setCorrectGuesses((guesses) => [...guesses, ...data]);
+        mutate();
       })
       .subscribe();
     return () => {
       supabase.removeSubscription(guessSubscription);
     };
-  }, [roomId]);
+  }, [roomId, mutate]);
 
   async function submitGuess(guess: SubmitGuess) {
     return supabase.rpc<CorrectGuess>("submit_guess", {
@@ -45,7 +40,7 @@ export const useGuesses = (roomId: string | undefined) => {
   }
 
   return {
-    correctGuesses: { ...data, ...correctGuesses },
+    correctGuesses: data,
     isLoading: !error && data === undefined,
     isError: error,
     submitGuess,
