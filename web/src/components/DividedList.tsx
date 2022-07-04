@@ -11,10 +11,10 @@ export const DividedList: FC<Props> = ({
   return (
     <>
       {children.map((element, i, array) => (
-        <>
+        <div key={i}>
           <div className="p-4">{element}</div>
           {i < array.length - 1 && divider}
-        </>
+        </div>
       ))}
     </>
   );

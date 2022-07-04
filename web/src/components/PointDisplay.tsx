@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import LinearProgress from "@mui/material/LinearProgress";
 import { useGuesses } from "../hooks/useGuesses";
 import { usePuzzle } from "../hooks/usePuzzle";
 
@@ -70,7 +69,7 @@ export const PointDisplay = ({ roomId, puzzleId }: PointDisplayProps) => {
   const maxScore = puzzle?.max_score || 0;
   const percent = (currentScore / maxScore) * 100;
   return (
-    <div>
+    <div className="font-bold">
       <span className="capitalize">{findLevel(percent).rank}: </span>
       <span>
         {currentScore}/{maxScore} points

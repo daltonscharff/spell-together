@@ -6,6 +6,7 @@ import { useShortcode } from "../hooks/useShortcode";
 import { useUsername } from "../hooks/useUsername";
 import { CorrectGuessList } from "./CorrectGuessList";
 import { DividedList } from "./DividedList";
+import { FoundWordDisplay } from "./FoundWordDisplay";
 import { Header } from "./Header";
 import { Hive } from "./Hive";
 import { LetterInput } from "./LetterInput";
@@ -16,7 +17,7 @@ export const App = () => {
   const { username } = useUsername();
   const { shortcode, isValid, loading: validatingShortcode } = useShortcode();
   const { room, isLoading: roomIsLoading } = useRoom(shortcode);
-  const { correctGuesses, isLoading: guessesAreLoading } = useGuesses(room?.id);
+  const { isLoading: guessesAreLoading } = useGuesses(room?.id);
   const { isLoading: puzzleIsLoading } = usePuzzle(room?.puzzle_id);
 
   if (
@@ -47,6 +48,7 @@ export const App = () => {
         </div>
         <div className="flex flex-col mx-auto md:ml-0 max-w-lg min-w-[200px] border-black border-2 rounded-lg">
           <DividedList divider={<div className="border-b-2 border-black" />}>
+            <FoundWordDisplay roomId={room?.id} />
             <CorrectGuessList roomId={room?.id} />
             <PointDisplay puzzleId={room?.puzzle_id} roomId={room?.id} />
           </DividedList>
