@@ -1,20 +1,45 @@
 import { useGuesses } from "../hooks/useGuesses";
+import { DividedList } from "./DividedList";
 
 type CorrectGuessListProps = {
   roomId?: string;
 };
 
+const partOfSpeechAbbreviation: Record<string, string> = {
+  noun: "n.",
+  pronoun: "pron.",
+  verb: "v.",
+  adjective: "adj.",
+  adverb: "adv.",
+  preposition: "prep.",
+  conjunction: "conj.",
+  interjection: "interj.",
+};
+
 export const CorrectGuessList = ({ roomId }: CorrectGuessListProps) => {
   const { correctGuesses } = useGuesses(roomId);
   return (
-    <div>
+    <DividedList>
       {(correctGuesses || []).map((guess) => (
         <div key={guess.word_id}>
-          <div>{guess.word}</div>
-          <div>{guess.username}</div>
-          <div>{guess.definition}</div>
+          <div className="flex flex-row justify-between">
+            <div
+              className={`capitalize font-semibold ${
+                guess.is_pangram && "relative bg-yellow-300 px-1 -left-1"
+              }`}
+            >
+              {guess.word}
+            </div>
+            <div className="font-light">{guess.username}</div>
+          </div>
+          <div className="italic font-light">
+            {guess.part_of_speech && (
+              <span>{partOfSpeechAbbreviation[guess.part_of_speech]} </span>
+            )}
+            <span>{guess.definition}</span>
+          </div>
         </div>
       ))}
-    </div>
+    </DividedList>
   );
 };
