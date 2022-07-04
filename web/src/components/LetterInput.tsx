@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
-import { keyframes } from "@emotion/react";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
+import { usePuzzle } from "../hooks/usePuzzle";
+import { useLetterInput } from "../hooks/useLetterInput";
 
 type Props = {
-  value: string;
-  outerLetters: string[];
-  centerLetter: string;
   disabled?: boolean;
+  puzzleId?: string;
 };
 
 type LetterCategory = "outer" | "invalid" | "center";
@@ -24,52 +21,16 @@ function checkLetterCategory(
   return "invalid";
 }
 
-const Letter = styled("span")`
-  color: ${(props: { category: LetterCategory }) => {
-    const colors = {
-      outer: "black",
-      center: "#FED74E",
-      invalid: "lightgray",
-    };
-    return colors[props.category];
-  }};
-  font-weight: bold;
-`;
+const colors = {
+  outer: "text-black",
+  center: "text-yellow-300",
+  invalid: "text-zinc-200",
+};
 
-const blink = keyframes`
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-`;
-
-const Blinker = styled("span")`
-  animation: ${blink} 1200ms steps(1, end) infinite;
-  margin-left: 1px;
-  user-select: none;
-  font-weight: 100;
-  position: absolute;
-  font-family: sans serif;
-`;
-
-const PlaceholderText = styled(Box)`
-  color: lightgrey;
-`;
-
-const Container = styled(Box)`
-  font-size: 2em;
-  text-align: center;
-`;
-
-export const LetterInput = ({
-  value,
-  outerLetters,
-  centerLetter,
-  disabled,
-}: Props) => {
+export const LetterInput = ({ puzzleId, disabled }: Props) => {
   const [isFocused, setIsFocused] = useState(true);
+  const { letters } = useLetterInput();
+  const { puzzle } = usePuzzle(puzzleId);
 
   useEffect(() => {
     if (disabled) return setIsFocused(false);
@@ -84,29 +45,32 @@ export const LetterInput = ({
   }, [disabled]);
 
   return (
-    <Container>
-      {value
+    <div className="text-4xl text-center">
+      {letters
         .toUpperCase()
         .split("")
         .map((letter, i) => {
           const category = checkLetterCategory(
             letter,
-            outerLetters,
-            centerLetter
+            (puzzle?.outer_letters as string[]) || [],
+            puzzle?.center_letter || ""
           );
+          const classes = `font-bold ${colors[category]}`;
           return (
-            <Letter key={i} category={category}>
+            <span className={classes} key={i}>
               {letter}
-            </Letter>
+            </span>
           );
         })}
 
-      {isFocused && <Blinker>|</Blinker>}
-      {!isFocused && value.length === 0 ? (
-        <PlaceholderText>Type or click...</PlaceholderText>
+      {isFocused && (
+        <span className="animate-blink select-none font-thin absolute">|</span>
+      )}
+      {!isFocused && letters.length === 0 ? (
+        <div className="text-zinc-300">Type or click...</div>
       ) : (
         <wbr />
       )}
-    </Container>
+    </div>
   );
 };

@@ -5,6 +5,7 @@ import { useShortcode } from "../hooks/useShortcode";
 import { useUsername } from "../hooks/useUsername";
 import { Header } from "./Header";
 import { Hive } from "./Hive";
+import { LetterInput } from "./LetterInput";
 import { LoginModal } from "./LoginModal";
 
 export const App = () => {
@@ -29,7 +30,10 @@ export const App = () => {
     <LetterInputProvider>
       <Header puzzleId={room?.puzzle_id} />
       <div className="flex flex-col md:flex-row">
-        <Hive puzzleId={room?.puzzle_id} />
+        <div>
+          <LetterInput puzzleId={room?.puzzle_id} />
+          <Hive puzzleId={room?.puzzle_id} />
+        </div>
       </div>
       {JSON.stringify(room)}
       {JSON.stringify(correctGuesses)}
