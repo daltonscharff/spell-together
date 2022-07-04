@@ -40,8 +40,8 @@ export const App = () => {
   return (
     <LetterInputProvider>
       <Header puzzleId={room?.puzzle_id} />
-      <div className="container mx-auto grid gap-20 grid-cols-1 md:grid-cols-2">
-        <div className="flex flex-col gap-8 mx-auto md:mr-0 max-w-md min-w-[200px]">
+      <div className="container grid gap-20 grid-cols-1 md:grid-cols-2">
+        <div className="flex flex-col gap-8 mx-auto md:mr-0 max-w-sm min-w-[200px]">
           <LetterInput puzzleId={room?.puzzle_id} />
           <Hive puzzleId={room?.puzzle_id} />
         </div>
