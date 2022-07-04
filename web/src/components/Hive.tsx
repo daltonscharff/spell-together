@@ -53,7 +53,7 @@ export const Hive = ({ puzzleId }: Props) => {
       </defs>
       {[...outerLetters, centerLetter].map((letter, i, array) => {
         const hexClasses = `cursor-pointer fill-white stroke-black stroke-2 ${
-          i === array.length - 1 && "fill-yellow-200"
+          i === array.length - 1 && "fill-yellow-300"
         }`;
         const handleClick = () => addLetter(letter);
         return (
