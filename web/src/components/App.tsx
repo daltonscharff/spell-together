@@ -46,8 +46,11 @@ export const App = () => {
           <LetterInput puzzleId={room?.puzzle_id} />
           <Hive puzzleId={room?.puzzle_id} />
         </div>
-        <div className="flex flex-col mx-auto md:ml-0 max-w-lg min-w-[200px] border-black border-2 rounded-lg">
-          <DividedList divider={<div className="border-b-2 border-black" />}>
+        <div className="flex flex-col mx-auto md:ml-0 max-w-lg min-w-[200px] border-black border-2 rounded-lg md:max-h-[600px]">
+          <DividedList
+            divider={<div className="border-b-2 border-black" />}
+            overflowIndex={1}
+          >
             <FoundWordDisplay roomId={room?.id} />
             <CorrectGuessList roomId={room?.id} />
             <PointDisplay puzzleId={room?.puzzle_id} roomId={room?.id} />
