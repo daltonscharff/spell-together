@@ -37,14 +37,16 @@ export const App = () => {
   return (
     <LetterInputProvider>
       <Header puzzleId={room?.puzzle_id} />
-      <div className="flex flex-col md:flex-row">
-        <div>
+      <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+        <div className="flex flex-col gap-8 mx-auto max-w-md min-w-[200px]">
           <LetterInput puzzleId={room?.puzzle_id} />
           <Hive puzzleId={room?.puzzle_id} />
         </div>
+        <div>
+          {JSON.stringify(room)}
+          {JSON.stringify(correctGuesses)}
+        </div>
       </div>
-      {JSON.stringify(room)}
-      {JSON.stringify(correctGuesses)}
     </LetterInputProvider>
   );
 };
