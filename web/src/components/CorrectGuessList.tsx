@@ -1,22 +1,20 @@
-import { Box } from "@mui/material";
-import { definitions } from "../types/supabase";
+import { useGuesses } from "../hooks/useGuesses";
 
 type CorrectGuessListProps = {
-  correctGuesses?: definitions["correct_guess"][];
+  roomId?: string;
 };
 
-export const CorrectGuessList = ({
-  correctGuesses = [],
-}: CorrectGuessListProps) => {
+export const CorrectGuessList = ({ roomId }: CorrectGuessListProps) => {
+  const { correctGuesses } = useGuesses(roomId);
   return (
-    <Box>
-      {correctGuesses.map((guess) => (
-        <Box key={guess.word_id}>
-          <Box sx={{ transform: "capitalize" }}>{guess.word}</Box>
-          <Box>{guess.username}</Box>
-          <Box>{guess.definition}</Box>
-        </Box>
+    <div>
+      {(correctGuesses || []).map((guess) => (
+        <div key={guess.word_id}>
+          <div>{guess.word}</div>
+          <div>{guess.username}</div>
+          <div>{guess.definition}</div>
+        </div>
       ))}
-    </Box>
+    </div>
   );
 };

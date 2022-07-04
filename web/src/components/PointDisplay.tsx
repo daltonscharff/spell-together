@@ -1,9 +1,11 @@
-import Typography from "@mui/material/Typography";
+import { useMemo } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
+import { useGuesses } from "../hooks/useGuesses";
+import { usePuzzle } from "../hooks/usePuzzle";
 
 export type PointDisplayProps = {
-  currentScore?: number;
-  maxScore?: number;
+  roomId?: string;
+  puzzleId?: string;
 };
 
 type Level = {
@@ -54,17 +56,25 @@ function findLevel(percent: number): Level {
   return levels.find((level) => level.percent <= percent) || levels[0];
 }
 
-export const PointDisplay = ({
-  currentScore = 0,
-  maxScore = 0,
-}: PointDisplayProps) => {
+export const PointDisplay = ({ roomId, puzzleId }: PointDisplayProps) => {
+  const { correctGuesses } = useGuesses(roomId);
+  const { puzzle } = usePuzzle(puzzleId);
+  const currentScore = useMemo(
+    () =>
+      correctGuesses?.reduce(
+        (total, guess) => (total += guess.point_value || 0),
+        0
+      ) || 0,
+    [correctGuesses]
+  );
+  const maxScore = puzzle?.max_score || 0;
   const percent = (currentScore / maxScore) * 100;
   return (
-    <>
-      <Typography>
-        {findLevel(percent).rank}: {currentScore}/{maxScore}
-      </Typography>
-      <LinearProgress variant="determinate" value={percent} />
-    </>
+    <div>
+      <span className="capitalize">{findLevel(percent).rank}: </span>
+      <span>
+        {currentScore}/{maxScore} points
+      </span>
+    </div>
   );
 };
