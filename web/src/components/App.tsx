@@ -5,6 +5,7 @@ import { useRoom } from "../hooks/useRoom";
 import { useShortcode } from "../hooks/useShortcode";
 import { useUsername } from "../hooks/useUsername";
 import { CorrectGuessList } from "./CorrectGuessList";
+import { DividedList } from "./DividedList";
 import { Header } from "./Header";
 import { Hive } from "./Hive";
 import { LetterInput } from "./LetterInput";
@@ -44,9 +45,11 @@ export const App = () => {
           <LetterInput puzzleId={room?.puzzle_id} />
           <Hive puzzleId={room?.puzzle_id} />
         </div>
-        <div className="flex flex-col gap-8 mx-auto md:ml-0 max-w-lg min-w-[200px]">
-          <PointDisplay puzzleId={room?.puzzle_id} roomId={room?.id} />
-          <CorrectGuessList roomId={room?.id} />
+        <div className="flex flex-col mx-auto md:ml-0 max-w-lg min-w-[200px] border-black border-2 rounded-lg">
+          <DividedList divider={<div className="border-b-2 border-black" />}>
+            <CorrectGuessList roomId={room?.id} />
+            <PointDisplay puzzleId={room?.puzzle_id} roomId={room?.id} />
+          </DividedList>
         </div>
       </div>
     </LetterInputProvider>
