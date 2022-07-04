@@ -1,8 +1,10 @@
+import { LetterInputProvider } from "../contexts/LetterInputContext";
 import { useGuesses } from "../hooks/useGuesses";
 import { useRoom } from "../hooks/useRoom";
 import { useShortcode } from "../hooks/useShortcode";
 import { useUsername } from "../hooks/useUsername";
 import { Header } from "./Header";
+import { Hive } from "./Hive";
 import { LoginModal } from "./LoginModal";
 
 export const App = () => {
@@ -24,11 +26,14 @@ export const App = () => {
   }
 
   return (
-    <>
+    <LetterInputProvider>
       <Header puzzleId={room?.puzzle_id} />
+      <div className="flex flex-col md:flex-row">
+        <Hive puzzleId={room?.puzzle_id} />
+      </div>
       {JSON.stringify(room)}
       {JSON.stringify(correctGuesses)}
-    </>
+    </LetterInputProvider>
   );
 };
 

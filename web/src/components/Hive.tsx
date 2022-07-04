@@ -1,39 +1,26 @@
-import { styled } from "@mui/material/styles";
+import { useMemo } from "react";
+import { useLetterInput } from "../hooks/useLetterInput";
+import { usePuzzle } from "../hooks/usePuzzle";
 
 type Props = {
-  outerLetters: string[];
-  centerLetter: string;
-  onClick?: (letter: string) => void;
+  puzzleId?: string;
 };
 
-const Container = styled("svg")`
-  margin: 0 auto;
-`;
-const Hexagon = styled("use")`
-  stroke-width: 2px;
-  stroke: black;
-  cursor: pointer;
-  fill: white;
-`;
-const CenterHexagon = styled(Hexagon)`
-  fill: #fee383;
-`;
-const Text = styled("text")`
-  dominant-baseline: middle;
-  text-anchor: middle;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 2em;
-  user-select: none;
-`;
+export const Hive = ({ puzzleId }: Props) => {
+  const { puzzle } = usePuzzle(puzzleId);
+  const { addLetter } = useLetterInput();
 
-export const Hive = ({
-  outerLetters,
-  centerLetter,
-  onClick = (_: string) => {},
-}: Props) => {
-  centerLetter = centerLetter.toUpperCase();
-  outerLetters = outerLetters.map((letter) => letter.toUpperCase());
+  const centerLetter = useMemo(
+    () => puzzle?.center_letter.toUpperCase() || "",
+    [puzzle?.center_letter]
+  );
+  const outerLetters = useMemo(
+    () =>
+      ((puzzle?.outer_letters as string[]) ?? []).map((letter: string) =>
+        letter.toUpperCase()
+      ),
+    [puzzle?.outer_letters]
+  );
 
   const translations = [
     [76, 0],
@@ -46,7 +33,11 @@ export const Hive = ({
   ];
 
   return (
-    <Container viewBox="0 0 257 265" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      className="m-0"
+      viewBox="0 0 257 265"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <defs>
         <g id="hexagon">
           <path
@@ -61,8 +52,10 @@ export const Hive = ({
         </g>
       </defs>
       {[...outerLetters, centerLetter].map((letter, i, array) => {
-        const Hex = i < array.length - 1 ? Hexagon : CenterHexagon;
-        const handleClick = () => onClick(letter);
+        const hexClasses = `cursor-pointer fill-white stroke-black stroke-2 ${
+          i === array.length - 1 && "fill-yellow-200"
+        }`;
+        const handleClick = () => addLetter(letter);
         return (
           <svg
             key={`hexagon_${i}`}
@@ -71,13 +64,18 @@ export const Hive = ({
             x={translations[i][0]}
             y={translations[i][1]}
           >
-            <Hex href="#hexagon" onClick={handleClick} />
-            <Text x="50%" y="54%" onClick={handleClick}>
+            <use href="#hexagon" className={hexClasses} onClick={handleClick} />
+            <text
+              className="cursor-pointer anchor-middle baseline-middle font-bold text-3xl select-none"
+              x="50%"
+              y="54%"
+              onClick={handleClick}
+            >
               {letter}
-            </Text>
+            </text>
           </svg>
         );
       })}
-    </Container>
+    </svg>
   );
 };
