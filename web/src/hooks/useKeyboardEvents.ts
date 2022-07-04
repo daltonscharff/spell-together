@@ -1,11 +1,12 @@
 import { useEffect } from "react";
-
-export const useKeyboardEvents = ({
-  onLetter = (letter: string) => {},
-  onBackspace = () => {},
-  onEnter = () => {},
-  disabled = false,
-}) => {
+export const useKeyboardEvents = (
+  {
+    onLetter = (letter: string) => {},
+    onBackspace = () => {},
+    onEnter = () => {},
+  },
+  disabled = false
+) => {
   useEffect(() => {
     if (disabled) return;
     const registerEvent = ({ key }: KeyboardEvent) => {
