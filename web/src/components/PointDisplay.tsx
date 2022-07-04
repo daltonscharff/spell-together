@@ -69,7 +69,7 @@ export const PointDisplay = ({ roomId, puzzleId }: PointDisplayProps) => {
   const maxScore = puzzle?.max_score || 0;
   const percent = (currentScore / maxScore) * 100;
   return (
-    <div className="font-bold">
+    <div className="font-semibold">
       <span className="capitalize">{findLevel(percent).rank}: </span>
       <span>
         {currentScore}/{maxScore} points

@@ -27,10 +27,10 @@ export const FoundWordDisplay = ({ roomId }: Props) => {
 
   return (
     <div>
-      <div className="font-bold">
+      <div className="font-semibold">
         Found Words: {correctGuesses?.length || 0}
       </div>
-      <div>
+      <div className="font-light flex flex-row flex-wrap gap-x-6">
         {playersSortedByCorrectGuesses.map((player, i) => (
           <div key={i}>
             {player}: {correctPerPlayer[player]}
