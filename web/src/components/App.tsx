@@ -39,21 +39,23 @@ export const App = () => {
 
   return (
     <LetterInputProvider>
-      <Header puzzleId={room?.puzzle_id} />
-      <div className="container grid gap-20 grid-cols-1 md:grid-cols-2">
-        <div className="flex flex-col gap-8 mx-auto md:mr-0 max-w-sm min-w-[200px]">
-          <LetterInput puzzleId={room?.puzzle_id} />
-          <Hive puzzleId={room?.puzzle_id} />
-        </div>
-        <div className="flex flex-col mx-auto md:ml-0 max-w-lg min-w-[200px] border-black border-2 rounded-lg md:max-h-[600px]">
-          <div className="p-4 border-b-2 border-black">
-            <FoundWordDisplay roomId={room?.id} />
+      <div className="flex flex-col gap-y-8">
+        <Header puzzleId={room?.puzzle_id} />
+        <div className="container grid gap-8 grid-cols-1 md:grid-cols-2">
+          <div className="flex flex-col gap-8 mx-auto max-w-sm min-w-[200px]">
+            <LetterInput puzzleId={room?.puzzle_id} />
+            <Hive puzzleId={room?.puzzle_id} />
           </div>
-          <div className="p-2 overflow-y-auto border-b-2 border-black">
-            <CorrectGuessList roomId={room?.id} />
-          </div>
-          <div className="p-4">
-            <PointDisplay puzzleId={room?.puzzle_id} roomId={room?.id} />
+          <div className="flex flex-col mx-auto max-w-lg min-w-[200px] border-black border-2 rounded-lg md:max-h-[600px]">
+            <div className="p-4 border-b-2 border-black">
+              <FoundWordDisplay roomId={room?.id} />
+            </div>
+            <div className="p-2 overflow-y-auto border-b-2 border-black">
+              <CorrectGuessList roomId={room?.id} />
+            </div>
+            <div className="p-4">
+              <PointDisplay puzzleId={room?.puzzle_id} roomId={room?.id} />
+            </div>
           </div>
         </div>
       </div>
