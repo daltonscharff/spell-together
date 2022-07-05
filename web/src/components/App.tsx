@@ -1,9 +1,10 @@
 import { LetterInputProvider } from "../contexts/LetterInputContext";
-import { useGuesses } from "../hooks/useGuesses";
+import { useCorrectGuesses } from "../hooks/useCorrectGuesses";
 import { usePuzzle } from "../hooks/usePuzzle";
 import { useRoom } from "../hooks/useRoom";
 import { useShortcode } from "../hooks/useShortcode";
 import { useUsername } from "../hooks/useUsername";
+import { ButtonArea } from "./ButtonArea";
 import { CorrectGuessList } from "./CorrectGuessList";
 import { FoundWordDisplay } from "./FoundWordDisplay";
 import { Header } from "./Header";
@@ -16,7 +17,7 @@ export const App = () => {
   const { username } = useUsername();
   const { shortcode, isValid, loading: validatingShortcode } = useShortcode();
   const { room, isLoading: roomIsLoading } = useRoom(shortcode);
-  const { isLoading: guessesAreLoading } = useGuesses(room?.id);
+  const { isLoading: guessesAreLoading } = useCorrectGuesses(room?.id);
   const { isLoading: puzzleIsLoading } = usePuzzle(room?.puzzle_id);
 
   if (
@@ -45,6 +46,7 @@ export const App = () => {
           <div className="flex flex-col gap-8 mx-auto max-w-sm min-w-[200px]">
             <LetterInput puzzleId={room?.puzzle_id} />
             <Hive puzzleId={room?.puzzle_id} />
+            <ButtonArea puzzleId={room?.puzzle_id} />
           </div>
           <div className="flex flex-col mx-auto max-w-lg min-w-[200px] border-black border-2 rounded-lg md:max-h-[600px]">
             <div className="p-4 border-b-2 border-black">

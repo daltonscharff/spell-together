@@ -1,4 +1,4 @@
-import { useGuesses } from "../hooks/useGuesses";
+import { useCorrectGuesses } from "../hooks/useCorrectGuesses";
 import { Fragment } from "react";
 
 type CorrectGuessListProps = {
@@ -17,7 +17,7 @@ const partOfSpeechAbbreviation: Record<string, string> = {
 };
 
 export const CorrectGuessList = ({ roomId }: CorrectGuessListProps) => {
-  const { correctGuesses } = useGuesses(roomId);
+  const { correctGuesses } = useCorrectGuesses(roomId);
   return (
     <>
       {(correctGuesses || []).map((guess, i, array) => (
