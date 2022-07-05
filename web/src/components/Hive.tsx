@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const Hive = ({ puzzleId }: Props) => {
-  const { puzzle } = usePuzzle(puzzleId);
+  const { puzzle, shuffledLetters } = usePuzzle(puzzleId);
   const { addLetter } = useLetterInput();
 
   const centerLetter = useMemo(
@@ -15,11 +15,8 @@ export const Hive = ({ puzzleId }: Props) => {
     [puzzle?.center_letter]
   );
   const outerLetters = useMemo(
-    () =>
-      ((puzzle?.outer_letters as string[]) ?? []).map((letter: string) =>
-        letter.toUpperCase()
-      ),
-    [puzzle?.outer_letters]
+    () => shuffledLetters.map((letter: string) => letter.toUpperCase()),
+    [shuffledLetters]
   );
 
   const translations = [
