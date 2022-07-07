@@ -30,9 +30,9 @@ export const FoundWordDisplay = ({ roomId }: Props) => {
       <div className="font-semibold">
         Found Words: {correctGuesses?.length || 0}
       </div>
-      <div className="font-light flex flex-row flex-wrap gap-x-6">
+      <div className="font-light flex flex-row flex-wrap gap-x-6 mt-2">
         {playersSortedByCorrectGuesses.map((player, i) => (
-          <div key={i}>
+          <div key={i} className="border-b px-1 relative -left-1">
             {player}: {correctPerPlayer[player]}
           </div>
         ))}
