@@ -50,13 +50,13 @@ export const App = () => {
           </div>
           <div className="flex flex-col mx-auto max-w-lg min-w-[200px] border-black border rounded-sm md:max-h-[600px]">
             <div className="p-4 border-b-2 border-black">
+              <PointDisplay puzzleId={room?.puzzle_id} roomId={room?.id} />
+            </div>
+            <div className="p-4 border-b-2 border-black">
               <FoundWordDisplay roomId={room?.id} />
             </div>
-            <div className="p-2 overflow-y-auto border-b-2 border-black">
+            <div className="p-2 overflow-y-auto">
               <CorrectGuessList roomId={room?.id} />
-            </div>
-            <div className="p-4">
-              <PointDisplay puzzleId={room?.puzzle_id} roomId={room?.id} />
             </div>
           </div>
         </div>
