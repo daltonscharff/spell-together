@@ -9,7 +9,7 @@ export const Header = ({ puzzleId }: Props) => {
   const { puzzle } = usePuzzle(puzzleId);
   const { shortcode, unsetShortcode } = useShortcode();
   return (
-    <div className="container mt-3">
+    <div className="container mt-3 border-b border-black pb-2 sm:pb-0">
       <div className="grid grid-cols-2 sm:grid-cols-3 items-baseline gap-x-4 gap-x mb-2">
         <h1 className="font-display text-2xl text-left col-span-2 sm:col-span-1">
           Spell Together
@@ -33,7 +33,6 @@ export const Header = ({ puzzleId }: Props) => {
           />
         </div>
       </div>
-      <div className="flex flex-row justify-between border-b border-black font-light"></div>
     </div>
   );
 };
