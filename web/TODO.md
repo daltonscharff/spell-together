@@ -1,0 +1,3 @@
+- [ ] login 
+- [ ] create new room
+- [ ] alert if guess is valid or invalid
