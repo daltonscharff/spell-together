@@ -15,7 +15,13 @@ export const Header = ({ puzzleId }: Props) => {
       </h1>
       <div className="flex flex-row justify-between border-b border-black font-light py-2">
         {puzzleId && <p>{puzzle?.date}</p>}
-        <button onClick={unsetShortcode}>Leave</button>
+
+        <button
+          onClick={unsetShortcode}
+          className="flex flex-row items-center bg-zinc-50 border border-zinc-100 rounded-sm"
+        >
+          <img src="/icons/leave.svg" alt="Leave room" className="h-4 px-1" />
+        </button>
       </div>
     </div>
   );
