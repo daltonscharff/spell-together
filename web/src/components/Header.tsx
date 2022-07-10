@@ -17,17 +17,19 @@ export const Header = () => {
             })}
           </div>
         )}
-        <div
-          onClick={unsetShortcode}
-          className="cursor-pointer uppercase font-semibold text-right ml-2"
-        >
-          {shortcode}
-          <img
-            src="/icons/leave.svg"
-            alt="Leave room"
-            className="h-3 pl-1 relative bottom-[2px] inline-block"
-          />
-        </div>
+        {shortcode && (
+          <div
+            onClick={unsetShortcode}
+            className="cursor-pointer uppercase font-semibold text-right ml-2"
+          >
+            {shortcode}
+            <img
+              src="/icons/leave.svg"
+              alt="Leave room"
+              className="h-3 pl-1 relative bottom-[2px] inline-block"
+            />
+          </div>
+        )}
       </div>
     </div>
   );
