@@ -10,7 +10,7 @@ export const Header = ({ puzzleId }: Props) => {
   const { shortcode, unsetShortcode } = useShortcode();
   return (
     <div className="container mt-3">
-      <div className="grid grid-cols-2 sm:grid-cols-3 items-center gap-x-4 gap-x mb-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 items-baseline gap-x-4 gap-x mb-2">
         <h1 className="font-display text-2xl text-left col-span-2 sm:col-span-1">
           Spell Together
         </h1>
@@ -21,14 +21,17 @@ export const Header = ({ puzzleId }: Props) => {
             })}
           </div>
         )}
-        <button onClick={unsetShortcode} className="ml-2 text-right">
-          <span className="uppercase font-semibold">{shortcode}</span>
+        <div
+          onClick={unsetShortcode}
+          className="cursor-pointer uppercase font-semibold text-right ml-2"
+        >
+          {shortcode}
           <img
             src="/icons/leave.svg"
             alt="Leave room"
-            className="h-5 pl-1 relative -top-[2px] inline-block"
+            className="h-3 pl-1 relative bottom-[2px] inline-block"
           />
-        </button>
+        </div>
       </div>
       <div className="flex flex-row justify-between border-b border-black font-light"></div>
     </div>
