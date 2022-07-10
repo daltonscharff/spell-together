@@ -7,7 +7,7 @@ type Props = {
 export const Footer = ({ puzzleId }: Props) => {
   const { puzzle } = usePuzzle(puzzleId);
   return (
-    <div className="container text-center text-sm font-light text-zinc-300 border-t border-zinc-200 pt-3 mb-6">
+    <div className="container text-center text-sm font-light text-zinc-300 border-t border-zinc-200 pt-3 my-6">
       {puzzle?.editor && <p>Puzzle by {puzzle?.editor}.</p>}
       <p>
         This multiplayer version of the{" "}
