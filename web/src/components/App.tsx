@@ -16,18 +16,8 @@ import { PointDisplay } from "./PointDisplay";
 
 export const App = () => {
   const { username } = useUsername();
-  const { shortcode, isValid, loading: validatingShortcode } = useShortcode();
-  const { room, isLoading: roomIsLoading } = useRoom(shortcode);
-  const { isLoading: guessesAreLoading } = useCorrectGuesses(room?.id);
-  const { isLoading: puzzleIsLoading } = usePuzzle(room?.puzzle_id);
-
-  if (
-    validatingShortcode ||
-    roomIsLoading ||
-    puzzleIsLoading ||
-    guessesAreLoading
-  )
-    return <div>Loading</div>;
+  const { shortcode, isValid } = useShortcode();
+  const { room } = useRoom(shortcode);
 
   if (!username || !shortcode || !isValid) {
     return (
