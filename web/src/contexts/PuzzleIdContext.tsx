@@ -5,7 +5,7 @@ export const PuzzleIdContext = createContext<
 >([null, () => {}]);
 
 export const PuzzleIdProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
-  const [puzzleId, setPuzzleId] = useState(localStorage.getItem("puzzleId"));
+  const [puzzleId, setPuzzleId] = useState<string | null>(null);
   return (
     <PuzzleIdContext.Provider value={[puzzleId, setPuzzleId]}>
       {children}
