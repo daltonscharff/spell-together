@@ -6,7 +6,6 @@ import { useSubmitGuess } from "../hooks/useSubmitGuess";
 
 type Props = {
   disabled?: boolean;
-  puzzleId?: string;
   roomId?: string;
 };
 
@@ -30,11 +29,11 @@ const colors = {
   invalid: "text-zinc-200",
 };
 
-export const LetterInput = ({ puzzleId, roomId, disabled }: Props) => {
+export const LetterInput = ({ roomId, disabled }: Props) => {
   const [isFocused, setIsFocused] = useState(true);
   const { letters, addLetter, removeLetter } = useLetterInput();
   const { submitGuess } = useSubmitGuess(roomId);
-  const { puzzle } = usePuzzle(puzzleId);
+  const { puzzle } = usePuzzle();
   useKeyboardEvents({
     onLetter: addLetter,
     onBackspace: removeLetter,

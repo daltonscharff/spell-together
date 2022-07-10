@@ -1,13 +1,9 @@
 import { useLetterInput } from "../hooks/useLetterInput";
 import { usePuzzle } from "../hooks/usePuzzle";
 
-type Props = {
-  puzzleId?: string;
-};
-
-export const ButtonArea = ({ puzzleId }: Props) => {
+export const ButtonArea = () => {
   const { removeLetter } = useLetterInput();
-  const { shuffle } = usePuzzle(puzzleId);
+  const { shuffle } = usePuzzle();
   return (
     <div className="grid grid-cols-3 gap-2">
       <button className="uppercase" onClick={removeLetter}>

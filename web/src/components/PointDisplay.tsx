@@ -4,7 +4,6 @@ import { usePuzzle } from "../hooks/usePuzzle";
 
 export type PointDisplayProps = {
   roomId?: string;
-  puzzleId?: string;
 };
 
 type Level = {
@@ -55,9 +54,9 @@ function findLevel(percent: number): Level {
   return levels.find((level) => level.percent <= percent) || levels[0];
 }
 
-export const PointDisplay = ({ roomId, puzzleId }: PointDisplayProps) => {
+export const PointDisplay = ({ roomId }: PointDisplayProps) => {
   const { correctGuesses } = useCorrectGuesses(roomId);
-  const { puzzle } = usePuzzle(puzzleId);
+  const { puzzle } = usePuzzle();
   const currentScore = useMemo(
     () =>
       correctGuesses?.reduce(

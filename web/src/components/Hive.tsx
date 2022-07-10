@@ -2,12 +2,8 @@ import { useMemo } from "react";
 import { useLetterInput } from "../hooks/useLetterInput";
 import { usePuzzle } from "../hooks/usePuzzle";
 
-type Props = {
-  puzzleId?: string;
-};
-
-export const Hive = ({ puzzleId }: Props) => {
-  const { puzzle, shuffledLetters } = usePuzzle(puzzleId);
+export const Hive = () => {
+  const { puzzle, shuffledLetters } = usePuzzle();
   const { addLetter } = useLetterInput();
 
   const centerLetter = useMemo(

@@ -1,11 +1,13 @@
 import { useContext, useEffect } from "react";
 import useSWR from "swr";
+import { PuzzleIdContext } from "../contexts/PuzzleIdContext";
 import { ShuffledLettersContext } from "../contexts/ShuffledLettersContext";
 import { Puzzle } from "../types/supabase";
 import fetcher from "../utils/fetcher";
 import { shuffle } from "../utils/shuffle";
 
-export const usePuzzle = (puzzleId: string | undefined) => {
+export const usePuzzle = () => {
+  const [puzzleId, setPuzzleId] = useContext(PuzzleIdContext);
   const { data, error } = useSWR<Puzzle[]>(
     puzzleId ? `/rest/v1/puzzle?id=eq.${puzzleId}&select=*` : null,
     fetcher
@@ -29,5 +31,6 @@ export const usePuzzle = (puzzleId: string | undefined) => {
     isError: error,
     shuffle: shuffleOuterLetters,
     shuffledLetters,
+    setPuzzleId,
   };
 };

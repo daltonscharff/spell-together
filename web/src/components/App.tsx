@@ -32,16 +32,16 @@ export const App = () => {
   return (
     <LetterInputProvider>
       <div className="flex flex-col gap-y-8 min-h-screen">
-        <Header puzzleId={room?.puzzle_id} />
+        <Header />
         <div className="container grid gap-8 grid-cols-1 md:grid-cols-2 flex-grow">
           <div className="flex flex-col gap-8 mx-auto max-w-sm min-w-[200px]">
-            <LetterInput roomId={room?.id} puzzleId={room?.puzzle_id} />
-            <Hive puzzleId={room?.puzzle_id} />
-            <ButtonArea puzzleId={room?.puzzle_id} />
+            <LetterInput roomId={room?.id} />
+            <Hive />
+            <ButtonArea />
           </div>
           <div className="flex flex-col mx-auto max-w-lg min-w-[200px] border-black border rounded-sm md:max-h-[600px]">
             <div className="p-4 border-b-2 border-black">
-              <PointDisplay puzzleId={room?.puzzle_id} roomId={room?.id} />
+              <PointDisplay roomId={room?.id} />
             </div>
             <div className="p-4 border-b-2 border-black">
               <FoundWordDisplay roomId={room?.id} />
@@ -51,7 +51,7 @@ export const App = () => {
             </div>
           </div>
         </div>
-        <Footer puzzleId={room?.puzzle_id} />
+        <Footer />
       </div>
     </LetterInputProvider>
   );

@@ -1,12 +1,8 @@
 import { usePuzzle } from "../hooks/usePuzzle";
 import { useShortcode } from "../hooks/useShortcode";
 
-type Props = {
-  puzzleId?: string;
-};
-
-export const Header = ({ puzzleId }: Props) => {
-  const { puzzle } = usePuzzle(puzzleId);
+export const Header = () => {
+  const { puzzle } = usePuzzle();
   const { shortcode, unsetShortcode } = useShortcode();
   return (
     <div className="container mt-3 border-b border-black pb-2 sm:pb-0">
