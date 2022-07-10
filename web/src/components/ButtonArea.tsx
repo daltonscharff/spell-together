@@ -15,7 +15,7 @@ export const ButtonArea = ({ puzzleId }: Props) => {
       </button>
       <div className="text-center">
         <button onClick={shuffle} className="py-1 px-4">
-          <img alt="shuffle" src="/icons/shuffle.svg" className="h-10" />
+          <img alt="shuffle" src="/icons/shuffle.svg" className="h-8" />
         </button>
       </div>
       <button className="uppercase">Enter</button>

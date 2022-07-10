@@ -26,7 +26,8 @@ export const CorrectGuessList = ({ roomId }: CorrectGuessListProps) => {
             <div className="flex flex-row justify-between">
               <div
                 className={`capitalize font-semibold ${
-                  guess.is_pangram && "relative bg-yellow-300 px-1 -left-1"
+                  guess.is_pangram &&
+                  "relative bg-yellow-300 px-1 -left-1 rounded-sm"
                 }`}
               >
                 {guess.word}

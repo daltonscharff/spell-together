@@ -48,7 +48,7 @@ export const App = () => {
             <Hive puzzleId={room?.puzzle_id} />
             <ButtonArea puzzleId={room?.puzzle_id} />
           </div>
-          <div className="flex flex-col mx-auto max-w-lg min-w-[200px] border-black border-2 rounded-lg md:max-h-[600px]">
+          <div className="flex flex-col mx-auto max-w-lg min-w-[200px] border-black border rounded-sm md:max-h-[600px]">
             <div className="p-4 border-b-2 border-black">
               <FoundWordDisplay roomId={room?.id} />
             </div>
