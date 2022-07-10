@@ -18,7 +18,16 @@ export const ButtonArea = ({ puzzleId }: Props) => {
           <img alt="shuffle" src="/icons/shuffle.svg" className="h-8" />
         </button>
       </div>
-      <button className="uppercase">Enter</button>
+      <button
+        onClick={() => {
+          document.dispatchEvent(
+            new KeyboardEvent("keydown", { key: "Enter" })
+          );
+        }}
+        className="uppercase"
+      >
+        Enter
+      </button>
     </div>
   );
 };

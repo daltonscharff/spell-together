@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { usePuzzle } from "../hooks/usePuzzle";
 import { useLetterInput } from "../hooks/useLetterInput";
+import { useKeyboardEvents } from "../hooks/useKeyboardEvents";
+import { useSubmitGuess } from "../hooks/useSubmitGuess";
 
 type Props = {
   disabled?: boolean;
   puzzleId?: string;
+  roomId?: string;
 };
 
 type LetterCategory = "outer" | "invalid" | "center";
@@ -27,10 +30,20 @@ const colors = {
   invalid: "text-zinc-200",
 };
 
-export const LetterInput = ({ puzzleId, disabled }: Props) => {
+export const LetterInput = ({ puzzleId, roomId, disabled }: Props) => {
   const [isFocused, setIsFocused] = useState(true);
-  const { letters } = useLetterInput();
+  const { letters, addLetter, removeLetter } = useLetterInput();
+  const { submitGuess } = useSubmitGuess(roomId);
   const { puzzle } = usePuzzle(puzzleId);
+  useKeyboardEvents({
+    onLetter: addLetter,
+    onBackspace: removeLetter,
+    onEnter: () => {
+      if (letters.length === 0) return;
+      console.log("ENTER CLICKED", letters);
+      submitGuess();
+    },
+  });
 
   useEffect(() => {
     if (disabled) return setIsFocused(false);

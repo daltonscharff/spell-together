@@ -44,7 +44,7 @@ export const App = () => {
         <Header puzzleId={room?.puzzle_id} />
         <div className="container grid gap-8 grid-cols-1 md:grid-cols-2">
           <div className="flex flex-col gap-8 mx-auto max-w-sm min-w-[200px]">
-            <LetterInput puzzleId={room?.puzzle_id} />
+            <LetterInput roomId={room?.id} puzzleId={room?.puzzle_id} />
             <Hive puzzleId={room?.puzzle_id} />
             <ButtonArea puzzleId={room?.puzzle_id} />
           </div>
