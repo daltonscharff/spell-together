@@ -1,9 +1,12 @@
 import { CorrectGuess } from "../types/supabase";
 import { supabase } from "../utils/supabaseClient";
 import { useLetterInput } from "./useLetterInput";
+import { useRoom } from "./useRoom";
 import { useUsername } from "./useUsername";
 
-export const useSubmitGuess = (roomId: string | undefined) => {
+export const useSubmitGuess = () => {
+  const { room } = useRoom();
+  const roomId = room?.id;
   const { letters, clearLetters } = useLetterInput();
   const { username } = useUsername();
 

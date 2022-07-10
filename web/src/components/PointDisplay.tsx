@@ -2,10 +2,6 @@ import { useMemo } from "react";
 import { useCorrectGuesses } from "../hooks/useCorrectGuesses";
 import { usePuzzle } from "../hooks/usePuzzle";
 
-export type PointDisplayProps = {
-  roomId?: string;
-};
-
 type Level = {
   rank: string;
   percent: number;
@@ -54,8 +50,8 @@ function findLevel(percent: number): Level {
   return levels.find((level) => level.percent <= percent) || levels[0];
 }
 
-export const PointDisplay = ({ roomId }: PointDisplayProps) => {
-  const { correctGuesses } = useCorrectGuesses(roomId);
+export const PointDisplay = () => {
+  const { correctGuesses } = useCorrectGuesses();
   const { puzzle } = usePuzzle();
   const currentScore = useMemo(
     () =>

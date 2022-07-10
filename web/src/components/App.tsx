@@ -17,7 +17,6 @@ import { PointDisplay } from "./PointDisplay";
 export const App = () => {
   const { username } = useUsername();
   const { shortcode, isValid } = useShortcode();
-  const { room } = useRoom(shortcode);
 
   if (!username || !shortcode || !isValid) {
     return (
@@ -35,19 +34,19 @@ export const App = () => {
         <Header />
         <div className="container grid gap-8 grid-cols-1 md:grid-cols-2 flex-grow">
           <div className="flex flex-col gap-8 mx-auto max-w-sm min-w-[200px]">
-            <LetterInput roomId={room?.id} />
+            <LetterInput />
             <Hive />
             <ButtonArea />
           </div>
           <div className="flex flex-col mx-auto max-w-lg min-w-[200px] border-black border rounded-sm md:max-h-[600px]">
             <div className="p-4 border-b-2 border-black">
-              <PointDisplay roomId={room?.id} />
+              <PointDisplay />
             </div>
             <div className="p-4 border-b-2 border-black">
-              <FoundWordDisplay roomId={room?.id} />
+              <FoundWordDisplay />
             </div>
             <div className="p-2 overflow-y-auto">
-              <CorrectGuessList roomId={room?.id} />
+              <CorrectGuessList />
             </div>
           </div>
         </div>

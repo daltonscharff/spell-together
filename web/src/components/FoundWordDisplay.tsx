@@ -1,12 +1,8 @@
 import { useCorrectGuesses } from "../hooks/useCorrectGuesses";
 import { useMemo } from "react";
 
-type Props = {
-  roomId?: string;
-};
-
-export const FoundWordDisplay = ({ roomId }: Props) => {
-  const { correctGuesses } = useCorrectGuesses(roomId);
+export const FoundWordDisplay = () => {
+  const { correctGuesses } = useCorrectGuesses();
   const correctPerPlayer = useMemo(() => {
     const count: Record<string, number> = {};
     correctGuesses?.forEach((guess) => {

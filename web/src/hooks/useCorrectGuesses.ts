@@ -3,8 +3,11 @@ import useSWR from "swr";
 import { CorrectGuess, Guess } from "../types/supabase";
 import fetcher from "../utils/fetcher";
 import { supabase } from "../utils/supabaseClient";
+import { useRoom } from "./useRoom";
 
-export const useCorrectGuesses = (roomId: string | undefined) => {
+export const useCorrectGuesses = () => {
+  const { room } = useRoom();
+  const roomId = room?.id;
   const { data, error, mutate } = useSWR<CorrectGuess[]>(
     roomId ? `/rest/v1/correct_guess?room_id=eq.${roomId}&select=*` : null,
     fetcher
