@@ -6,6 +6,7 @@ import { useShortcode } from "../hooks/useShortcode";
 import { useUsername } from "../hooks/useUsername";
 import { ButtonArea } from "./ButtonArea";
 import { CorrectGuessList } from "./CorrectGuessList";
+import { Footer } from "./Footer";
 import { FoundWordDisplay } from "./FoundWordDisplay";
 import { Header } from "./Header";
 import { Hive } from "./Hive";
@@ -40,9 +41,9 @@ export const App = () => {
 
   return (
     <LetterInputProvider>
-      <div className="flex flex-col gap-y-8">
+      <div className="flex flex-col gap-y-12 min-h-screen">
         <Header puzzleId={room?.puzzle_id} />
-        <div className="container grid gap-8 grid-cols-1 md:grid-cols-2">
+        <div className="container grid gap-8 grid-cols-1 md:grid-cols-2 flex-grow">
           <div className="flex flex-col gap-8 mx-auto max-w-sm min-w-[200px]">
             <LetterInput roomId={room?.id} puzzleId={room?.puzzle_id} />
             <Hive puzzleId={room?.puzzle_id} />
@@ -60,6 +61,7 @@ export const App = () => {
             </div>
           </div>
         </div>
+        <Footer puzzleId={room?.puzzle_id} />
       </div>
     </LetterInputProvider>
   );
