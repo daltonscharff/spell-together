@@ -30,5 +30,18 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
+  daisyui: {
+    themes: [
+      {
+        light: {
+          ...require("daisyui/src/colors/themes")["[data-theme=light]"],
+          "--rounded-box": "0.125rem",
+          "--rounded-btn": "0.125rem",
+          "--rounded-badge": "0.125rem",
+          neutral: "#1c1917",
+        },
+      },
+    ],
+  },
 };
