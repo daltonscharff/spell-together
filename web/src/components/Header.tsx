@@ -2,7 +2,7 @@ import { usePuzzle } from "../hooks/usePuzzle";
 import { useShortcode } from "../hooks/useShortcode";
 
 export const Header = () => {
-  const { puzzle } = usePuzzle();
+  const { puzzle, setPuzzleId } = usePuzzle();
   const { shortcode, unsetShortcode } = useShortcode();
   return (
     <div className="container mt-3 border-b border-black pb-2 sm:pb-0">
@@ -19,7 +19,10 @@ export const Header = () => {
         )}
         {shortcode && (
           <div
-            onClick={unsetShortcode}
+            onClick={() => {
+              unsetShortcode();
+              setPuzzleId(null);
+            }}
             className="cursor-pointer uppercase font-semibold text-right ml-2"
           >
             {shortcode}
