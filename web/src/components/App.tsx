@@ -1,21 +1,19 @@
-import { LetterInputProvider } from "../contexts/LetterInputContext";
-import { useShortcode } from "../hooks/useShortcode";
-import { useUsername } from "../hooks/useUsername";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { GameRoom } from "../pages/GameRoom";
 import { Index } from "../pages/Index";
+import { Layout } from "./Layout";
 
 export const App = () => {
-  const { username } = useUsername();
-  const { shortcode, isValid } = useShortcode();
-
-  if (!username || !shortcode || !isValid) {
-    return <Index />;
-  }
-
   return (
-    <LetterInputProvider>
-      <GameRoom />
-    </LetterInputProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Index />} />
+          <Route path="rooms/:shortcode" element={<GameRoom />} />
+          <Route path="*" element={<div>Page not found</div>} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 };
 

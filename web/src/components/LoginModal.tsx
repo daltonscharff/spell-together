@@ -1,10 +1,7 @@
 import { Dialog, Tab } from "@headlessui/react";
-import { useShortcode } from "../hooks/useShortcode";
-import { useUsername } from "../hooks/useUsername";
+import { useLocalStore } from "../hooks/useLocalStore";
 
 export const LoginModal = () => {
-  const { setShortcode } = useShortcode();
-  const { setUsername } = useUsername();
   return (
     <Dialog open={true} onClose={() => {}}>
       <div className="fixed inset-0 bg-black/5" aria-hidden="true" />
@@ -32,8 +29,8 @@ export const LoginModal = () => {
                 <button
                   className="border"
                   onClick={() => {
-                    setUsername("Dalton");
-                    setShortcode("abcdef");
+                    useLocalStore.setState({ username: "Dalton" });
+                    useLocalStore.setState({ shortcode: "abcdef" });
                   }}
                 >
                   Login

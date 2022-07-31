@@ -1,9 +1,9 @@
 import { usePuzzle } from "../hooks/usePuzzle";
-import { useShortcode } from "../hooks/useShortcode";
+import { useLocalStore } from "../hooks/useLocalStore";
 
 export const Header = () => {
   const { puzzle, setPuzzleId } = usePuzzle();
-  const { shortcode, unsetShortcode } = useShortcode();
+  const shortcode = useLocalStore((state) => state.shortcode);
   return (
     <div className="container mt-3 border-b border-black pb-2 sm:pb-0">
       <div className="grid grid-cols-2 sm:grid-cols-3 items-baseline gap-x-4 gap-x mb-2">
@@ -20,7 +20,6 @@ export const Header = () => {
         {shortcode && (
           <div
             onClick={() => {
-              unsetShortcode();
               setPuzzleId(null);
             }}
             className="cursor-pointer uppercase font-semibold text-right ml-2"

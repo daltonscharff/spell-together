@@ -2,13 +2,13 @@ import { CorrectGuess } from "../types/supabase";
 import { supabase } from "../utils/supabaseClient";
 import { useLetterInput } from "./useLetterInput";
 import { useRoom } from "./useRoom";
-import { useUsername } from "./useUsername";
+import { useLocalStore } from "../hooks/useLocalStore";
 
 export const useSubmitGuess = () => {
   const { room } = useRoom();
   const roomId = room?.id;
   const { letters, clearLetters } = useLetterInput();
-  const { username } = useUsername();
+  const username = useLocalStore((state) => state.username);
 
   async function submitGuess() {
     await supabase.rpc<CorrectGuess>("submit_guess", {

@@ -1,10 +1,9 @@
 import { useForm } from "react-hook-form";
-import { useShortcode } from "../hooks/useShortcode";
-import { useUsername } from "../hooks/useUsername";
+import { useLocalStore } from "../hooks/useLocalStore";
 
 export const JoinRoomForm = () => {
-  const { username, setUsername } = useUsername();
-  const { shortcode, setShortcode } = useShortcode();
+  const shortcode = useLocalStore((state) => state.shortcode);
+  const username = useLocalStore((state) => state.username);
 
   const {
     register,
@@ -22,8 +21,8 @@ export const JoinRoomForm = () => {
       return;
     }
     console.log("submitted", data);
-    setUsername(data.username);
-    setShortcode(data.shortcode);
+    useLocalStore.setState({ username: data.username });
+    useLocalStore.setState({ shortcode: data.shortcode });
   };
 
   return (

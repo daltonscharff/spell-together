@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require("tailwindcss/defaultTheme");
+
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
@@ -12,8 +14,12 @@ module.exports = {
       },
     },
     extend: {
+      colors: {
+        primary: "#fee383",
+      },
       fontFamily: {
-        display: [`"DM Serif Text"`, "ui-serif"],
+        display: [`"DM Serif Display"`, "ui-serif"],
+        sans: [`"Noto Sans"`, ...defaultTheme.fontFamily.sans],
       },
       animation: {
         blink: "blink 1200ms steps(1, end) infinite",
@@ -29,19 +35,5 @@ module.exports = {
         },
       },
     },
-  },
-  plugins: [require("daisyui")],
-  daisyui: {
-    themes: [
-      {
-        light: {
-          ...require("daisyui/src/colors/themes")["[data-theme=light]"],
-          "--rounded-box": "0.125rem",
-          "--rounded-btn": "0.125rem",
-          "--rounded-badge": "0.125rem",
-          neutral: "#1c1917",
-        },
-      },
-    ],
   },
 };

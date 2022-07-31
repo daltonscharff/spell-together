@@ -3,11 +3,11 @@ import useSWR from "swr";
 import { Room } from "../types/supabase";
 import fetcher from "../utils/fetcher";
 import { usePuzzle } from "./usePuzzle";
-import { useShortcode } from "./useShortcode";
+import { useLocalStore } from "./useLocalStore";
 
 export const useRoom = () => {
   const { setPuzzleId } = usePuzzle();
-  const { shortcode } = useShortcode();
+  const shortcode = useLocalStore((state) => state.shortcode);
   const { data, error } = useSWR<Room[]>(
     shortcode ? `/rest/v1/room?shortcode=eq.${shortcode}&select=*` : null,
     fetcher
