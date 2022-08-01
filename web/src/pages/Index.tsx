@@ -5,11 +5,12 @@ import { TextInput } from "../components/TextInput";
 
 export const Index = () => {
   return (
-    <div className="flex gap-12">
+    <div className="flex gap-x-12 gap-y-6 flex-col-reverse md:flex-row">
       <div className="flex-grow w-full flex">
         <HelpText />
       </div>
-      <div className="w-[1px] my-3 border-l" />
+      <div className="w-[1px] my-3 border-l hidden md:block" />
+      <hr className="block md:hidden mx-3" />
       <div className="flex-grow w-full">
         <TabGroup
           tabs={[
@@ -22,8 +23,14 @@ export const Index = () => {
                   </p>
                   <TextInput icon="user" placeholder="Your name" solid />
                   <div className="flex gap-2">
-                    <TextInput icon="hash" placeholder="Room code" />
-                    <CtaButton>Go</CtaButton>
+                    <TextInput
+                      icon="hash"
+                      placeholder="Room code"
+                      error="Test error"
+                    />
+                    <div>
+                      <CtaButton>Go</CtaButton>
+                    </div>
                   </div>
                 </form>
               ),
