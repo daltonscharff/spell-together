@@ -1,11 +1,12 @@
-type Props = {
+import { InputHTMLAttributes } from "react";
+
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
   icon: string;
-  placeholder: string;
   solid?: boolean;
   error?: string;
-};
+}
 
-export const TextInput = ({ icon, solid, placeholder, error }: Props) => {
+export const TextInput = ({ icon, solid, error, ...props }: Props) => {
   return (
     <div className="w-full">
       <div
@@ -19,7 +20,7 @@ export const TextInput = ({ icon, solid, placeholder, error }: Props) => {
         <input
           className="pr-3 py-3 pl-9 w-full flex-grow"
           type="text"
-          placeholder={placeholder}
+          {...props}
         />
       </div>
       {error && (
