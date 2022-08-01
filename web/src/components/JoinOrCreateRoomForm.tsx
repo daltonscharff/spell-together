@@ -102,7 +102,45 @@ export const JoinOrCreateRoomForm = () => {
         },
         {
           label: "Create",
-          element: <div>Create</div>,
+          element: (
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col gap-2"
+            >
+              <p className="p-4 text-center font-light">Create a new room</p>
+              <div className="flex gap-2">
+                <Controller
+                  name="username"
+                  control={control}
+                  rules={{
+                    required: {
+                      value: true,
+                      message: "Please provide a username",
+                    },
+                    maxLength: {
+                      value: 24,
+                      message: "Please limit your username to 24 characters",
+                    },
+                  }}
+                  render={({
+                    field: { name, value, onChange, onBlur },
+                    fieldState: { error },
+                  }) => (
+                    <TextInput
+                      {...{ name, value, onChange, onBlur }}
+                      icon="user"
+                      placeholder="Your name"
+                      solid
+                      error={error?.message}
+                    />
+                  )}
+                />
+                <div>
+                  <CtaButton type="submit">Create</CtaButton>
+                </div>
+              </div>
+            </form>
+          ),
         },
       ]}
     />
