@@ -3,10 +3,12 @@ import { TabGroup } from "./TabGroup";
 import { TextInput } from "./TextInput";
 import { useForm, Controller } from "react-hook-form";
 import { useLocalStore } from "../hooks/useLocalStore";
+import { useNavigate } from "react-router-dom";
 
 export const JoinOrCreateRoomForm = () => {
   const shortcode = useLocalStore((state) => state.shortcode);
   const username = useLocalStore((state) => state.username);
+  const navigate = useNavigate();
 
   const {
     handleSubmit,
@@ -19,13 +21,22 @@ export const JoinOrCreateRoomForm = () => {
     },
   });
 
-  const onSubmit = (data: { username: string; shortcode: string }) => {
+  const onJoinSubmit = (data: { username: string; shortcode: string }) => {
     console.log("submitted", data);
     if (Object.entries(errors).length !== 0) {
       return;
     }
     useLocalStore.setState({ username: data.username });
     useLocalStore.setState({ shortcode: data.shortcode });
+    navigate(`/rooms/${data.shortcode}`);
+  };
+
+  const onCreateSubmit = (data: { username: string }) => {
+    console.log("submitted", data);
+    if (errors.username) {
+      return;
+    }
+    useLocalStore.setState({ username: data.username });
   };
 
   return (
@@ -35,7 +46,7 @@ export const JoinOrCreateRoomForm = () => {
           label: "Join",
           element: (
             <form
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={handleSubmit(onJoinSubmit)}
               className="flex flex-col gap-2"
             >
               <p className="p-4 text-center font-light">
@@ -104,7 +115,7 @@ export const JoinOrCreateRoomForm = () => {
           label: "Create",
           element: (
             <form
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={handleSubmit(onCreateSubmit)}
               className="flex flex-col gap-2"
             >
               <p className="p-4 text-center font-light">Create a new room</p>
