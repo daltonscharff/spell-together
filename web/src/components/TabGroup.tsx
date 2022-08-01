@@ -17,7 +17,7 @@ export const TabGroup = ({ tabs }: Props) => {
             <Tab
               key={tab.label + i}
               className={({ selected }) =>
-                `w-full text-center rounded py-1 px-4 ${
+                `w-full text-center rounded-sm py-1 px-4 ${
                   selected && "bg-white text-black shadow-sm"
                 }`
               }
@@ -27,8 +27,8 @@ export const TabGroup = ({ tabs }: Props) => {
           ))}
         </Tab.List>
         <Tab.Panels>
-          {tabs.map((tab) => (
-            <Tab.Panel>{tab.element}</Tab.Panel>
+          {tabs.map((tab, i) => (
+            <Tab.Panel key={tab.label + i}>{tab.element}</Tab.Panel>
           ))}
         </Tab.Panels>
       </Tab.Group>
