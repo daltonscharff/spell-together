@@ -3,7 +3,7 @@ import { usePuzzle } from "../hooks/usePuzzle";
 export const Footer = () => {
   const { puzzle } = usePuzzle();
   return (
-    <div className="container text-center text-sm font-light text-zinc-300 border-t border-zinc-200 pt-3 my-6">
+    <div className="container text-center text-sm font-light text-zinc-300 border-t border-zinc-200 pt-3 my-4">
       {puzzle?.editor && <p>Puzzle by {puzzle?.editor}.</p>}
       <p>
         This multiplayer version of the{" "}
