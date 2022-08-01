@@ -5,7 +5,7 @@ import { Header } from "./Header";
 export const Layout = () => {
   return (
     <div className="flex flex-col gap-y-8 min-h-screen">
-      <Header />
+      <Header titleOnly />
       <div className="container flex-grow">
         <Outlet />
       </div>
