@@ -9,7 +9,9 @@ export const useRoom = () => {
   const { setPuzzleId } = usePuzzle();
   const shortcode = useLocalStore((state) => state.shortcode);
   const { data, error } = useSWR<Room[]>(
-    shortcode ? `/rest/v1/room?shortcode=eq.${shortcode}&select=*` : null,
+    shortcode
+      ? `/rest/v1/room?shortcode=eq.${shortcode.toLowerCase()}&select=*`
+      : null,
     fetcher
   );
 

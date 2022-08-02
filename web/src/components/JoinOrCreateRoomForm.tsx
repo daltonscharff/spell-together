@@ -9,7 +9,6 @@ import { validateShortcode } from "../utils/validateShortcode";
 
 export const JoinOrCreateRoomForm = () => {
   const shortcode = useLocalStore((state) => state.shortcode);
-  const setShortcode = useLocalStore((state) => state.setShortcode);
   const username = useLocalStore((state) => state.username);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +36,7 @@ export const JoinOrCreateRoomForm = () => {
     useLocalStore.setState({ username: data.username });
 
     if (await validateShortcode(data.shortcode)) {
-      setShortcode(data.shortcode);
+      useLocalStore.setState({ shortcode: data.shortcode });
       navigate(`/rooms/${data.shortcode}`);
     } else {
       setError("shortcode", {
