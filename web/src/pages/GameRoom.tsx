@@ -18,7 +18,7 @@ export const GameRoom = () => {
 
   return (
     <div className="container grid gap-8 grid-cols-1 md:grid-cols-2 flex-grow">
-      <div className="flex flex-col gap-8 mx-auto max-w-sm min-w-[200px]">
+      <div className="flex flex-col gap-8 mx-auto max-w-sm min-w-[200px] w-full">
         <LetterInput
           centerLetter={puzzle?.center_letter}
           outerLetters={puzzle?.outer_letters as string[]}
@@ -31,7 +31,7 @@ export const GameRoom = () => {
           shuffle={() => setShuffledLetters(shuffle(shuffledLetters))}
         />
       </div>
-      <div className="flex flex-col mx-auto max-w-lg min-w-[200px] border-black border rounded-sm md:max-h-[600px]">
+      <div className="flex flex-col mx-auto max-w-lg min-w-[200px] w-full border-black border rounded-sm md:max-h-[600px]">
         <div className="p-4 border-b-2 border-black">
           <PointDisplay maxScore={puzzle?.max_score} />
         </div>
