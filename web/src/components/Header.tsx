@@ -1,5 +1,6 @@
 import { usePuzzle } from "../hooks/usePuzzle";
 import { useLocalStore } from "../hooks/useLocalStore";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   titleOnly?: boolean;
@@ -7,13 +8,20 @@ type Props = {
 
 export const Header = ({ titleOnly }: Props) => {
   const { puzzle, setPuzzleId } = usePuzzle();
+  const navigate = useNavigate();
+
   const shortcode = useLocalStore((state) => state.shortcode);
   return (
     <div className="container mt-3 border-b border-black pb-2 sm:pb-0">
       <div className="grid grid-cols-2 sm:grid-cols-3 items-baseline gap-x-4 gap-x mb-2">
-        <h1 className="font-display text-2xl text-left col-span-2 sm:col-span-1">
-          Spell Together
-        </h1>
+        <div>
+          <h1
+            className="font-display text-2xl text-left col-span-2 sm:col-span-1 cursor-pointer inline"
+            onClick={() => navigate("/")}
+          >
+            Spell Together
+          </h1>
+        </div>
         {!titleOnly && (
           <>
             {puzzle?.date && (
