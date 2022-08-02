@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { validateShortcode } from "../utils/validateShortcode";
 import { generateShortcode } from "../utils/generateShortcode";
+import { supabase } from "../utils/supabaseClient";
+import { Room } from "../types/supabase";
 
 export const JoinOrCreateRoomForm = () => {
   const shortcode = useLocalStore((state) => state.shortcode);
@@ -121,7 +123,8 @@ export const JoinOrCreateRoomForm = () => {
     useLocalStore.setState({ username: data.username });
 
     setIsLoading(true);
-    const newShortcode = (await generateShortcode()).toUpperCase(); // create a new room instead of generatingShortcode
+    const newRoom = await supabase.from<Room>("room").insert({});
+    const newShortcode = newRoom.data?.[0].shortcode.toUpperCase() ?? "";
     setIsLoading(false);
 
     useLocalStore.setState({ shortcode: newShortcode });
