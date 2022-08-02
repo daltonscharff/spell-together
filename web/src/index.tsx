@@ -1,6 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./components/App";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { GameRoom } from "./pages/GameRoom";
+import { Index } from "./pages/Index";
+import { Layout } from "./components/Layout";
 import "./styles/index.css";
 
 const root = ReactDOM.createRoot(
@@ -8,6 +11,14 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Index />} />
+          <Route path="rooms/:shortcode" element={<GameRoom />} />
+          <Route path="*" element={<div>Page not found</div>} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );

@@ -6,7 +6,6 @@ import { useLocalStore } from "../hooks/useLocalStore";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { validateShortcode } from "../utils/validateShortcode";
-import { generateShortcode } from "../utils/generateShortcode";
 import { supabase } from "../utils/supabaseClient";
 import { Room } from "../types/supabase";
 
