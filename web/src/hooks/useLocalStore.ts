@@ -1,7 +1,10 @@
 import create from "zustand";
 import { persist } from "zustand/middleware";
 
-export const useLocalStore = create(
+export const useLocalStore = create<{
+  username: string;
+  shortcode: string;
+}>()(
   persist(
     () => ({
       username: "",
