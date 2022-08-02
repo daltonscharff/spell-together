@@ -14,7 +14,7 @@ export const useRoom = () => {
   );
 
   useEffect(() => {
-    const puzzleId = data?.[0].puzzle_id || null;
+    const puzzleId = data?.[0]?.puzzle_id || null;
     setPuzzleId(puzzleId);
   }, [data, setPuzzleId]);
 

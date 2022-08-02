@@ -4,16 +4,21 @@ import { TextInput } from "./TextInput";
 import { useForm, Controller } from "react-hook-form";
 import { useLocalStore } from "../hooks/useLocalStore";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { validateShortcode } from "../utils/validateShortcode";
 
 export const JoinOrCreateRoomForm = () => {
   const shortcode = useLocalStore((state) => state.shortcode);
+  const setShortcode = useLocalStore((state) => state.setShortcode);
   const username = useLocalStore((state) => state.username);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     handleSubmit,
     control,
     formState: { errors },
+    setError,
   } = useForm({
     defaultValues: {
       username,
@@ -21,14 +26,26 @@ export const JoinOrCreateRoomForm = () => {
     },
   });
 
-  const onJoinSubmit = (data: { username: string; shortcode: string }) => {
-    console.log("submitted", data);
+  const onJoinSubmit = async (data: {
+    username: string;
+    shortcode: string;
+  }) => {
+    setIsLoading(true);
     if (Object.entries(errors).length !== 0) {
       return;
     }
     useLocalStore.setState({ username: data.username });
-    useLocalStore.setState({ shortcode: data.shortcode });
-    navigate(`/rooms/${data.shortcode}`);
+
+    if (await validateShortcode(data.shortcode)) {
+      setShortcode(data.shortcode);
+      navigate(`/rooms/${data.shortcode}`);
+    } else {
+      setError("shortcode", {
+        type: "string",
+        message: "Room code is invalid",
+      });
+    }
+    setIsLoading(false);
   };
 
   const onCreateSubmit = (data: { username: string }) => {
@@ -105,7 +122,9 @@ export const JoinOrCreateRoomForm = () => {
                   )}
                 />
                 <div>
-                  <CtaButton type="submit">Go</CtaButton>
+                  <CtaButton type="submit" disabled={isLoading}>
+                    Go
+                  </CtaButton>
                 </div>
               </div>
             </form>
