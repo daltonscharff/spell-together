@@ -1,19 +1,15 @@
-import { useMemo } from "react";
 import { useLetterInput } from "../hooks/useLetterInput";
-import { usePuzzle } from "../hooks/usePuzzle";
 
-export const Hive = () => {
-  const { puzzle, shuffledLetters } = usePuzzle();
+type Props = {
+  centerLetter?: string;
+  outerLetters?: string[];
+};
+
+export const Hive = ({
+  centerLetter = "",
+  outerLetters = Array(6).fill(""),
+}: Props) => {
   const { addLetter } = useLetterInput();
-
-  const centerLetter = useMemo(
-    () => puzzle?.center_letter.toUpperCase() || "",
-    [puzzle?.center_letter]
-  );
-  const outerLetters = useMemo(
-    () => shuffledLetters.map((letter: string) => letter.toUpperCase()),
-    [shuffledLetters]
-  );
 
   const translations = [
     [76, 0],
@@ -45,6 +41,7 @@ export const Hive = () => {
         </g>
       </defs>
       {[...outerLetters, centerLetter].map((letter, i, array) => {
+        letter = letter.toUpperCase();
         const hexClasses = `cursor-pointer fill-white stroke-black stroke-2 ${
           i === array.length - 1 && "fill-yellow-300"
         }`;

@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const Header = ({ titleOnly }: Props) => {
-  const { puzzle, setPuzzleId } = usePuzzle();
+  const { puzzle } = usePuzzle();
   const navigate = useNavigate();
 
   const shortcode = useLocalStore((state) => state.shortcode);
@@ -32,12 +32,7 @@ export const Header = ({ titleOnly }: Props) => {
               </div>
             )}
             {shortcode && (
-              <div
-                onClick={() => {
-                  setPuzzleId(null);
-                }}
-                className="cursor-pointer uppercase font-semibold text-right ml-2"
-              >
+              <div className="cursor-pointer uppercase font-semibold text-right ml-2">
                 {shortcode}
                 <img
                   src="/icons/leave.svg"

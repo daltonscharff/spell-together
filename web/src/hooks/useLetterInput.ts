@@ -1,25 +1,19 @@
-import { useContext } from "react";
-import { LetterInputContext } from "../contexts/LetterInputContext";
+import create from "zustand";
 
-export const useLetterInput = () => {
-  const [letters, setLetters] = useContext(LetterInputContext);
-
-  function addLetter(letter: string) {
-    setLetters(letters + letter.toLowerCase());
-  }
-
-  function removeLetter() {
-    setLetters(letters.slice(0, -1));
-  }
-
-  function clearLetters() {
-    setLetters("");
-  }
-
-  return {
-    letters,
-    addLetter,
-    removeLetter,
-    clearLetters,
-  };
-};
+export const useLetterInput = create<{
+  letters: string;
+  addLetter: (letter: string) => void;
+  removeLetter: () => void;
+  clearLetters: () => void;
+}>()((set) => ({
+  letters: "",
+  addLetter: (letter: string) => {
+    set((state) => ({ letters: state.letters + letter.toLowerCase() }));
+  },
+  removeLetter: () => {
+    set((state) => ({ letters: state.letters.slice(0, -1) }));
+  },
+  clearLetters: () => {
+    set({ letters: "" });
+  },
+}));

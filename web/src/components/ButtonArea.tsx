@@ -1,10 +1,12 @@
 import { useLetterInput } from "../hooks/useLetterInput";
-import { usePuzzle } from "../hooks/usePuzzle";
 import { useSubmitGuess } from "../hooks/useSubmitGuess";
 
-export const ButtonArea = () => {
+type Props = {
+  shuffle: () => void;
+};
+
+export const ButtonArea = ({ shuffle }: Props) => {
   const { removeLetter } = useLetterInput();
-  const { shuffle } = usePuzzle();
   const { submitGuess } = useSubmitGuess();
   return (
     <div className="grid grid-cols-3 gap-2">

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { usePuzzle } from "../hooks/usePuzzle";
 import { useLetterInput } from "../hooks/useLetterInput";
 import { useKeyboardEvents } from "../hooks/useKeyboardEvents";
 import { useSubmitGuess } from "../hooks/useSubmitGuess";
 
 type Props = {
   disabled?: boolean;
+  outerLetters?: string[];
+  centerLetter?: string;
 };
 
 type LetterCategory = "outer" | "invalid" | "center";
@@ -28,11 +29,14 @@ const colors = {
   invalid: "text-zinc-200",
 };
 
-export const LetterInput = ({ disabled }: Props) => {
+export const LetterInput = ({
+  outerLetters = [],
+  centerLetter = "",
+  disabled,
+}: Props) => {
   const [isFocused, setIsFocused] = useState(true);
   const { letters, addLetter, removeLetter } = useLetterInput();
   const { submitGuess } = useSubmitGuess();
-  const { puzzle } = usePuzzle();
   useKeyboardEvents({
     onLetter: addLetter,
     onBackspace: removeLetter,
@@ -63,8 +67,8 @@ export const LetterInput = ({ disabled }: Props) => {
         .map((letter, i) => {
           const category = checkLetterCategory(
             letter,
-            (puzzle?.outer_letters as string[]) || [],
-            puzzle?.center_letter || ""
+            outerLetters,
+            centerLetter
           );
           const classes = `font-bold ${colors[category]}`;
           return (

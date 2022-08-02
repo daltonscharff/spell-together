@@ -50,9 +50,12 @@ function findLevel(percent: number): Level {
   return levels.find((level) => level.percent <= percent) || levels[0];
 }
 
-export const PointDisplay = () => {
+type Props = {
+  maxScore?: number;
+};
+
+export const PointDisplay = ({ maxScore = 0 }: Props) => {
   const { correctGuesses } = useCorrectGuesses();
-  const { puzzle } = usePuzzle();
   const currentScore = useMemo(
     () =>
       correctGuesses?.reduce(
@@ -61,7 +64,6 @@ export const PointDisplay = () => {
       ) || 0,
     [correctGuesses]
   );
-  const maxScore = puzzle?.max_score || 0;
   const percent = (currentScore / maxScore) * 100;
   return (
     <div className="font-semibold">
