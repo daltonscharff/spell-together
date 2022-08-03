@@ -34,6 +34,9 @@ jobs:
         REACT_APP_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         REACT_APP_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
     
+    - name: Copy index.html to 404.html
+      run: cp ./build/index.html ./build/404.html
+    
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       if: ${{ github.ref == 'refs/heads/main' }}
