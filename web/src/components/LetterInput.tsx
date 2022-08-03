@@ -60,7 +60,7 @@ export const LetterInput = ({
   }, [disabled]);
 
   return (
-    <div className="text-4xl text-center relative">
+    <div className="text-4xl text-center relative break-words">
       {letters
         .toUpperCase()
         .split("")
@@ -80,7 +80,7 @@ export const LetterInput = ({
 
       {isFocused && (
         <span
-          className={`animate-blink inline-block select-none font-thin border-x w-0 border-black h-8 top-1 absolute ${
+          className={`animate-blink inline-block select-none font-thin border-x w-0 border-black h-8 bottom-1 absolute ${
             letters && "ml-1"
           }`}
         />

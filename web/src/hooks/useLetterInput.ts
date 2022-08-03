@@ -8,7 +8,12 @@ export const useLetterInput = create<{
 }>()((set) => ({
   letters: "",
   addLetter: (letter: string) => {
-    set((state) => ({ letters: state.letters + letter.toLowerCase() }));
+    set((state) => ({
+      letters:
+        state.letters.length <= 22
+          ? state.letters + letter.toLowerCase()
+          : state.letters,
+    }));
   },
   removeLetter: () => {
     set((state) => ({ letters: state.letters.slice(0, -1) }));
