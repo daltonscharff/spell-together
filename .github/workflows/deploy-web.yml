@@ -18,6 +18,9 @@ jobs:
       with:
         node-version: '16.x'
         cache: 'yarn'
+
+    - name: Change to web directory
+      run: cd ./web
         
     - name: Install
       run: yarn install --frozen-lockfile
