@@ -22,6 +22,10 @@ export const GameRoom = () => {
   );
 
   useEffect(() => {
+    setShuffledLetters((puzzle?.outer_letters as string[]) ?? []);
+  }, [puzzle?.outer_letters, setShuffledLetters]);
+
+  useEffect(() => {
     if (!shortcode) return;
     validateShortcode(shortcode).then((isValid) => {
       if (!isValid) {
