@@ -1,5 +1,0 @@
-- [ ] login 
-- [ ] create new room
-- [ ] alert if guess is valid or invalid
-- [ ] setup heroku cron to call supabase load-puzzle function daily
-- [ ] add help modal
