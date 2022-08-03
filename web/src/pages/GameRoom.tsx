@@ -14,6 +14,7 @@ import { validateShortcode } from "../utils/validateShortcode";
 
 export const GameRoom = () => {
   const { shortcode } = useParams();
+  const username = useLocalStore((state) => state.username);
   const navigate = useNavigate();
   const { room } = useRoom();
   const { puzzle } = usePuzzle(room?.puzzle_id);
@@ -26,15 +27,20 @@ export const GameRoom = () => {
   }, [puzzle?.outer_letters, setShuffledLetters]);
 
   useEffect(() => {
+    if (!username) navigate("/");
+  }, [username, navigate]);
+
+  useEffect(() => {
     if (!shortcode) return;
     validateShortcode(shortcode).then((isValid) => {
-      if (!isValid) {
-        navigate("/");
-      } else {
+      if (isValid) {
         useLocalStore.setState({ shortcode });
       }
+      if (!isValid || !username) {
+        navigate("/");
+      }
     });
-  }, [shortcode, navigate]);
+  }, [shortcode, username, navigate]);
 
   return (
     <div className="container grid gap-8 grid-cols-1 md:grid-cols-2 flex-grow">
