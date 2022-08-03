@@ -12,15 +12,16 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-
-    - name: Change to web directory
-      run: cd ./web
     
     - name: Use Node.js 16.x
       uses: actions/setup-node@v2
       with:
         node-version: '16.x'
         cache: 'yarn'
+        cache-dependency-path: web/yarn.lock
+
+    - name: Change to web directory
+      run: cd ./web
         
     - name: Install
       run: yarn install --frozen-lockfile
