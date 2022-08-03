@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { useCorrectGuesses } from "../hooks/useCorrectGuesses";
-import { usePuzzle } from "../hooks/usePuzzle";
 
 type Level = {
   rank: string;
