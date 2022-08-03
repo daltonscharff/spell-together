@@ -1,20 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { ButtonArea } from "../components/ButtonArea";
 import { CorrectGuessList } from "../components/CorrectGuessList";
 import { FoundWordDisplay } from "../components/FoundWordDisplay";
 import { Hive } from "../components/Hive";
 import { LetterInput } from "../components/LetterInput";
 import { PointDisplay } from "../components/PointDisplay";
+import { useLocalStore } from "../hooks/useLocalStore";
 import { usePuzzle } from "../hooks/usePuzzle";
 import { useRoom } from "../hooks/useRoom";
 import { shuffle } from "../utils/shuffle";
+import { validateShortcode } from "../utils/validateShortcode";
 
 export const GameRoom = () => {
+  const { shortcode } = useParams();
+  const navigate = useNavigate();
   const { room } = useRoom();
   const { puzzle } = usePuzzle(room?.puzzle_id);
   const [shuffledLetters, setShuffledLetters] = useState<string[]>(
     (puzzle?.outer_letters as string[]) ?? []
   );
+
+  useEffect(() => {
+    if (!shortcode) return;
+    validateShortcode(shortcode).then((isValid) => {
+      if (!isValid) {
+        navigate("/");
+      } else {
+        useLocalStore.setState({ shortcode });
+      }
+    });
+  }, [shortcode, navigate]);
 
   return (
     <div className="container grid gap-8 grid-cols-1 md:grid-cols-2 flex-grow">
