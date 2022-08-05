@@ -15,7 +15,7 @@ function validateSubmission(
 ): string {
   const allLetters = [...outerLetters, centerLetter];
 
-  if (guess.length < 3) return "too short";
+  if (guess.length < 4) return "too short";
 
   if (!guess.includes(centerLetter)) return "missing center letter";
 
@@ -58,12 +58,11 @@ export const useSubmitGuess = () => {
       return;
     }
 
-    const guessResponsePromise = supabase.rpc<CorrectGuess>("submit_guess", {
+    const guessResponse = await supabase.rpc<CorrectGuess>("submit_guess", {
       _room_id: roomId,
       _username: username,
       _word: guessedWord,
     });
-    const guessResponse = await guessResponsePromise;
 
     if (guessResponse?.body?.length) {
       const points = guessResponse.body?.[0].point_value;
