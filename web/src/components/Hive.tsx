@@ -47,7 +47,7 @@ export const Hive = ({
         }`;
         return (
           <svg
-            key={`hexagon_${i}`}
+            key={`hexagon_${i}_${letter}`}
             width="105"
             height="91"
             x={translations[i][0]}
