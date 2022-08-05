@@ -5,7 +5,7 @@ export const GuessNotification = () => {
 
   return (
     <div
-      className={`h-6 rounded-b-sm text-center ${
+      className={`h-6 rounded-sm text-center ${
         guess?.correct === false && "bg-red-50 text-red-900"
       } ${guess?.correct === true && "bg-green-50 text-green-900"}`}
     >

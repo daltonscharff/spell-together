@@ -46,9 +46,11 @@ export const GameRoom = () => {
 
   return (
     <div className="container">
-      <Header />
-      <GuessNotification />
-      <div className="grid gap-8 grid-cols-1 md:grid-cols-2 flex-grow mt-2">
+      <Header titleOnly />
+      <div className="my-1">
+        <GuessNotification />
+      </div>
+      <div className="grid gap-8 grid-cols-1 md:grid-cols-2 flex-grow">
         <div className="flex flex-col gap-8 mx-auto max-w-sm min-w-[200px] w-full">
           <LetterInput
             centerLetter={puzzle?.center_letter}
