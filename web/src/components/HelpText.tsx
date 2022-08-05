@@ -24,7 +24,7 @@ export const HelpText = () => {
         <li className="pl-4 indent-[-1rem]">
           Each puzzle includes at least one “pangram” which uses every letter.
         </li>
-        <li>
+        <li className="pl-4 indent-[-1rem]">
           A new puzzle is loaded daily at{" "}
           {new Intl.DateTimeFormat(undefined, {
             hour: "numeric",
