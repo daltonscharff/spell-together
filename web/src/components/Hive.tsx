@@ -45,7 +45,6 @@ export const Hive = ({
         const hexClasses = `cursor-pointer fill-white stroke-black stroke-2 ${
           i === array.length - 1 && "fill-yellow-300"
         }`;
-        const handleClick = () => addLetter(letter);
         return (
           <svg
             key={`hexagon_${i}`}
@@ -53,13 +52,13 @@ export const Hive = ({
             height="91"
             x={translations[i][0]}
             y={translations[i][1]}
+            onClick={() => addLetter(letter)}
           >
-            <use href="#hexagon" className={hexClasses} onClick={handleClick} />
+            <use href="#hexagon" className={hexClasses} />
             <text
               className="cursor-pointer anchor-middle baseline-middle font-bold text-3xl select-none"
               x="50%"
               y="54%"
-              // onClick={handleClick}
             >
               {letter}
             </text>
