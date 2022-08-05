@@ -66,10 +66,11 @@ export const useSubmitGuess = () => {
     const guessResponse = await guessResponsePromise;
 
     if (guessResponse?.body?.length) {
+      const points = guessResponse.body?.[0].point_value;
       setGuessNotification(
         true,
         guessedWord,
-        `${guessResponse.body?.[0].point_value} points`
+        points === 1 ? `1 point` : `${points} points`
       );
     } else {
       setGuessNotification(false, guessedWord, "not in word list");
