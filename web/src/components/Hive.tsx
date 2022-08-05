@@ -59,7 +59,7 @@ export const Hive = ({
               className="cursor-pointer anchor-middle baseline-middle font-bold text-3xl select-none"
               x="50%"
               y="54%"
-              onClick={handleClick}
+              // onClick={handleClick}
             >
               {letter}
             </text>
