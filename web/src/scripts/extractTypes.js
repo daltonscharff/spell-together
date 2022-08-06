@@ -2,7 +2,7 @@ const fs = require("node:fs/promises");
 const { pascalCase } = require("pascal-case");
 
 async function extractTypes() {
-  const filepath = "./types/supabase.ts";
+  const filepath = "./src/types/supabase.ts";
   const fileBuffer = await fs.readFile(filepath);
   const fileText = fileBuffer.toString();
 
@@ -16,7 +16,7 @@ async function extractTypes() {
   const individualDefinitionMatches = [
     ...definitionsText.matchAll(individualDefinitionPattern),
   ];
-  // console.log(individualDefinitionMatches);
+
   const types = individualDefinitionMatches.map((match, i) => {
     return `\r\nexport type ${pascalCase(match[1])} = definitions["${
       match[1]
