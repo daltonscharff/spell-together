@@ -10,7 +10,6 @@ import { LetterInput } from "../components/LetterInput";
 import { PointDisplay } from "../components/PointDisplay";
 import { useLocalStore } from "../hooks/useLocalStore";
 import { usePuzzle } from "../hooks/usePuzzle";
-import { useRoom } from "../hooks/useRoom";
 import { shuffle } from "../utils/shuffle";
 import { validateShortcode } from "../utils/validateShortcode";
 
@@ -18,8 +17,7 @@ export const GameRoom = () => {
   const { shortcode } = useParams();
   const username = useLocalStore((state) => state.username);
   const navigate = useNavigate();
-  const { room } = useRoom();
-  const { puzzle } = usePuzzle(room?.puzzle_id);
+  const { puzzle } = usePuzzle();
   const [shuffledLetters, setShuffledLetters] = useState<string[]>(
     (puzzle?.outer_letters as string[]) ?? []
   );

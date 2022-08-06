@@ -32,8 +32,7 @@ function validateSubmission(
 
 export const useSubmitGuess = () => {
   const { room } = useRoom();
-  const { puzzle } = usePuzzle(room?.puzzle_id);
-  const roomId = room?.id;
+  const { puzzle } = usePuzzle();
   const { letters, clearLetters } = useLetterInput();
   const username = useLocalStore((state) => state.username);
   const setGuessNotification = useNotifications(
@@ -44,7 +43,7 @@ export const useSubmitGuess = () => {
   async function submitGuess() {
     const guessedWord = letters;
     clearLetters();
-    if (!puzzle) return;
+    if (!puzzle || !room) return;
 
     const errorMsg = validateSubmission(
       guessedWord,
@@ -59,7 +58,8 @@ export const useSubmitGuess = () => {
     }
 
     const guessResponse = await supabase.rpc<CorrectGuess>("submit_guess", {
-      _room_id: roomId,
+      _room_id: room.id,
+      _puzzle_id: puzzle.id,
       _username: username,
       _word: guessedWord,
     });

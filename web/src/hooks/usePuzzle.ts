@@ -2,9 +2,10 @@ import useSWR from "swr";
 import { Puzzle } from "../types/supabase";
 import fetcher from "../utils/fetcher";
 
-export const usePuzzle = (puzzleId?: string) => {
+export const usePuzzle = () => {
+  const puzzlesToLoad = 1;
   const { data, error } = useSWR<Puzzle[]>(
-    puzzleId ? `/rest/v1/puzzle?id=eq.${puzzleId}&select=*` : null,
+    `/rest/v1/puzzle?select=*&limit=${puzzlesToLoad}`,
     fetcher
   );
 

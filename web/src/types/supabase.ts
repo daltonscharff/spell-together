@@ -22,7 +22,6 @@ export type paths = {
           username?: parameters["rowFilter.correct_guess.username"];
           room_id?: parameters["rowFilter.correct_guess.room_id"];
           shortcode?: parameters["rowFilter.correct_guess.shortcode"];
-          name?: parameters["rowFilter.correct_guess.name"];
           word_id?: parameters["rowFilter.correct_guess.word_id"];
           word?: parameters["rowFilter.correct_guess.word"];
           point_value?: parameters["rowFilter.correct_guess.point_value"];
@@ -67,6 +66,7 @@ export type paths = {
           username?: parameters["rowFilter.guess.username"];
           room_id?: parameters["rowFilter.guess.room_id"];
           word_id?: parameters["rowFilter.guess.word_id"];
+          puzzle_id?: parameters["rowFilter.guess.puzzle_id"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -123,6 +123,7 @@ export type paths = {
           username?: parameters["rowFilter.guess.username"];
           room_id?: parameters["rowFilter.guess.room_id"];
           word_id?: parameters["rowFilter.guess.word_id"];
+          puzzle_id?: parameters["rowFilter.guess.puzzle_id"];
         };
         header: {
           /** Preference */
@@ -143,6 +144,7 @@ export type paths = {
           username?: parameters["rowFilter.guess.username"];
           room_id?: parameters["rowFilter.guess.room_id"];
           word_id?: parameters["rowFilter.guess.word_id"];
+          puzzle_id?: parameters["rowFilter.guess.puzzle_id"];
         };
         body: {
           /** guess */
@@ -169,7 +171,6 @@ export type paths = {
           outer_letters?: parameters["rowFilter.puzzle.outer_letters"];
           center_letter?: parameters["rowFilter.puzzle.center_letter"];
           max_score?: parameters["rowFilter.puzzle.max_score"];
-          editor?: parameters["rowFilter.puzzle.editor"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -226,7 +227,6 @@ export type paths = {
           outer_letters?: parameters["rowFilter.puzzle.outer_letters"];
           center_letter?: parameters["rowFilter.puzzle.center_letter"];
           max_score?: parameters["rowFilter.puzzle.max_score"];
-          editor?: parameters["rowFilter.puzzle.editor"];
         };
         header: {
           /** Preference */
@@ -247,7 +247,6 @@ export type paths = {
           outer_letters?: parameters["rowFilter.puzzle.outer_letters"];
           center_letter?: parameters["rowFilter.puzzle.center_letter"];
           max_score?: parameters["rowFilter.puzzle.max_score"];
-          editor?: parameters["rowFilter.puzzle.editor"];
         };
         body: {
           /** puzzle */
@@ -273,7 +272,6 @@ export type paths = {
           last_played?: parameters["rowFilter.room.last_played"];
           shortcode?: parameters["rowFilter.room.shortcode"];
           name?: parameters["rowFilter.room.name"];
-          puzzle_id?: parameters["rowFilter.room.puzzle_id"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -329,7 +327,6 @@ export type paths = {
           last_played?: parameters["rowFilter.room.last_played"];
           shortcode?: parameters["rowFilter.room.shortcode"];
           name?: parameters["rowFilter.room.name"];
-          puzzle_id?: parameters["rowFilter.room.puzzle_id"];
         };
         header: {
           /** Preference */
@@ -349,7 +346,6 @@ export type paths = {
           last_played?: parameters["rowFilter.room.last_played"];
           shortcode?: parameters["rowFilter.room.shortcode"];
           name?: parameters["rowFilter.room.name"];
-          puzzle_id?: parameters["rowFilter.room.puzzle_id"];
         };
         body: {
           /** room */
@@ -499,6 +495,8 @@ export type paths = {
       parameters: {
         body: {
           args: {
+            /** Format: uuid */
+            _puzzle_id: string;
             /** Format: character varying */
             _username: string;
             /** Format: uuid */
@@ -506,6 +504,23 @@ export type paths = {
             /** Format: character varying */
             _word: string;
           };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/newest_puzzle_id": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
         };
         header: {
           /** Preference */
@@ -542,8 +557,6 @@ export type definitions = {
     room_id?: string;
     /** Format: character varying */
     shortcode?: string;
-    /** Format: character varying */
-    name?: string;
     /**
      * Format: uuid
      * @description Note:
@@ -589,7 +602,13 @@ export type definitions = {
      * @description Note:
      * This is a Foreign Key to `word.id`.<fk table='word' column='id'/>
      */
-    word_id?: string;
+    word_id: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `puzzle.id`.<fk table='puzzle' column='id'/>
+     */
+    puzzle_id: string;
   };
   puzzle: {
     /**
@@ -615,8 +634,6 @@ export type definitions = {
     center_letter: string;
     /** Format: smallint */
     max_score: number;
-    /** Format: character varying */
-    editor?: string;
   };
   room: {
     /**
@@ -643,12 +660,6 @@ export type definitions = {
     shortcode: string;
     /** Format: character varying */
     name?: string;
-    /**
-     * Format: uuid
-     * @description Note:
-     * This is a Foreign Key to `puzzle.id`.<fk table='puzzle' column='id'/>
-     */
-    puzzle_id?: string;
   };
   word: {
     /**
@@ -729,8 +740,6 @@ export type parameters = {
   "rowFilter.correct_guess.room_id": string;
   /** Format: character varying */
   "rowFilter.correct_guess.shortcode": string;
-  /** Format: character varying */
-  "rowFilter.correct_guess.name": string;
   /** Format: uuid */
   "rowFilter.correct_guess.word_id": string;
   /** Format: character varying */
@@ -757,6 +766,8 @@ export type parameters = {
   "rowFilter.guess.room_id": string;
   /** Format: uuid */
   "rowFilter.guess.word_id": string;
+  /** Format: uuid */
+  "rowFilter.guess.puzzle_id": string;
   /** @description puzzle */
   "body.puzzle": definitions["puzzle"];
   /** Format: uuid */
@@ -771,8 +782,6 @@ export type parameters = {
   "rowFilter.puzzle.center_letter": string;
   /** Format: smallint */
   "rowFilter.puzzle.max_score": string;
-  /** Format: character varying */
-  "rowFilter.puzzle.editor": string;
   /** @description room */
   "body.room": definitions["room"];
   /** Format: uuid */
@@ -785,8 +794,6 @@ export type parameters = {
   "rowFilter.room.shortcode": string;
   /** Format: character varying */
   "rowFilter.room.name": string;
-  /** Format: uuid */
-  "rowFilter.room.puzzle_id": string;
   /** @description word */
   "body.word": definitions["word"];
   /** Format: uuid */
