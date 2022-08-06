@@ -22,23 +22,9 @@ export const Hive = ({
   ];
 
   return (
-    <svg
-      className="m-0"
-      viewBox="0 0 257 265"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg viewBox="0 0 257 265" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <g id="hexagon">
-          <path
-            d="M 27 89
-            L 78 89
-            L 103 45.5
-            L 78 2
-            L 27 2
-            L 2 45.5      
-            Z"
-          ></path>
-        </g>
+        <polygon id="hexagon" points="27,89 78,89 103,45.5 78,2 27,2 2,45.5" />
       </defs>
       {[...outerLetters, centerLetter].map((letter, i, array) => {
         letter = letter.toUpperCase();
@@ -52,11 +38,12 @@ export const Hive = ({
             height="91"
             x={translations[i][0]}
             y={translations[i][1]}
+            className="select-none cursor-pointer"
             onClick={() => addLetter(letter)}
           >
             <use href="#hexagon" className={hexClasses} />
             <text
-              className="cursor-pointer anchor-middle baseline-middle font-bold text-3xl select-none"
+              className="anchor-middle baseline-middle font-bold text-3xl pointer-events-none"
               x="50%"
               y="54%"
             >
