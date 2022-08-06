@@ -8,9 +8,9 @@ BEGIN
     ('2022-01-29','{"a","i","y","l","o","f"}','c',224)
   RETURNING id INTO puzzle_id;
 
-  INSERT INTO room (shortcode,name,puzzle_id)
+  INSERT INTO room (shortcode)
   VALUES 
-    ('abcdef','Test Room',puzzle_id);
+    ('abcdef');
 
   INSERT INTO word (word,point_value,is_pangram,definition,part_of_speech,puzzle_id)
   VALUES
