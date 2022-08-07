@@ -3,13 +3,18 @@ import useSWR from "swr";
 import { CorrectGuess, Guess } from "../types/supabase";
 import fetcher from "../utils/fetcher";
 import { supabase } from "../utils/supabaseClient";
+import { usePuzzle } from "./usePuzzle";
 import { useRoom } from "./useRoom";
 
 export const useCorrectGuesses = () => {
   const { room } = useRoom();
+  const { puzzle } = usePuzzle();
   const roomId = room?.id;
+  const puzzleId = puzzle?.id;
   const { data, error, mutate } = useSWR<CorrectGuess[]>(
-    roomId ? `/rest/v1/correct_guess?room_id=eq.${roomId}&select=*` : null,
+    roomId && puzzleId
+      ? `/rest/v1/correct_guess?room_id=eq.${roomId}&puzzle_id=eq.${puzzleId}&select=*`
+      : null,
     fetcher
   );
 

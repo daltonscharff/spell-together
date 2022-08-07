@@ -20,8 +20,8 @@ export type paths = {
           created_at?: parameters["rowFilter.correct_guess.created_at"];
           is_correct?: parameters["rowFilter.correct_guess.is_correct"];
           username?: parameters["rowFilter.correct_guess.username"];
+          puzzle_id?: parameters["rowFilter.correct_guess.puzzle_id"];
           room_id?: parameters["rowFilter.correct_guess.room_id"];
-          shortcode?: parameters["rowFilter.correct_guess.shortcode"];
           word_id?: parameters["rowFilter.correct_guess.word_id"];
           word?: parameters["rowFilter.correct_guess.word"];
           point_value?: parameters["rowFilter.correct_guess.point_value"];
@@ -149,6 +149,108 @@ export type paths = {
         body: {
           /** guess */
           guess?: definitions["guess"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/newest_puzzle": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.newest_puzzle.id"];
+          created_at?: parameters["rowFilter.newest_puzzle.created_at"];
+          date?: parameters["rowFilter.newest_puzzle.date"];
+          outer_letters?: parameters["rowFilter.newest_puzzle.outer_letters"];
+          center_letter?: parameters["rowFilter.newest_puzzle.center_letter"];
+          max_score?: parameters["rowFilter.newest_puzzle.max_score"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["newest_puzzle"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** newest_puzzle */
+          newest_puzzle?: definitions["newest_puzzle"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.newest_puzzle.id"];
+          created_at?: parameters["rowFilter.newest_puzzle.created_at"];
+          date?: parameters["rowFilter.newest_puzzle.date"];
+          outer_letters?: parameters["rowFilter.newest_puzzle.outer_letters"];
+          center_letter?: parameters["rowFilter.newest_puzzle.center_letter"];
+          max_score?: parameters["rowFilter.newest_puzzle.max_score"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.newest_puzzle.id"];
+          created_at?: parameters["rowFilter.newest_puzzle.created_at"];
+          date?: parameters["rowFilter.newest_puzzle.date"];
+          outer_letters?: parameters["rowFilter.newest_puzzle.outer_letters"];
+          center_letter?: parameters["rowFilter.newest_puzzle.center_letter"];
+          max_score?: parameters["rowFilter.newest_puzzle.max_score"];
+        };
+        body: {
+          /** newest_puzzle */
+          newest_puzzle?: definitions["newest_puzzle"];
         };
         header: {
           /** Preference */
@@ -552,11 +654,15 @@ export type definitions = {
     /**
      * Format: uuid
      * @description Note:
-     * This is a Primary Key.<pk/>
+     * This is a Foreign Key to `puzzle.id`.<fk table='puzzle' column='id'/>
+     */
+    puzzle_id?: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `room.id`.<fk table='room' column='id'/>
      */
     room_id?: string;
-    /** Format: character varying */
-    shortcode?: string;
     /**
      * Format: uuid
      * @description Note:
@@ -609,6 +715,24 @@ export type definitions = {
      * This is a Foreign Key to `puzzle.id`.<fk table='puzzle' column='id'/>
      */
     puzzle_id: string;
+  };
+  newest_puzzle: {
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id?: string;
+    /** Format: timestamp with time zone */
+    created_at?: string;
+    /** Format: date */
+    date?: string;
+    /** Format: ARRAY */
+    outer_letters?: unknown[];
+    /** Format: character */
+    center_letter?: string;
+    /** Format: smallint */
+    max_score?: number;
   };
   puzzle: {
     /**
@@ -737,9 +861,9 @@ export type parameters = {
   /** Format: character varying */
   "rowFilter.correct_guess.username": string;
   /** Format: uuid */
+  "rowFilter.correct_guess.puzzle_id": string;
+  /** Format: uuid */
   "rowFilter.correct_guess.room_id": string;
-  /** Format: character varying */
-  "rowFilter.correct_guess.shortcode": string;
   /** Format: uuid */
   "rowFilter.correct_guess.word_id": string;
   /** Format: character varying */
@@ -768,6 +892,20 @@ export type parameters = {
   "rowFilter.guess.word_id": string;
   /** Format: uuid */
   "rowFilter.guess.puzzle_id": string;
+  /** @description newest_puzzle */
+  "body.newest_puzzle": definitions["newest_puzzle"];
+  /** Format: uuid */
+  "rowFilter.newest_puzzle.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.newest_puzzle.created_at": string;
+  /** Format: date */
+  "rowFilter.newest_puzzle.date": string;
+  /** Format: ARRAY */
+  "rowFilter.newest_puzzle.outer_letters": string;
+  /** Format: character */
+  "rowFilter.newest_puzzle.center_letter": string;
+  /** Format: smallint */
+  "rowFilter.newest_puzzle.max_score": string;
   /** @description puzzle */
   "body.puzzle": definitions["puzzle"];
   /** Format: uuid */
@@ -821,6 +959,8 @@ export type external = {};
 export type CorrectGuess = definitions["correct_guess"];
 
 export type Guess = definitions["guess"];
+
+export type NewestPuzzle = definitions["newest_puzzle"];
 
 export type Puzzle = definitions["puzzle"];
 
