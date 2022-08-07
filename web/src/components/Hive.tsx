@@ -1,15 +1,9 @@
 import { useLetterInput } from "../hooks/useLetterInput";
+import { usePuzzle } from "../hooks/usePuzzle";
 
-type Props = {
-  centerLetter?: string;
-  outerLetters?: string[];
-};
-
-export const Hive = ({
-  centerLetter = "",
-  outerLetters = Array(6).fill(""),
-}: Props) => {
+export const Hive = () => {
   const { addLetter } = useLetterInput();
+  const { centerLetter, outerLetters } = usePuzzle();
 
   const translations = [
     [76, 0],

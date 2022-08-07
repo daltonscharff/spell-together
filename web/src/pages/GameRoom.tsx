@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ButtonArea } from "../components/ButtonArea";
 import { CorrectGuessList } from "../components/CorrectGuessList";
@@ -10,7 +10,6 @@ import { LetterInput } from "../components/LetterInput";
 import { PointDisplay } from "../components/PointDisplay";
 import { useLocalStore } from "../hooks/useLocalStore";
 import { usePuzzle } from "../hooks/usePuzzle";
-import { shuffle } from "../utils/shuffle";
 import { validateShortcode } from "../utils/validateShortcode";
 
 export const GameRoom = () => {
@@ -18,17 +17,6 @@ export const GameRoom = () => {
   const username = useLocalStore((state) => state.username);
   const navigate = useNavigate();
   const { puzzle } = usePuzzle();
-  const [shuffledLetters, setShuffledLetters] = useState<string[]>(
-    (puzzle?.outer_letters as string[]) ?? []
-  );
-
-  useEffect(() => {
-    setShuffledLetters((puzzle?.outer_letters as string[]) ?? []);
-  }, [puzzle?.outer_letters, setShuffledLetters]);
-
-  useEffect(() => {
-    if (!username) navigate("/");
-  }, [username, navigate]);
 
   useEffect(() => {
     if (!shortcode) return;
@@ -54,13 +42,8 @@ export const GameRoom = () => {
             centerLetter={puzzle?.center_letter}
             outerLetters={puzzle?.outer_letters as string[]}
           />
-          <Hive
-            centerLetter={puzzle?.center_letter}
-            outerLetters={shuffledLetters}
-          />
-          <ButtonArea
-            shuffle={() => setShuffledLetters(shuffle(shuffledLetters))}
-          />
+          <Hive />
+          <ButtonArea />
         </div>
         <div className="flex flex-col mx-auto max-w-lg min-w-[200px] w-full border-black border rounded-sm md:max-h-[600px]">
           <div className="p-4 border-b-2 border-black">
