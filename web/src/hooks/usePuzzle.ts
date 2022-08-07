@@ -19,7 +19,7 @@ const usePuzzleStore = create<{
 
 export const usePuzzle = () => {
   const { data, error } = useSWR<Puzzle[]>(
-    "/rest/v1/newest_puzzle?select=*&limit=1",
+    "/rest/v1/puzzle?order=date.desc&select=*&limit=1",
     fetcher
   );
 
