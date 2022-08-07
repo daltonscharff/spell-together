@@ -13,7 +13,7 @@ export const useCorrectGuesses = () => {
   const puzzleId = puzzle?.id;
   const { data, error, mutate } = useSWR<CorrectGuess[]>(
     roomId && puzzleId
-      ? `/rest/v1/correct_guess?room_id=eq.${roomId}&puzzle_id=eq.${puzzleId}&select=*`
+      ? `/rest/v1/correct_guess?room_id=eq.${roomId}&puzzle_id=eq.${puzzleId}&order=word.asc&select=*`
       : null,
     fetcher
   );
