@@ -9,14 +9,12 @@ import { Hive } from "../components/Hive";
 import { LetterInput } from "../components/LetterInput";
 import { PointDisplay } from "../components/PointDisplay";
 import { useLocalStore } from "../hooks/useLocalStore";
-import { usePuzzle } from "../hooks/usePuzzle";
 import { validateShortcode } from "../utils/validateShortcode";
 
 export const GameRoom = () => {
   const { shortcode } = useParams();
   const username = useLocalStore((state) => state.username);
   const navigate = useNavigate();
-  const { puzzle } = usePuzzle();
 
   useEffect(() => {
     if (!shortcode) return;
@@ -38,16 +36,13 @@ export const GameRoom = () => {
       </div>
       <div className="grid gap-8 grid-cols-1 md:grid-cols-2 flex-grow">
         <div className="flex flex-col gap-8 mx-auto max-w-sm min-w-[200px] w-full">
-          <LetterInput
-            centerLetter={puzzle?.center_letter}
-            outerLetters={puzzle?.outer_letters as string[]}
-          />
+          <LetterInput />
           <Hive />
           <ButtonArea />
         </div>
         <div className="flex flex-col mx-auto max-w-lg min-w-[200px] w-full border-black border rounded-sm md:max-h-[600px]">
           <div className="p-4 border-b-2 border-black">
-            <PointDisplay maxScore={puzzle?.max_score} />
+            <PointDisplay />
           </div>
           <div className="p-4 border-b-2 border-black">
             <FoundWordDisplay />

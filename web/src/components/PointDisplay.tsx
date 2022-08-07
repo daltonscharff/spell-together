@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useCorrectGuesses } from "../hooks/useCorrectGuesses";
+import { usePuzzle } from "../hooks/usePuzzle";
 
 type Level = {
   rank: string;
@@ -49,12 +50,12 @@ function findLevel(percent: number): Level {
   return levels.find((level) => level.percent <= percent) || levels[0];
 }
 
-type Props = {
-  maxScore?: number;
-};
-
-export const PointDisplay = ({ maxScore = 0 }: Props) => {
+export const PointDisplay = () => {
   const { correctGuesses } = useCorrectGuesses();
+  const { puzzle } = usePuzzle();
+
+  const maxScore = puzzle?.max_score || 0;
+
   const currentScore = useMemo(
     () =>
       correctGuesses?.reduce(

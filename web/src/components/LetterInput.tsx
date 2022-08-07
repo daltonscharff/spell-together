@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { useLetterInput } from "../hooks/useLetterInput";
 import { useKeyboardEvents } from "../hooks/useKeyboardEvents";
 import { useSubmitGuess } from "../hooks/useSubmitGuess";
+import { usePuzzle } from "../hooks/usePuzzle";
 
 type Props = {
   disabled?: boolean;
-  outerLetters?: string[];
-  centerLetter?: string;
 };
 
 type LetterCategory = "outer" | "invalid" | "center";
@@ -29,14 +28,11 @@ const colors = {
   invalid: "text-zinc-200",
 };
 
-export const LetterInput = ({
-  outerLetters = [],
-  centerLetter = "",
-  disabled,
-}: Props) => {
+export const LetterInput = ({ disabled }: Props) => {
   const [isFocused, setIsFocused] = useState(true);
   const { letters, addLetter, removeLetter } = useLetterInput();
   const { submitGuess } = useSubmitGuess();
+  const { outerLetters, centerLetter } = usePuzzle();
   useKeyboardEvents({
     onLetter: addLetter,
     onBackspace: removeLetter,
