@@ -728,7 +728,7 @@ export type definitions = {
     /** Format: date */
     date?: string;
     /** Format: ARRAY */
-    outer_letters?: unknown[];
+    outer_letters?: string[];
     /** Format: character */
     center_letter?: string;
     /** Format: smallint */
@@ -753,7 +753,7 @@ export type definitions = {
      */
     date: string;
     /** Format: ARRAY */
-    outer_letters: unknown[];
+    outer_letters: string[];
     /** Format: character */
     center_letter: string;
     /** Format: smallint */
