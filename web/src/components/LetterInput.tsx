@@ -75,7 +75,7 @@ export const LetterInput = ({ disabled }: Props) => {
 
       {isFocused && (
         <span
-          className={`animate-blink inline-block select-none font-thin border-x w-0 border-black h-8 bottom-1 absolute ${
+          className={`animate-blink inline-block select-none font-thin border-l-2 w-0 border-black h-8 bottom-1 absolute ${
             letters && "ml-1"
           }`}
         />
