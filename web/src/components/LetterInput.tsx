@@ -38,7 +38,6 @@ export const LetterInput = ({ disabled }: Props) => {
     onBackspace: removeLetter,
     onEnter: () => {
       if (letters.length === 0) return;
-      console.log("ENTER CLICKED", letters);
       submitGuess();
     },
   });

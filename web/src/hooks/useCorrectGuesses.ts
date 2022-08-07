@@ -22,7 +22,6 @@ export const useCorrectGuesses = () => {
     const guessSubscription = supabase
       .from<Guess>(`guess:room_id=eq.${roomId}`)
       .on("INSERT", async (guess) => {
-        console.log("Change received!", guess);
         mutate();
       })
       .subscribe();
