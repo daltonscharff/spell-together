@@ -6,7 +6,6 @@ export class Puzzle {
   outer_letters: string[] = [];
   center_letter = "";
   max_score = 0;
-  editor = "";
 
   async save() {
     const select = await supabaseClient
@@ -33,7 +32,6 @@ export class Puzzle {
         outer_letters: this.outer_letters,
         center_letter: this.center_letter,
         max_score: this.max_score,
-        editor: this.editor,
       },
     ]);
 
