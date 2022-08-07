@@ -12,7 +12,7 @@ export const Header = ({ titleOnly }: Props) => {
 
   const username = useLocalStore((state) => state.username);
   return (
-    <div className={"container mt-3 border-b border-black sm:pb-0"}>
+    <div className={"container mt-2 border-b border-black sm:pb-0"}>
       <div className="grid grid-cols-1 md:grid-cols-3 items-baseline gap-x-4 gap-y-1 mb-2">
         <h1
           className="font-display text-2xl text-center md:text-left cursor-pointer inline"
