@@ -7,14 +7,19 @@ import { GuessNotification } from "../components/GuessNotification";
 import { Header } from "../components/Header";
 import { Hive } from "../components/Hive";
 import { LetterInput } from "../components/LetterInput";
+import { Loader } from "../components/Loader";
 import { PointDisplay } from "../components/PointDisplay";
 import { useLocalStore } from "../hooks/useLocalStore";
+import { usePuzzle } from "../hooks/usePuzzle";
+import { useRoom } from "../hooks/useRoom";
 import { validateShortcode } from "../utils/validateShortcode";
 
 export const GameRoom = () => {
   const { shortcode } = useParams();
   const username = useLocalStore((state) => state.username);
   const navigate = useNavigate();
+  const { isLoading: isRoomLoading } = useRoom();
+  const { isLoading: isPuzzleLoading } = usePuzzle();
 
   useEffect(() => {
     if (!shortcode) return;
@@ -27,6 +32,15 @@ export const GameRoom = () => {
       }
     });
   }, [shortcode, username, navigate]);
+
+  if (isPuzzleLoading || isRoomLoading) {
+    return (
+      <div className="container">
+        <Header titleOnly />
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="container">
