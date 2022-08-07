@@ -26,7 +26,7 @@ export const usePuzzle = () => {
   useEffect(() => {
     if (!data) return;
     usePuzzleStore.setState({
-      outerLetters: data[0].outer_letters as string[],
+      outerLetters: data[0].outer_letters,
       centerLetter: data[0].center_letter,
     });
   }, [data]);

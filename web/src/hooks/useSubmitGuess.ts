@@ -47,7 +47,7 @@ export const useSubmitGuess = () => {
 
     const errorMsg = validateSubmission(
       guessedWord,
-      puzzle.outer_letters as string[],
+      puzzle.outer_letters,
       puzzle.center_letter,
       correctGuesses || []
     );
