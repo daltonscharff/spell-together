@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { ButtonArea } from "../components/ButtonArea";
 import { CorrectGuessList } from "../components/CorrectGuessList";
 import { FoundWordDisplay } from "../components/FoundWordDisplay";
@@ -16,10 +16,18 @@ import { validateShortcode } from "../utils/validateShortcode";
 
 export const GameRoom = () => {
   const { shortcode } = useParams();
+  const [searchParams] = useSearchParams();
   const username = useLocalStore((state) => state.username);
   const navigate = useNavigate();
   const { isLoading: isRoomLoading } = useRoom();
   const { isLoading: isPuzzleLoading } = usePuzzle();
+
+  useEffect(() => {
+    const usernameParam = searchParams.get("username");
+    if (usernameParam) {
+      useLocalStore.setState({ username: usernameParam });
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (!shortcode) return;
