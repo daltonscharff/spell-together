@@ -55,7 +55,7 @@ export const LetterInput = ({ disabled }: Props) => {
   }, [disabled]);
 
   return (
-    <div className="text-4xl text-center relative break-words">
+    <div className="text-4xl text-center relative break-words min-h-10">
       {letters
         .toUpperCase()
         .split("")
@@ -75,7 +75,7 @@ export const LetterInput = ({ disabled }: Props) => {
 
       {isFocused && (
         <span
-          className={`animate-blink inline-block select-none font-thin border-l-2 w-0 border-black h-8 bottom-1 absolute ${
+          className={`animate-blink inline-block select-none border-l-2 w-0 border-black h-8 bottom-1 absolute ${
             letters && "ml-1"
           }`}
         />
