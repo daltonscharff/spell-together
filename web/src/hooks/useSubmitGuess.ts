@@ -42,6 +42,8 @@ export const useSubmitGuess = () => {
 
   async function submitGuess() {
     const guessedWord = letters;
+    if (guessedWord.length === 0) return;
+
     clearLetters();
     if (!puzzle || !room) return;
 
