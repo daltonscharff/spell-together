@@ -73,17 +73,14 @@ export const LetterInput = ({ disabled }: Props) => {
           );
         })}
 
-      {isFocused && (
-        <span
-          className={`animate-blink inline-block select-none border-l-2 w-0 border-black h-8 bottom-1 absolute ${
-            letters && "ml-1"
-          }`}
-        />
-      )}
-      {!isFocused && letters.length === 0 ? (
+      {!letters && isFocused && <br />}
+      <span
+        className={`animate-blink inline-block select-none border-l-2 w-0 border-black h-8 bottom-1 absolute ${
+          letters && "ml-1"
+        } ${!isFocused && "hidden"}`}
+      />
+      {!isFocused && letters.length === 0 && (
         <div className="text-zinc-300">Type or click...</div>
-      ) : (
-        <wbr />
       )}
     </div>
   );
