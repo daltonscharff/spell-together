@@ -6,7 +6,6 @@ Compete to see who can create the most words using letters from the hive in this
 - [Docker](https://www.docker.com/products/docker-desktop/)
 - [Node](https://nodejs.org/en/)
 - [Supabase CLI](https://supabase.com/docs/reference/cli/installing-and-updating)
-- [WordsAPI](https://rapidapi.com/dpventures/api/wordsapi/) subscription on RapidAPI (optional: allows access to word definitions)
 
 ## How to Run
 ### 1. Server and Database
@@ -20,7 +19,6 @@ Scrape puzzle data from the official spelling bee game.
 ```
 # supabase/.env.local
 ENVIRONMENT=production
-RAPID_API_KEY=4ca976ea...  # optional RapidAPI key for getting word definitions
 ```
 2. Run `supabase functions serve load-puzzle --env-file ./supabase/.env.local` to get the function running locally
 3. Run the following cURL request to trigger the function:

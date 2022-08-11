@@ -35,18 +35,12 @@ export class Word {
 
   async lookup() {
     const response = await fetch(
-      `https://wordsapiv1.p.rapidapi.com/words/${this.word}`,
-      {
-        headers: {
-          "X-Mashape-Key": Deno.env.get("RAPID_API_KEY") ?? "",
-        },
-      }
+      `https://api.dictionaryapi.dev/api/v2/entries/en/${this.word}`
     );
-
-    const { results } = await response.json();
-    if (results) {
-      this.definition = results[0].definition;
-      this.part_of_speech = results[0].partOfSpeech;
+    const result = await response.json();
+    if (result && Array.isArray(result)) {
+      this.definition = result[0].meanings[0].definitions[0].definition;
+      this.part_of_speech = result[0].meanings[0].partOfSpeech;
     }
   }
 
