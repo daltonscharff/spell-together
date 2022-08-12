@@ -13,15 +13,15 @@ const partOfSpeechAbbreviation: Record<string, string> = {
 };
 
 export const CorrectGuessList = () => {
-  const { correctGuesses } = useCorrectGuesses();
+  const { filteredGuesses } = useCorrectGuesses();
   return (
     <>
-      {correctGuesses?.length === 0 && (
+      {filteredGuesses.length === 0 && (
         <div className="text-zinc-400 italic font-light p-2">
           No words found
         </div>
       )}
-      {(correctGuesses || []).map((guess, i, array) => (
+      {filteredGuesses.map((guess, i, array) => (
         <Fragment key={guess.word_id}>
           <div className="px-2">
             <div className="flex flex-row justify-between">

@@ -2,7 +2,7 @@ import { useCorrectGuesses } from "../hooks/useCorrectGuesses";
 import { useMemo } from "react";
 
 export const FoundWordDisplay = () => {
-  const { correctGuesses } = useCorrectGuesses();
+  const { correctGuesses, selectedUser, setSelectedUser } = useCorrectGuesses();
   const correctPerPlayer = useMemo(() => {
     const count: Record<string, number> = {};
     correctGuesses?.forEach((guess) => {
@@ -28,16 +28,28 @@ export const FoundWordDisplay = () => {
       </div>
       {playersSortedByCorrectGuesses.length > 0 && (
         <div className="font-light flex flex-row flex-wrap gap-2 mt-2 max-h-24 overflow-y-auto">
-          {playersSortedByCorrectGuesses.map((player, i) => (
-            <div key={i}>
-              <span className="px-2 border rounded-l-sm bg-zinc-50">
-                {player}
-              </span>
-              <span className="px-2 border-y border-r rounded-r-sm bg-zinc-50">
-                {correctPerPlayer[player]}
-              </span>
-            </div>
-          ))}
+          {playersSortedByCorrectGuesses.map((player, i) => {
+            const color =
+              player === selectedUser
+                ? "bg-zinc-700 text-white border-zinc-500"
+                : "bg-zinc-50";
+            return (
+              <div
+                key={i}
+                onClick={() => setSelectedUser(player)}
+                className={`cursor-pointer select-none`}
+              >
+                <span className={`px-2 border rounded-l-sm ${color}`}>
+                  {player}
+                </span>
+                <span
+                  className={`px-2 border-y border-r rounded-r-sm ${color}`}
+                >
+                  {correctPerPlayer[player]}
+                </span>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
