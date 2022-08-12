@@ -1,10 +1,27 @@
 import { useEffect } from "react";
 import useSWR from "swr";
+import create from "zustand";
 import { CorrectGuess, Guess } from "../types/supabase";
 import fetcher from "../utils/fetcher";
 import { supabase } from "../utils/supabaseClient";
 import { usePuzzle } from "./usePuzzle";
 import { useRoom } from "./useRoom";
+
+const useCorrectGuessStore = create<{
+  filteredGuesses: CorrectGuess[];
+  selectedUser: string;
+  setSelectedUser: (username: string) => void;
+}>()((set, get) => ({
+  filteredGuesses: [],
+  selectedUser: "",
+  setSelectedUser: (selectedUser: string) => {
+    if (get().selectedUser === selectedUser) {
+      set({ selectedUser: "" });
+    } else {
+      set({ selectedUser });
+    }
+  },
+}));
 
 export const useCorrectGuesses = () => {
   const { room } = useRoom();
@@ -17,11 +34,21 @@ export const useCorrectGuesses = () => {
       : null,
     fetcher
   );
+  const selectedUser = useCorrectGuessStore((state) => state.selectedUser);
+
+  useEffect(() => {
+    if (!data) return;
+    useCorrectGuessStore.setState({
+      filteredGuesses: selectedUser
+        ? data.filter((guess) => guess.username === selectedUser)
+        : data,
+    });
+  }, [data, selectedUser]);
 
   useEffect(() => {
     const guessSubscription = supabase
       .from<Guess>(`guess:room_id=eq.${roomId}`)
-      .on("INSERT", async (guess) => {
+      .on("INSERT", async (_) => {
         mutate();
       })
       .subscribe();
@@ -32,6 +59,9 @@ export const useCorrectGuesses = () => {
 
   return {
     correctGuesses: data,
+    filteredGuesses: useCorrectGuessStore((state) => state.filteredGuesses),
+    selectedUser: useCorrectGuessStore((state) => state.selectedUser),
+    setSelectedUser: useCorrectGuessStore((state) => state.setSelectedUser),
     isLoading: !error && data === undefined,
     isError: error,
   };
