@@ -161,108 +161,6 @@ export type paths = {
       };
     };
   };
-  "/newest_puzzle": {
-    get: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.newest_puzzle.id"];
-          created_at?: parameters["rowFilter.newest_puzzle.created_at"];
-          date?: parameters["rowFilter.newest_puzzle.date"];
-          outer_letters?: parameters["rowFilter.newest_puzzle.outer_letters"];
-          center_letter?: parameters["rowFilter.newest_puzzle.center_letter"];
-          max_score?: parameters["rowFilter.newest_puzzle.max_score"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["newest_puzzle"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-    post: {
-      parameters: {
-        body: {
-          /** newest_puzzle */
-          newest_puzzle?: definitions["newest_puzzle"];
-        };
-        query: {
-          /** Filtering Columns */
-          select?: parameters["select"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** Created */
-        201: unknown;
-      };
-    };
-    delete: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.newest_puzzle.id"];
-          created_at?: parameters["rowFilter.newest_puzzle.created_at"];
-          date?: parameters["rowFilter.newest_puzzle.date"];
-          outer_letters?: parameters["rowFilter.newest_puzzle.outer_letters"];
-          center_letter?: parameters["rowFilter.newest_puzzle.center_letter"];
-          max_score?: parameters["rowFilter.newest_puzzle.max_score"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-    patch: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.newest_puzzle.id"];
-          created_at?: parameters["rowFilter.newest_puzzle.created_at"];
-          date?: parameters["rowFilter.newest_puzzle.date"];
-          outer_letters?: parameters["rowFilter.newest_puzzle.outer_letters"];
-          center_letter?: parameters["rowFilter.newest_puzzle.center_letter"];
-          max_score?: parameters["rowFilter.newest_puzzle.max_score"];
-        };
-        body: {
-          /** newest_puzzle */
-          newest_puzzle?: definitions["newest_puzzle"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-  };
   "/puzzle": {
     get: {
       parameters: {
@@ -716,24 +614,6 @@ export type definitions = {
      */
     puzzle_id: string;
   };
-  newest_puzzle: {
-    /**
-     * Format: uuid
-     * @description Note:
-     * This is a Primary Key.<pk/>
-     */
-    id?: string;
-    /** Format: timestamp with time zone */
-    created_at?: string;
-    /** Format: date */
-    date?: string;
-    /** Format: ARRAY */
-    outer_letters?: string[];
-    /** Format: character */
-    center_letter?: string;
-    /** Format: smallint */
-    max_score?: number;
-  };
   puzzle: {
     /**
      * Format: uuid
@@ -892,20 +772,6 @@ export type parameters = {
   "rowFilter.guess.word_id": string;
   /** Format: uuid */
   "rowFilter.guess.puzzle_id": string;
-  /** @description newest_puzzle */
-  "body.newest_puzzle": definitions["newest_puzzle"];
-  /** Format: uuid */
-  "rowFilter.newest_puzzle.id": string;
-  /** Format: timestamp with time zone */
-  "rowFilter.newest_puzzle.created_at": string;
-  /** Format: date */
-  "rowFilter.newest_puzzle.date": string;
-  /** Format: ARRAY */
-  "rowFilter.newest_puzzle.outer_letters": string;
-  /** Format: character */
-  "rowFilter.newest_puzzle.center_letter": string;
-  /** Format: smallint */
-  "rowFilter.newest_puzzle.max_score": string;
   /** @description puzzle */
   "body.puzzle": definitions["puzzle"];
   /** Format: uuid */
@@ -959,8 +825,6 @@ export type external = {};
 export type CorrectGuess = definitions["correct_guess"];
 
 export type Guess = definitions["guess"];
-
-export type NewestPuzzle = definitions["newest_puzzle"];
 
 export type Puzzle = definitions["puzzle"];
 

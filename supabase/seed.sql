@@ -76,7 +76,6 @@ BEGIN
     ('allow',5,FALSE,puzzle_id_2),
     ('ammo',1,FALSE,puzzle_id_2),
     ('amok',1,FALSE,puzzle_id_2),
-    ('anal',1,FALSE,puzzle_id_2),
     ('annal',5,FALSE,puzzle_id_2),
     ('anon',4,FALSE,puzzle_id_2);
 
@@ -85,6 +84,8 @@ BEGIN
     (TRUE,'testUser',(SELECT id FROM room WHERE shortcode='abcdef'),(SELECT id FROM word WHERE word='cool'),puzzle_id_1),
     (TRUE,'testUser',(SELECT id FROM room WHERE shortcode='aaaaaa'),(SELECT id FROM word WHERE word='callaloo'),puzzle_id_1),
     (TRUE,'testUser',(SELECT id FROM room WHERE shortcode='aaaaaa'),(SELECT id FROM word WHERE word='focaccia'),puzzle_id_1),
-    (TRUE,'testUser',(SELECT id FROM room WHERE shortcode='abcdef'),(SELECT id FROM word WHERE word='allow'),puzzle_id_2);
+    (TRUE,'testUser',(SELECT id FROM room WHERE shortcode='abcdef'),(SELECT id FROM word WHERE word='allow'),puzzle_id_2),
+    (TRUE,'testUser',(SELECT id FROM room WHERE shortcode='abcdef'),(SELECT id FROM word WHERE word='ammo'),puzzle_id_2),
+    (TRUE,'testUser2',(SELECT id FROM room WHERE shortcode='abcdef'),(SELECT id FROM word WHERE word='anon'),puzzle_id_2);
 
 END $$;
