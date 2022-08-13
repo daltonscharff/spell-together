@@ -38,6 +38,7 @@ jobs:
           echo "::set-output name=unused_room_ids::$(echo $ids)"
 
       - name: delete rooms by ID
+        if: ${{ steps.get_ids.outputs.unused_room_ids }} != 0
         run : |
           curl --request GET \
             --url '${{ secrets.SUPABASE_URL }}/rest/v1/room?id=in.(${{ steps.get_ids.outputs.unused_room_ids }})' \
