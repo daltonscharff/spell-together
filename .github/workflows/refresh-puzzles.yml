@@ -1,4 +1,4 @@
-name: deploy-web
+name: refresh-puzzles
 
 on:
   schedule:
