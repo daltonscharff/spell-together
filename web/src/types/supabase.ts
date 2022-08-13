@@ -269,7 +269,6 @@ export type paths = {
         query: {
           id?: parameters["rowFilter.room.id"];
           created_at?: parameters["rowFilter.room.created_at"];
-          last_played?: parameters["rowFilter.room.last_played"];
           shortcode?: parameters["rowFilter.room.shortcode"];
           name?: parameters["rowFilter.room.name"];
           /** Filtering Columns */
@@ -324,7 +323,6 @@ export type paths = {
         query: {
           id?: parameters["rowFilter.room.id"];
           created_at?: parameters["rowFilter.room.created_at"];
-          last_played?: parameters["rowFilter.room.last_played"];
           shortcode?: parameters["rowFilter.room.shortcode"];
           name?: parameters["rowFilter.room.name"];
         };
@@ -343,7 +341,6 @@ export type paths = {
         query: {
           id?: parameters["rowFilter.room.id"];
           created_at?: parameters["rowFilter.room.created_at"];
-          last_played?: parameters["rowFilter.room.last_played"];
           shortcode?: parameters["rowFilter.room.shortcode"];
           name?: parameters["rowFilter.room.name"];
         };
@@ -516,23 +513,6 @@ export type paths = {
       };
     };
   };
-  "/rpc/newest_puzzle_id": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
 };
 
 export type definitions = {
@@ -652,11 +632,6 @@ export type definitions = {
      * @default now()
      */
     created_at: string;
-    /**
-     * Format: timestamp with time zone
-     * @default now()
-     */
-    last_played: string;
     /**
      * Format: character varying
      * @default public.generate_shortcode(6)
@@ -792,8 +767,6 @@ export type parameters = {
   "rowFilter.room.id": string;
   /** Format: timestamp with time zone */
   "rowFilter.room.created_at": string;
-  /** Format: timestamp with time zone */
-  "rowFilter.room.last_played": string;
   /** Format: character varying */
   "rowFilter.room.shortcode": string;
   /** Format: character varying */
