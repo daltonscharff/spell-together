@@ -18,5 +18,5 @@ jobs:
       run: |
         curl --request DELETE \
           --url "${{ secrets.SUPABASE_URL }}/rest/v1/puzzle?date=lt.$(date --date '-4 days' +'%Y-%m-%d')" \
-          --header 'Authorization: ${{ secrets.SUPABASE_SERVICE_KEY }}' \
+          --header 'Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_KEY }}' \
           --header 'apikey: ${{ secrets.SUPABASE_ANON_KEY }}'
