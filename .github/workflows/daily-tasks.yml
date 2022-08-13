@@ -40,7 +40,7 @@ jobs:
       - name: delete rooms by ID
         if: ${{ steps.get_ids.outputs.unused_room_ids != '' }}
         run : |
-          curl --request GET \
+          curl --request DELETE \
             --url '${{ secrets.SUPABASE_URL }}/rest/v1/room?id=in.(${{ steps.get_ids.outputs.unused_room_ids }})' \
             --header 'Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_KEY }}' \
             --header 'apikey: ${{ secrets.SUPABASE_ANON_KEY }}'
