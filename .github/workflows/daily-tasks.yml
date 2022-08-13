@@ -30,7 +30,7 @@ jobs:
         run: |
           ids=$( \
             curl --request GET \
-              --url "${{ secrets.SUPABASE_URL }}/rest/v1/most_recent_correct_guess?room_created_at=lt.$(date --date '-17 days' +'%Y-%m-%d')&or=(found_at.lt.$(date --date '-17 days' +'%Y-%m-%d'),found_at.is.NULL)" \
+              --url "${{ secrets.SUPABASE_URL }}/rest/v1/most_recent_correct_guess?room_created_at=lt.$(date --date '-7 days' +'%Y-%m-%d')&or=(found_at.lt.$(date --date '-7 days' +'%Y-%m-%d'),found_at.is.NULL)" \
               --header 'Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}' \
               --header 'apikey: ${{ secrets.SUPABASE_ANON_KEY }}' | \
             jq -r 'map(.room_id) | join(",")' \
