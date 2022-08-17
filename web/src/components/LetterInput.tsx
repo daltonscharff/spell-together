@@ -33,22 +33,27 @@ export const LetterInput = ({ disabled }: Props) => {
   const { letters, addLetter, removeLetter } = useLetterInput();
   const { submitGuess } = useSubmitGuess();
   const { outerLetters, centerLetter } = usePuzzle();
-  useKeyboardEvents({
-    onLetter: addLetter,
-    onBackspace: removeLetter,
-    onEnter: () => {
-      if (letters.length === 0) return;
-      submitGuess();
+  useKeyboardEvents(
+    {
+      onLetter: addLetter,
+      onBackspace: removeLetter,
+      onEnter: () => {
+        if (letters.length === 0) return;
+        submitGuess();
+      },
     },
-  });
+    disabled
+  );
 
   useEffect(() => {
     if (disabled) return setIsFocused(false);
     const handleInFocus = () => setIsFocused(true);
     const handleOutFocus = () => setIsFocused(false);
+    window.addEventListener("click", handleInFocus);
     window.addEventListener("focus", handleInFocus);
     window.addEventListener("blur", handleOutFocus);
     return () => {
+      window.removeEventListener("click", handleInFocus);
       window.removeEventListener("focus", handleInFocus);
       window.removeEventListener("blur", handleOutFocus);
     };
