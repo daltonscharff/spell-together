@@ -64,5 +64,6 @@ export const useCorrectGuesses = () => {
     setSelectedUser: useCorrectGuessStore((state) => state.setSelectedUser),
     isLoading: !error && data === undefined,
     isError: error,
+    mutate,
   };
 };

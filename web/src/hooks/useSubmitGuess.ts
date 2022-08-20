@@ -38,7 +38,7 @@ export const useSubmitGuess = () => {
   const setGuessNotification = useNotifications(
     (state) => state.setGuessResponse
   );
-  const { correctGuesses } = useCorrectGuesses();
+  const { correctGuesses, mutate } = useCorrectGuesses();
 
   async function submitGuess() {
     const guessedWord = letters;
@@ -68,6 +68,7 @@ export const useSubmitGuess = () => {
 
     if (guessResponse?.body?.length) {
       const points = guessResponse.body?.[0].point_value;
+      mutate();
       setGuessNotification(
         true,
         guessedWord,
