@@ -32,6 +32,9 @@ export const CorrectGuessList = () => {
                 }`}
               >
                 {guess.word}
+                <span className="font-light align-top text-[.65rem] ml-1 select-none text-zinc-800">
+                  {guess.point_value}
+                </span>
               </div>
               <div className="font-light">{guess.username}</div>
             </div>
