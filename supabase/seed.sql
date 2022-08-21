@@ -11,7 +11,7 @@ BEGIN
 
   INSERT INTO puzzle (date,outer_letters,center_letter,max_score)
   VALUES 
-    ('2022-07-30','{"k","o","m","l","n","w"}','a',119)
+    ('2022-01-01','{"k","o","m","l","n","w"}','a',119)
   RETURNING id INTO puzzle_id_2;
 
   INSERT INTO room (shortcode)
