@@ -8,6 +8,7 @@ import { useState } from "react";
 import { validateShortcode } from "../utils/validateShortcode";
 import { supabase } from "../utils/supabaseClient";
 import { Room } from "../types/supabase";
+import { HashtagIcon, UserIcon, LinkIcon } from "@heroicons/react/outline";
 
 export const JoinOrCreateRoomForm = () => {
   const shortcode = useLocalStore((state) => state.shortcode);
@@ -73,9 +74,8 @@ export const JoinOrCreateRoomForm = () => {
         }) => (
           <TextInput
             {...{ name, value, onChange, onBlur }}
-            icon="user"
+            icon={<UserIcon />}
             placeholder="Your name"
-            solid
             error={error?.message}
           />
         )}
@@ -100,7 +100,7 @@ export const JoinOrCreateRoomForm = () => {
           }) => (
             <TextInput
               {...{ name, value, onChange, onBlur }}
-              icon="hash"
+              icon={<HashtagIcon />}
               placeholder="Room code"
               error={error?.message}
             />
@@ -159,9 +159,8 @@ export const JoinOrCreateRoomForm = () => {
           }) => (
             <TextInput
               {...{ name, value, onChange, onBlur }}
-              icon="user"
+              icon={<UserIcon />}
               placeholder="Your name"
-              solid
               error={error?.message}
             />
           )}
@@ -175,7 +174,7 @@ export const JoinOrCreateRoomForm = () => {
       {newRoomLink && (
         <>
           <TextInput
-            icon="link"
+            icon={<LinkIcon />}
             value={newRoomLink}
             onClick={() => navigator.clipboard.writeText(newRoomLink)}
             readOnly

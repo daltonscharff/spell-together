@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useHelpModal } from "../hooks/useHelpModal";
+import { QuestionMarkCircleIcon } from "@heroicons/react/outline";
 
 type Props = {
   titleOnly?: boolean;
@@ -19,14 +20,14 @@ export const Header = ({ titleOnly }: Props) => {
           </h1>
         </div>
         {!titleOnly && (
-          <div className="text-right text-lg">
+          <div className="justify-self-end self-center">
             <div
               className="cursor-pointer"
               onClick={() => {
                 useHelpModal.setState({ showHelpModal: true });
               }}
             >
-              <i className={`bx bx-help-circle `} />
+              <QuestionMarkCircleIcon className="h-5 w-5" />
             </div>
           </div>
         )}

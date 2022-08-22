@@ -1,5 +1,6 @@
 import { PropsWithChildren } from "react";
 import { Dialog } from "@headlessui/react";
+import { XIcon } from "@heroicons/react/outline";
 
 type Props = PropsWithChildren<{
   open: boolean;
@@ -18,10 +19,10 @@ export const Modal = ({ children, ...props }: Props) => {
                 className="absolute right-0 top-0 p-1 m-1 text-xl text-zinc-400 cursor-pointer"
                 onClick={props.onClose}
               >
-                <i className="bx bx-x" />
+                <XIcon className="w-5 h-5" />
               </div>
             </div>
-            <div className="px-9 pt-8 pb-10">{children}</div>
+            <div className="px-9 pt-7 pb-10">{children}</div>
           </Dialog.Panel>
         </div>
       </Dialog>

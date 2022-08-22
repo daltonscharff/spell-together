@@ -1,12 +1,11 @@
 import { InputHTMLAttributes } from "react";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
-  icon: string;
-  solid?: boolean;
+  icon: JSX.Element;
   error?: string;
 }
 
-export const TextInput = ({ icon, solid, error, ...props }: Props) => {
+export const TextInput = ({ icon, error, ...props }: Props) => {
   return (
     <div className="w-full">
       <div
@@ -14,9 +13,7 @@ export const TextInput = ({ icon, solid, error, ...props }: Props) => {
           error && "border-red-700"
         }`}
       >
-        <span className="py-3 absolute left-3">
-          <i className={`bx ${solid ? "bxs" : "bx"}-${icon}`} />
-        </span>
+        <span className="h-4 w-4 absolute left-3 top-4">{icon}</span>
         <input
           className="pr-3 py-3 pl-9 w-full flex-grow"
           type="text"
