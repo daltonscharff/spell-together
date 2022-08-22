@@ -21,6 +21,7 @@ export const GameRoom = () => {
   const { shortcode } = useParams();
   const [searchParams] = useSearchParams();
   const username = useLocalStore((state) => state.username);
+  const expandedIndex = useLocalStore((state) => state.expandedIndex);
   const navigate = useNavigate();
   const { isLoading: isRoomLoading } = useRoom();
   const { isLoading: isPuzzleLoading } = usePuzzle();
@@ -74,11 +75,21 @@ export const GameRoom = () => {
             <ButtonArea />
           </div>
           <div className="flex flex-col mx-auto max-w-lg min-w-[200px] w-full border-black border rounded-sm md:max-h-[600px]">
-            <div className="p-4 border-b-2 border-black">
-              <PointDisplay />
+            <div
+              className={`p-4 border-b-2 border-black ${
+                expandedIndex !== 0 && "cursor-pointer hover:bg-zinc-100"
+              }`}
+              onClick={() => useLocalStore.setState({ expandedIndex: 0 })}
+            >
+              <PointDisplay expanded={expandedIndex === 0} />
             </div>
-            <div className="p-4 border-b-2 border-black">
-              <FoundWordDisplay />
+            <div
+              className={`p-4 border-b-2 border-black ${
+                expandedIndex !== 1 && "cursor-pointer hover:bg-zinc-100"
+              }`}
+              onClick={() => useLocalStore.setState({ expandedIndex: 1 })}
+            >
+              <FoundWordDisplay expanded={expandedIndex === 1} />
             </div>
             <div className="p-2 overflow-y-auto">
               <CorrectGuessList />
