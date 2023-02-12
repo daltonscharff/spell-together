@@ -19,7 +19,9 @@ export async function scrape() {
   const words = await Promise.all(
     gameData.today.answers.map(async (a: string) => {
       const word = new Word(a);
-      await word.lookup();
+      await word.lookup().catch((e) => {
+        console.log(`Error looking up "${a}". ${e}`);
+      });
       return word;
     })
   );
