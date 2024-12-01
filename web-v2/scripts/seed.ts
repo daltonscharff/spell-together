@@ -1,7 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { Timestamp } from "@firebase/firestore";
 import type { BaseType } from "~/types/baseType";
-import type { Game, GameId } from "~/types/game";
 import type { Guess, GuessId } from "~/types/guess";
 import type { Puzzle, PuzzleId } from "~/types/puzzle";
 import type { Room, RoomId } from "~/types/room";
@@ -22,7 +21,6 @@ enum Collections {
   ROOMS = "rooms",
   USERS = "users",
   GUESSES = "guesses",
-  GAMES = "games",
 }
 
 function createBaseType(): BaseType {
@@ -85,7 +83,7 @@ function createUser(): { id: UserId } & User {
 
 function createGuess(
   userId: UserId,
-  gameId: GameId,
+  roomId: RoomId,
   wordId: WordId,
   isCorrect: boolean = true
 ): { id: GuessId } & Guess {
@@ -93,18 +91,9 @@ function createGuess(
     ...createBaseType(),
     id: faker.string.uuid(),
     userId,
-    gameId,
+    roomId,
     wordId,
     isCorrect,
-  };
-}
-
-function createGame(puzzleId: PuzzleId, roomId: RoomId): { id: GameId } & Game {
-  return {
-    ...createBaseType(),
-    id: faker.string.uuid(),
-    puzzleId,
-    roomId,
   };
 }
 
@@ -173,14 +162,13 @@ await Promise.all(
 const words = faker.helpers.multiple(createWord, {
   count: { min: 15, max: 30 },
 });
-const users = [createUser(), createUser()];
+const users = [createUser(), createUser(), createUser()];
 const room = createRoom([users[0].id, users[1].id], users[0].id);
 const puzzle = createPuzzle();
-const game = createGame(puzzle.id, room.id);
 const guesses = [
-  createGuess(users[0].id, game.id, faker.helpers.arrayElement(words).id, true),
-  createGuess(users[0].id, game.id, faker.helpers.arrayElement(words).id, true),
-  createGuess(users[1].id, game.id, faker.helpers.arrayElement(words).id, true),
+  createGuess(users[0].id, room.id, faker.helpers.arrayElement(words).id, true),
+  createGuess(users[0].id, room.id, faker.helpers.arrayElement(words).id, true),
+  createGuess(users[1].id, room.id, faker.helpers.arrayElement(words).id, true),
 ];
 
 const batch = db.batch();
@@ -210,12 +198,6 @@ batch.set(db.collection(Collections.PUZZLES).doc(puzzle.id), {
   ...puzzle,
   date: clientToAdminTimestamp(puzzle.date),
   createdAt: clientToAdminTimestamp(puzzle.createdAt),
-  id: undefined,
-});
-
-batch.set(db.collection(Collections.GAMES).doc(game.id), {
-  ...game,
-  createdAt: clientToAdminTimestamp(game.createdAt),
   id: undefined,
 });
 
