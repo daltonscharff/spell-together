@@ -1,3 +1,4 @@
+import type { BaseType } from "./baseType";
 import type { UserId } from "./user";
 import type { WordId } from "./word";
 
