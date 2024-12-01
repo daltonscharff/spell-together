@@ -13,6 +13,17 @@ import {
   Timestamp as AdminTimestamp,
 } from "firebase-admin/firestore";
 import serviceAccount from "../credentials.json";
+import readline from "readline/promises";
+import { stdin, stdout } from "process";
+
+enum Collections {
+  WORDS = "words",
+  PUZZLES = "puzzles",
+  ROOMS = "rooms",
+  USERS = "users",
+  GUESSES = "guesses",
+  GAMES = "games",
+}
 
 function createBaseType(): BaseType {
   const ts = Timestamp.fromDate(faker.date.recent());
@@ -99,13 +110,6 @@ function createGame(puzzleId: PuzzleId, roomId: RoomId): { id: GameId } & Game {
   };
 }
 
-/**
- * TODO:
- *  x load admin firebase
- *  - clear database (with cli confirmation)
- *  x write new fake data to firebase
- */
-
 function clientToAdminTimestamp(clientTs: Timestamp): AdminTimestamp {
   return AdminTimestamp.fromDate(clientTs.toDate());
 }
@@ -115,20 +119,75 @@ function initializeFirestore() {
     credential: admin.credential.cert(serviceAccount as ServiceAccount),
   });
 
-  return getFirestore();
+  const db = getFirestore();
+  db.settings({
+    ignoreUndefinedProperties: true,
+  });
+  return db;
+}
+
+async function wipeFirestoreCollection(
+  db: admin.firestore.Firestore,
+  collection: string
+) {
+  const BATCH_SIZE = 50;
+  const query = db.collection(collection).orderBy("__name__").limit(BATCH_SIZE);
+  let snapshot = await query.get();
+
+  while (snapshot.size > 0) {
+    const batch = db.batch();
+
+    snapshot.docs.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+
+    await batch.commit();
+    snapshot = await query.get();
+  }
+}
+
+const rl = readline.createInterface({
+  input: stdin,
+  output: stdout,
+});
+const hasConsent = await rl.question(
+  "Are you sure you want to clear and reseed the database? (y/N) "
+);
+rl.close();
+if (hasConsent !== "y") {
+  process.exit();
 }
 
 const db = initializeFirestore();
-db.settings({
-  ignoreUndefinedProperties: true,
-});
-const batch = db.batch();
+
+await Promise.all(
+  Object.values(Collections).map(async (collection) => {
+    console.info("Wiping collection", collection);
+    return wipeFirestoreCollection(db, collection);
+  })
+)
+  .catch((err) => {
+    console.error("Error wiping collections", err);
+    process.exit(1);
+  })
+  .then(() => console.info("All collections wiped"));
 
 const words = faker.helpers.multiple(createWord, {
   count: { min: 15, max: 30 },
 });
+const users = [createUser(), createUser()];
+const room = createRoom([users[0].id, users[1].id], users[0].id);
+const puzzle = createPuzzle();
+const game = createGame(puzzle.id, room.id);
+const guesses = [
+  createGuess(users[0].id, game.id, faker.helpers.arrayElement(words).id, true),
+  createGuess(users[0].id, game.id, faker.helpers.arrayElement(words).id, true),
+  createGuess(users[1].id, game.id, faker.helpers.arrayElement(words).id, true),
+];
+
+const batch = db.batch();
 words.forEach((word) =>
-  batch.set(db.collection("words").doc(word.id), {
+  batch.set(db.collection(Collections.WORDS).doc(word.id), {
     ...word,
     createdAt: clientToAdminTimestamp(word.createdAt),
     updatedAt: clientToAdminTimestamp(word.updatedAt),
@@ -136,9 +195,8 @@ words.forEach((word) =>
   })
 );
 
-const users = [createUser(), createUser()];
 users.forEach((user) =>
-  batch.set(db.collection("users").doc(user.id), {
+  batch.set(db.collection(Collections.USERS).doc(user.id), {
     ...user,
     createdAt: clientToAdminTimestamp(user.createdAt),
     updatedAt: clientToAdminTimestamp(user.updatedAt),
@@ -146,16 +204,14 @@ users.forEach((user) =>
   })
 );
 
-const room = createRoom([users[0].id, users[1].id], users[0].id);
-batch.set(db.collection("rooms").doc(room.id), {
+batch.set(db.collection(Collections.ROOMS).doc(room.id), {
   ...room,
   createdAt: clientToAdminTimestamp(room.createdAt),
   updatedAt: clientToAdminTimestamp(room.updatedAt),
   id: undefined,
 });
 
-const puzzle = createPuzzle();
-batch.set(db.collection("puzzles").doc(puzzle.id), {
+batch.set(db.collection(Collections.PUZZLES).doc(puzzle.id), {
   ...puzzle,
   date: clientToAdminTimestamp(puzzle.date),
   createdAt: clientToAdminTimestamp(puzzle.createdAt),
@@ -163,21 +219,15 @@ batch.set(db.collection("puzzles").doc(puzzle.id), {
   id: undefined,
 });
 
-const game = createGame(puzzle.id, room.id);
-batch.set(db.collection("games").doc(game.id), {
+batch.set(db.collection(Collections.GAMES).doc(game.id), {
   ...game,
   createdAt: clientToAdminTimestamp(game.createdAt),
   updatedAt: clientToAdminTimestamp(game.updatedAt),
   id: undefined,
 });
 
-const guesses = [
-  createGuess(users[0].id, game.id, faker.helpers.arrayElement(words).id, true),
-  createGuess(users[0].id, game.id, faker.helpers.arrayElement(words).id, true),
-  createGuess(users[1].id, game.id, faker.helpers.arrayElement(words).id, true),
-];
 guesses.forEach(async (guess) =>
-  batch.set(db.collection("guesses").doc(guess.id), {
+  batch.set(db.collection(Collections.GUESSES).doc(guess.id), {
     ...guess,
     createdAt: clientToAdminTimestamp(guess.createdAt),
     updatedAt: clientToAdminTimestamp(guess.updatedAt),
@@ -186,7 +236,7 @@ guesses.forEach(async (guess) =>
 );
 
 console.info("Writing to firestore...");
-batch
+await batch
   .commit()
   .catch((err) => console.error("Error writing to firestore", err))
   .then(() => console.info("Writing complete"));
