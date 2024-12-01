@@ -26,10 +26,8 @@ enum Collections {
 }
 
 function createBaseType(): BaseType {
-  const ts = Timestamp.fromDate(faker.date.recent());
   return {
-    createdAt: ts,
-    updatedAt: ts,
+    createdAt: Timestamp.fromDate(faker.date.recent()),
   };
 }
 
@@ -190,7 +188,6 @@ words.forEach((word) =>
   batch.set(db.collection(Collections.WORDS).doc(word.id), {
     ...word,
     createdAt: clientToAdminTimestamp(word.createdAt),
-    updatedAt: clientToAdminTimestamp(word.updatedAt),
     id: undefined,
   })
 );
@@ -199,7 +196,6 @@ users.forEach((user) =>
   batch.set(db.collection(Collections.USERS).doc(user.id), {
     ...user,
     createdAt: clientToAdminTimestamp(user.createdAt),
-    updatedAt: clientToAdminTimestamp(user.updatedAt),
     id: undefined,
   })
 );
@@ -207,7 +203,6 @@ users.forEach((user) =>
 batch.set(db.collection(Collections.ROOMS).doc(room.id), {
   ...room,
   createdAt: clientToAdminTimestamp(room.createdAt),
-  updatedAt: clientToAdminTimestamp(room.updatedAt),
   id: undefined,
 });
 
@@ -215,14 +210,12 @@ batch.set(db.collection(Collections.PUZZLES).doc(puzzle.id), {
   ...puzzle,
   date: clientToAdminTimestamp(puzzle.date),
   createdAt: clientToAdminTimestamp(puzzle.createdAt),
-  updatedAt: clientToAdminTimestamp(puzzle.updatedAt),
   id: undefined,
 });
 
 batch.set(db.collection(Collections.GAMES).doc(game.id), {
   ...game,
   createdAt: clientToAdminTimestamp(game.createdAt),
-  updatedAt: clientToAdminTimestamp(game.updatedAt),
   id: undefined,
 });
 
@@ -230,7 +223,6 @@ guesses.forEach(async (guess) =>
   batch.set(db.collection(Collections.GUESSES).doc(guess.id), {
     ...guess,
     createdAt: clientToAdminTimestamp(guess.createdAt),
-    updatedAt: clientToAdminTimestamp(guess.updatedAt),
     id: undefined,
   })
 );
