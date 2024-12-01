@@ -84,6 +84,7 @@ function createUser(): { id: UserId } & User {
 function createGuess(
   userId: UserId,
   roomId: RoomId,
+  puzzleId: PuzzleId,
   wordId: WordId,
   isCorrect: boolean = true
 ): { id: GuessId } & Guess {
@@ -92,6 +93,7 @@ function createGuess(
     id: faker.string.uuid(),
     userId,
     roomId,
+    puzzleId,
     wordId,
     isCorrect,
   };
@@ -166,9 +168,27 @@ const users = [createUser(), createUser(), createUser()];
 const room = createRoom([users[0].id, users[1].id], users[0].id);
 const puzzle = createPuzzle();
 const guesses = [
-  createGuess(users[0].id, room.id, faker.helpers.arrayElement(words).id, true),
-  createGuess(users[0].id, room.id, faker.helpers.arrayElement(words).id, true),
-  createGuess(users[1].id, room.id, faker.helpers.arrayElement(words).id, true),
+  createGuess(
+    users[0].id,
+    room.id,
+    puzzle.id,
+    faker.helpers.arrayElement(words).id,
+    true
+  ),
+  createGuess(
+    users[0].id,
+    room.id,
+    puzzle.id,
+    faker.helpers.arrayElement(words).id,
+    true
+  ),
+  createGuess(
+    users[1].id,
+    room.id,
+    puzzle.id,
+    faker.helpers.arrayElement(words).id,
+    true
+  ),
 ];
 
 const batch = db.batch();

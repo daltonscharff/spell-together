@@ -8,6 +8,7 @@ export type GuessId = string;
 export type Guess = BaseType & {
   userId: UserId;
   roomId: RoomId;
+  puzzleId: PuzzleId;
   wordId: WordId;
   isCorrect: boolean;
 };
