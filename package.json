@@ -3,18 +3,23 @@
   "version": "1.0.0",
   "description": "Compete to see who can create the most words using letters from the hive in this multiplayer modification of [The New York Times Spelling Bee](https://www.nytimes.com/puzzles/spelling-bee).",
   "main": "index.js",
+  "author": "Dalton Scharff",
   "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
     "db:reset": "tsx --env-file=.env ./apps/scripts/database/reset.ts",
     "db:seed": "tsx --env-file=.env ./apps/scripts/database/seed.ts"
   },
-  "author": "Dalton Scharff",
-  "workspaces": [
-    "apps/web",
-    "apps/scripts",
-    "packages/config",
-    "packages/shared"
-  ],
-  "devDependencies": {
-    "tsx": "^4.19.2"
+  "dependencies": {
+    "@faker-js/faker": "^9.2.0",
+    "appwrite": "^14.0.1",
+    "node-appwrite": "^15.0.0",
+    "nuxt": "^3.14.1592",
+    "tsx": "^4.19.2",
+    "vue": "latest",
+    "vue-router": "latest"
   }
 }

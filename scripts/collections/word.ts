@@ -1,11 +1,11 @@
-import config from "config";
-import { databases } from "../appwriteClient";
+import config from "../utils/config";
+import { databases } from "../utils/appwriteClient";
 
 export type WordId = string;
 
 export class Word {
-  pointValue: number;
-  isPangram: boolean;
+  pointValue: number = 0;
+  isPangram: boolean = false;
   partOfSpeech?: string;
   definition?: string;
 

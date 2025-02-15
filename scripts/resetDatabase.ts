@@ -1,8 +1,8 @@
-import { Guess, Puzzle, Room, User, Word } from "../../../packages/shared";
+import { Guess, Puzzle, Room, User, Word } from "./collections";
 import readline from "readline/promises";
 import { stdin, stdout } from "process";
-import config from "config";
-import { databases } from "../../../packages/shared/appwriteClient";
+import config from "./utils/config";
+import { databases } from "./utils/appwriteClient";
 
 const DATABASE_NAME = "spell-together";
 

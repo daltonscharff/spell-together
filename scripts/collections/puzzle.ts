@@ -1,16 +1,16 @@
-import config from "config";
-import { databases } from "../appwriteClient";
+import config from "../utils/config";
+import { databases } from "../utils/appwriteClient";
 import type { WordId } from "./word";
 import { RelationshipType } from "node-appwrite";
 
 export type PuzzleId = string;
 
 export class Puzzle {
-  date: Date;
-  outerLetters: string[];
-  centerLetter: string;
-  maxScore: number;
-  words: WordId[];
+  date: Date = new Date(0);
+  outerLetters: string[] = [];
+  centerLetter: string = "";
+  maxScore: number = 0;
+  words: WordId[] = [];
 
   static async createCollection() {
     await databases.createCollection(

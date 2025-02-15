@@ -2,18 +2,18 @@ import { type RoomId } from "./room";
 import { type UserId } from "./user";
 import { type WordId } from "./word";
 import { type PuzzleId } from "./puzzle";
-import { databases } from "../appwriteClient";
+import { databases } from "../utils/appwriteClient";
 import { RelationshipType } from "node-appwrite";
-import config from "config";
+import config from "../utils/config";
 
 export type GuessId = string;
 
 export class Guess {
-  userId: UserId;
-  roomId: RoomId;
-  puzzleId: PuzzleId;
-  wordId: WordId;
-  isCorrect: boolean;
+  userId: UserId = "";
+  roomId: RoomId = "";
+  puzzleId: PuzzleId = "";
+  wordId: WordId = "";
+  isCorrect: boolean = false;
 
   static async createCollection() {
     await databases.createCollection(

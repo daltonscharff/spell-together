@@ -1,5 +1,5 @@
-import config from "config";
-import { databases } from "../appwriteClient";
+import config from "../utils/config";
+import { databases } from "../utils/appwriteClient";
 import type { UserId } from "./user";
 import { RelationshipType } from "node-appwrite";
 
@@ -7,8 +7,8 @@ export type RoomId = string;
 
 export class Room {
   name?: string;
-  users: UserId[];
-  owner: UserId;
+  users: UserId[] = [];
+  owner: UserId = "";
 
   static async createCollection() {
     await databases.createCollection(

@@ -1,11 +1,11 @@
-import config from "config";
-import { databases } from "../appwriteClient";
+import config from "../utils/config";
+import { databases } from "../utils/appwriteClient";
 
 export type UserId = string;
 
 export class User {
   email?: string;
-  name: string;
+  name: string = "";
 
   static async createCollection() {
     await databases.createCollection(

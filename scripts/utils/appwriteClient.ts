@@ -1,5 +1,5 @@
 import * as sdk from "node-appwrite";
-import config from "config";
+import config from "./config";
 
 export const client = new sdk.Client();
 
