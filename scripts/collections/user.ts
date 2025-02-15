@@ -1,11 +1,17 @@
 import config from "../utils/config";
 import { databases } from "../utils/appwriteClient";
+import { faker } from "@faker-js/faker";
 
 export type UserId = string;
 
 export class User {
   email?: string;
   name: string = "";
+
+  randomize() {
+    this.email = faker.internet.email();
+    this.name = faker.person.fullName();
+  }
 
   static async createCollection() {
     await databases.createCollection(

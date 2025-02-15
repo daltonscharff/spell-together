@@ -9,13 +9,13 @@ const DATABASE_NAME = "spell-together";
 async function deleteDatabase(databaseId: string) {
   return databases
     .delete(databaseId)
-    .then(() => console.log("database deleted"));
+    .then(() => console.log("old database deleted"));
 }
 
 async function createDatabase(databaseId: string, name: string) {
   return databases
     .create(databaseId, name)
-    .then(() => console.log("database created"));
+    .then(() => console.log("new database created"));
 }
 
 async function createCollections() {

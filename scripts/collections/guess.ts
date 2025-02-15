@@ -5,6 +5,7 @@ import { type PuzzleId } from "./puzzle";
 import { databases } from "../utils/appwriteClient";
 import { RelationshipType } from "node-appwrite";
 import config from "../utils/config";
+import { faker } from "@faker-js/faker";
 
 export type GuessId = string;
 
@@ -14,6 +15,19 @@ export class Guess {
   puzzleId: PuzzleId = "";
   wordId: WordId = "";
   isCorrect: boolean = false;
+
+  randomize(
+    userId: UserId,
+    roomId: RoomId,
+    puzzleId: PuzzleId,
+    wordId: WordId
+  ) {
+    this.userId = userId;
+    this.roomId = roomId;
+    this.puzzleId = puzzleId;
+    this.wordId = wordId;
+    this.isCorrect = faker.datatype.boolean();
+  }
 
   static async createCollection() {
     await databases.createCollection(

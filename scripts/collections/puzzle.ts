@@ -2,6 +2,7 @@ import config from "../utils/config";
 import { databases } from "../utils/appwriteClient";
 import type { WordId } from "./word";
 import { RelationshipType } from "node-appwrite";
+import { faker } from "@faker-js/faker";
 
 export type PuzzleId = string;
 
@@ -11,6 +12,14 @@ export class Puzzle {
   centerLetter: string = "";
   maxScore: number = 0;
   words: WordId[] = [];
+
+  randomize(words: WordId[]) {
+    this.date = faker.date.recent({ days: 7 });
+    this.outerLetters = faker.string.alpha(6).split("");
+    this.centerLetter = faker.string.alpha(1);
+    this.maxScore = faker.number.int({ min: 100, max: 300 });
+    this.words = words;
+  }
 
   static async createCollection() {
     await databases.createCollection(
