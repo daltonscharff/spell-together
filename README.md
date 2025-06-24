@@ -4,10 +4,47 @@ Compete to see who can create the most words using letters from the hive in this
 
 ## Requirements
 
-- [Deno](https://deno.land/#installation)
-- [Docker](https://www.docker.com/products/docker-desktop/)
-- [Node](https://nodejs.org/en/)
-- [Supabase CLI](https://supabase.com/docs/reference/cli/installing-and-updating)
+-   [Deno](https://deno.land/#installation)
+-   [Docker](https://www.docker.com/products/docker-desktop/)
+-   [Node](https://nodejs.org/en/)
+-   [Supabase CLI](https://supabase.com/docs/reference/cli/installing-and-updating)
+
+## Daily Tasks
+
+The production version of this application requires the following daily tasks to be run. These are executed via cron on Supabase.
+
+### Load the day's puzzle
+
+Completed by running the `load-puzzle` function.
+
+### Delete puzzles older than 7 days
+
+```sql
+delete from
+  puzzle
+where
+  date < current_date at time zone 'UTC' - interval '7 days';
+```
+
+### Delete rooms which have not been played in 7 days
+
+```sql
+delete from
+  room
+where
+  id in (
+    select
+      room_id
+    from
+      most_recent_correct_guess
+    where
+      room_created_at < current_date at time zone 'UTC' - interval '7 days'
+      AND (
+        found_at < current_date at time zone 'UTC' - interval '7 days'
+        OR found_at is null
+      )
+  );
+```
 
 ## How to Run
 
@@ -51,4 +88,4 @@ REACT_APP_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1N...  # Supabase anonymous public ke
 ```
 
 4. Run `yarn start`
-   - the application should be available at http://localhost:3000
+    - the application should be available at http://localhost:3000
