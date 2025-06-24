@@ -1,7 +1,7 @@
 DO $$
 DECLARE
-  puzzle_1_id INT8;
-  puzzle_2_id INT8;
+  puzzle_1_id UUID;
+  puzzle_2_id UUID;
 BEGIN
 
   INSERT INTO puzzle (date,outer_letters,center_letter,max_score)
