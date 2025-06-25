@@ -1,11 +1,9 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router";
-import Home from "./routes/home";
-import About from "./routes/about";
-import Posts from "./routes/posts";
 import { DefaultLayout } from "./layouts/default";
+import Home from "./routes/home";
+import Room from "./routes/room";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -13,8 +11,9 @@ createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route element={<DefaultLayout />}>
           <Route index element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/posts" element={<Posts />} />
+          <Route path="rooms">
+            <Route path=":shortcode" element={<Room />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
