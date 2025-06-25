@@ -4,7 +4,7 @@ const fetcher = (input: RequestInfo | URL) =>
   fetch(input).then((res) => res.json());
 const POSTS_TO_SHOW = 5;
 
-export default function PostsPage() {
+export function PostsPage() {
   const { data, error, isLoading } = useSWR<
     { userId: number; id: number; title: string; body: string }[]
   >(`https://jsonplaceholder.typicode.com/posts/`, fetcher);
@@ -33,3 +33,5 @@ export default function PostsPage() {
     </>
   );
 }
+
+export default PostsPage;
