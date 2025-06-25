@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function HomePage() {
+export default function HomePage() {
   const [count, setCount] = useState(0);
 
   return (
@@ -21,5 +21,3 @@ function HomePage() {
     </>
   );
 }
-
-export default HomePage;

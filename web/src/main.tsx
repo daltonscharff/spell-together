@@ -1,9 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import Home from "./routes/home";
 import { BrowserRouter, Routes, Route } from "react-router";
+import Home from "./routes/home";
 import About from "./routes/about";
+import Posts from "./routes/posts";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -11,6 +12,7 @@ createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route index element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/posts" element={<Posts />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
