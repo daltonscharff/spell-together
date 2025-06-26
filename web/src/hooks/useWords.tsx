@@ -1,9 +1,9 @@
-import useSWR from "swr";
+import useSWRImmutable from "swr/immutable";
 import { fetcher } from "../utils/fetcher";
 import { type Word, type WordWithPuzzleId } from "../types/database.types";
 
 export function useWords(puzzleId?: string) {
-  const { data, error } = useSWR<WordWithPuzzleId[]>(
+  const { data, error } = useSWRImmutable<WordWithPuzzleId[]>(
     puzzleId !== undefined
       ? `word_with_puzzle_id?puzzle_id=eq.${puzzleId}`
       : null,

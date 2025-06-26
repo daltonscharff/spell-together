@@ -1,9 +1,9 @@
-import useSWR from "swr";
+import useSWRImmutable from "swr/immutable";
 import { fetcher } from "../utils/fetcher";
 import type { Room } from "../types/database.types";
 
 export function useRoom(shortcode?: string) {
-  const { data, error } = useSWR<Room[]>(
+  const { data, error } = useSWRImmutable<Room[]>(
     shortcode !== undefined ? `room?shortcode=eq.${shortcode}` : null,
     fetcher
   );
