@@ -18,10 +18,13 @@ export function HomePage() {
       <div>
         <h1>Recent rooms</h1>
         {recentRooms.length > 0 ? (
-          recentRooms.map((recentRoom) => (
-            <Link to={`/rooms/${recentRoom.shortcode}`}>
+          recentRooms.map((recentRoom, i) => (
+            <Link
+              to={`/rooms/${recentRoom.shortcode}`}
+              key={`${recentRoom.roomId}_${i}`}
+            >
               <button className="btn">
-                <div key={recentRoom.roomId}>{recentRoom.shortcode}</div>
+                <div>{recentRoom.shortcode}</div>
                 <div>
                   last visited:{" "}
                   {dayjs
