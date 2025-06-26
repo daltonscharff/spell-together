@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useRecentRooms } from "../hooks/useRecentRooms";
 import { useRoom } from "../hooks/useRoom";
 import { useWords } from "../hooks/useWords";
 import { usePuzzles } from "../hooks/usePuzzles";
 import { useGuesses } from "../hooks/useGuesses";
+import { PuzzleSelector } from "../components/PuzzleSelector";
 
 export function RoomPage() {
   const navigate = useNavigate();
@@ -14,7 +15,10 @@ export function RoomPage() {
   const { puzzles } = usePuzzles();
   const { room, error: roomError, loading: roomLoading } = useRoom(shortcode);
 
-  const currentPuzzle = puzzles?.[0];
+  const [currentPuzzleIndex, setCurrentPuzzleIndex] = useState(0);
+  const currentPuzzle = useMemo(() => {
+    return puzzles?.[currentPuzzleIndex];
+  }, [currentPuzzleIndex]);
   const { words, wordsMappedById } = useWords(currentPuzzle?.id);
 
   const { guesses, revalidate: revalidateGuesses } = useGuesses(
@@ -35,6 +39,11 @@ export function RoomPage() {
   return (
     <>
       <div>Room page for shortcode: {shortcode}</div>
+      <PuzzleSelector
+        puzzles={puzzles ?? []}
+        currentPuzzleIndex={currentPuzzleIndex}
+        setCurrentPuzzleIndex={setCurrentPuzzleIndex}
+      />
       <div>
         <div>
           <span className="font-bold">puzzle:</span> {currentPuzzle?.date}{" "}
