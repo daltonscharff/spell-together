@@ -18,7 +18,10 @@ export function RoomPage() {
   const { wordsMappedById } = useWords(currentPuzzle?.id);
   console.log({ wordsMappedById });
 
-  const { guesses } = useGuesses(room?.id, currentPuzzle?.id);
+  const { guesses, revalidate: revalidateGuesses } = useGuesses(
+    room?.id,
+    currentPuzzle?.id
+  );
   console.log({ guesses });
 
   useEffect(() => {
@@ -34,6 +37,9 @@ export function RoomPage() {
   return (
     <>
       <div>Room page for shortcode: {shortcode}</div>
+      <button className="btn" onClick={revalidateGuesses}>
+        Reload guesses
+      </button>
     </>
   );
 }
