@@ -2,8 +2,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { DefaultLayout } from "./layouts/default";
-import Home from "./routes/home";
-import Room from "./routes/room";
+import Home from "./pages/home";
+import Room from "./pages/room";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
