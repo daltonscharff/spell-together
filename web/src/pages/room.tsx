@@ -15,14 +15,12 @@ export function RoomPage() {
   const { room, error: roomError, loading: roomLoading } = useRoom(shortcode);
 
   const currentPuzzle = puzzles?.[0];
-  const { wordsMappedById } = useWords(currentPuzzle?.id);
-  console.log({ wordsMappedById });
+  const { words, wordsMappedById } = useWords(currentPuzzle?.id);
 
   const { guesses, revalidate: revalidateGuesses } = useGuesses(
     room?.id,
     currentPuzzle?.id
   );
-  console.log({ guesses });
 
   useEffect(() => {
     if (roomLoading) return;
@@ -37,6 +35,24 @@ export function RoomPage() {
   return (
     <>
       <div>Room page for shortcode: {shortcode}</div>
+      <div>
+        <div>
+          <span className="font-bold">puzzle:</span> {currentPuzzle?.date}{" "}
+          {currentPuzzle?.outer_letters.join(",")},
+          <span className="font-medium">{currentPuzzle?.center_letter}</span>
+        </div>
+        <div className="wrap-normal">
+          <span className="font-bold">words:</span>{" "}
+          {words?.map((word) => word.word).join(", ")}
+        </div>
+        <div>
+          <span className="font-bold">guesses:</span>{" "}
+          {guesses
+            ?.map((guess) => wordsMappedById.get(guess.word_id)?.word)
+            .filter(Boolean)
+            .join(", ")}
+        </div>
+      </div>
       <button className="btn" onClick={revalidateGuesses}>
         Reload guesses
       </button>
