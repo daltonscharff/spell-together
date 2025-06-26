@@ -7,7 +7,7 @@ export function RoomPage() {
   const { pushToRecentRooms } = useRecentRooms();
 
   useEffect(() => {
-    if (shortcode) pushToRecentRooms(shortcode);
+    if (shortcode) pushToRecentRooms("1", shortcode);
   }, []);
 
   return (
