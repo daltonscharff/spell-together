@@ -113,6 +113,18 @@ alter table "public"."room" add constraint "room_shortcode_key" UNIQUE using ind
 
 alter table "public"."word" add constraint "word_word_key" UNIQUE using index "word_word_key";
 
+create materialized view "public"."word_with_puzzle_id" as  SELECT word.id,
+    word.created_at,
+    word.word,
+    word.point_value,
+    word.is_pangram,
+    word.definition,
+    word.part_of_speech,
+    puzzle_to_word.puzzle_id
+   FROM (puzzle_to_word
+     JOIN word ON ((puzzle_to_word.word_id = word.id)));
+
+
 grant delete on table "public"."guess" to "anon";
 
 grant insert on table "public"."guess" to "anon";

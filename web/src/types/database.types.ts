@@ -39,3 +39,5 @@ export type Word = {
   point_value: number;
   word: string;
 };
+
+export type WordWithPuzzleId = Word & Pick<PuzzleToWord, "puzzle_id">;
