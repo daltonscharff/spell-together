@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { APP_NAME } from "../copy";
 import { useRecentRooms } from "../hooks/useRecentRooms";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
@@ -16,9 +15,8 @@ export function HomePage() {
 
   return (
     <>
-      <h1>{APP_NAME}</h1>
       <div>
-        <h2>Recent rooms</h2>
+        <h1>Recent rooms</h1>
         {recentRooms.length > 0 ? (
           recentRooms.map((recentRoom) => (
             <Link to={`/rooms/${recentRoom.shortcode}`}>
@@ -43,7 +41,6 @@ export function HomePage() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          // TODO: check if room exists before rerouting
           navigate(`/rooms/${roomCodeInputValue}`);
         }}
       >
