@@ -4,6 +4,7 @@ import { useRecentRooms } from "../hooks/useRecentRooms";
 import { useRoom } from "../hooks/useRoom";
 import { useWords } from "../hooks/useWords";
 import { usePuzzles } from "../hooks/usePuzzles";
+import { useGuesses } from "../hooks/useGuesses";
 
 export function RoomPage() {
   const navigate = useNavigate();
@@ -15,7 +16,10 @@ export function RoomPage() {
 
   const currentPuzzle = puzzles?.[0];
   const { wordsMappedById } = useWords(currentPuzzle?.id);
-  console.log(wordsMappedById);
+  console.log({ wordsMappedById });
+
+  const { guesses } = useGuesses(room?.id, currentPuzzle?.id);
+  console.log({ guesses });
 
   useEffect(() => {
     if (roomLoading) return;
