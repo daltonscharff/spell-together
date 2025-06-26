@@ -2,16 +2,20 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useRecentRooms } from "../hooks/useRecentRooms";
 import { useRoom } from "../hooks/useRoom";
+import { useWords } from "../hooks/useWords";
+import { usePuzzles } from "../hooks/usePuzzles";
 
 export function RoomPage() {
+  const navigate = useNavigate();
   const { shortcode } = useParams();
   const { pushToRecentRooms } = useRecentRooms();
-  const {
-    room,
-    error: roomError,
-    loading: roomLoading,
-  } = useRoom(shortcode ?? "");
-  const navigate = useNavigate();
+
+  const { puzzles } = usePuzzles();
+  const { room, error: roomError, loading: roomLoading } = useRoom(shortcode);
+
+  const currentPuzzle = puzzles?.[0];
+  const { wordsMappedById } = useWords(currentPuzzle?.id);
+  console.log(wordsMappedById);
 
   useEffect(() => {
     if (roomLoading) return;
