@@ -18,7 +18,7 @@ export function RoomPage() {
   const [currentPuzzleIndex, setCurrentPuzzleIndex] = useState(0);
   const currentPuzzle = useMemo(() => {
     return puzzles?.[currentPuzzleIndex];
-  }, [currentPuzzleIndex]);
+  }, [puzzles, currentPuzzleIndex]);
   const { words, wordsMappedById } = useWords(currentPuzzle?.id);
 
   const { guesses, revalidate: revalidateGuesses } = useGuesses(
