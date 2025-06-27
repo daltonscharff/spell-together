@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useRecentRooms } from "../hooks/useRecentRooms";
 import { useRoom } from "../hooks/useRoom";
@@ -6,6 +6,7 @@ import { useWords } from "../hooks/useWords";
 import { usePuzzles } from "../hooks/usePuzzles";
 import { useGuesses } from "../hooks/useGuesses";
 import { PuzzleSelector } from "../components/PuzzleSelector";
+import { type Puzzle } from "../types/database.types";
 
 export function RoomPage() {
   const navigate = useNavigate();
@@ -13,12 +14,10 @@ export function RoomPage() {
   const { pushToRecentRooms } = useRecentRooms();
 
   const { puzzles } = usePuzzles();
+  const [currentPuzzle, setCurrentPuzzle] = useState<Puzzle>();
+
   const { room, error: roomError, loading: roomLoading } = useRoom(shortcode);
 
-  const [currentPuzzleIndex, setCurrentPuzzleIndex] = useState(0);
-  const currentPuzzle = useMemo(() => {
-    return puzzles?.[currentPuzzleIndex];
-  }, [puzzles, currentPuzzleIndex]);
   const { words, wordsMappedById } = useWords(currentPuzzle?.id);
 
   const { guesses, revalidate: revalidateGuesses } = useGuesses(
@@ -40,9 +39,9 @@ export function RoomPage() {
     <>
       <div>Room page for shortcode: {shortcode}</div>
       <PuzzleSelector
-        puzzles={puzzles ?? []}
-        currentPuzzleIndex={currentPuzzleIndex}
-        setCurrentPuzzleIndex={setCurrentPuzzleIndex}
+        puzzles={puzzles}
+        currentPuzzle={currentPuzzle}
+        onPuzzleChange={(p: Puzzle) => setCurrentPuzzle(p)}
       />
       <div>
         <div>
