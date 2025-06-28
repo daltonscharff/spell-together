@@ -7,12 +7,12 @@ CREATE OR REPLACE FUNCTION public.guess_table_changes()
 AS $function$
 begin
   perform realtime.broadcast_changes(
-    new.room_id::text || '_' || new.puzzle_id::text,
-      'guess-table-insert',
-      'INSERT',
-      'guess',
-      'public',
-      new
+    NEW.room_id::text || '_' || NEW.puzzle_id::text,
+      TG_OP,
+      TG_OP,
+      TG_TABLE_NAME,
+      TG_TABLE_SCHEMA,
+      NEW
     );
   return null;
 end;
