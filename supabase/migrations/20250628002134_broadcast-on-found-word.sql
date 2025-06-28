@@ -3,6 +3,7 @@ set check_function_bodies = off;
 CREATE OR REPLACE FUNCTION public.guess_table_changes()
  RETURNS trigger
  LANGUAGE plpgsql
+ SET search_path TO ''
 AS $function$
 begin
   perform realtime.broadcast_changes(
@@ -11,8 +12,7 @@ begin
       'INSERT',
       'guess',
       'public',
-      new,
-      old
+      new
     );
   return null;
 end;
