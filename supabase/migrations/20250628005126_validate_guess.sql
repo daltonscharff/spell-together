@@ -12,7 +12,7 @@ AS $function$
 declare
 puzzle_to_word_id UUID;
 begin
-  select id into puzzle_to_word_id from puzzle_to_word where new.puzzle_id = puzzle_to_word.puzzle_id and new.word_id = puzzle_to_word.word_id;
+  select id into puzzle_to_word_id from public.puzzle_to_word where new.puzzle_id = puzzle_to_word.puzzle_id and new.word_id = puzzle_to_word.word_id;
 
   if puzzle_to_word_id is null then
     raise exception 'Word not in puzzle';
