@@ -12,7 +12,8 @@ begin
       TG_OP,
       TG_TABLE_NAME,
       TG_TABLE_SCHEMA,
-      NEW
+      NEW,
+      OLD
     );
   return null;
 end;
