@@ -1,91 +1,36 @@
-# spell-together
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Compete to see who can create the most words using letters from the hive in this multiplayer modification of [The New York Times Spelling Bee](https://www.nytimes.com/puzzles/spelling-bee).
+## Getting Started
 
-## Requirements
+First, run the development server:
 
--   [Deno](https://deno.land/#installation)
--   [Docker](https://www.docker.com/products/docker-desktop/)
--   [Node](https://nodejs.org/en/)
--   [Supabase CLI](https://supabase.com/docs/reference/cli/installing-and-updating)
-
-## Daily Tasks
-
-The production version of this application requires the following daily tasks to be run. These are executed via cron on Supabase.
-
-### Load the day's puzzle
-
-Completed by running the `load-puzzle` function.
-
-### Delete puzzles older than 7 days
-
-```sql
-delete from
-  puzzle
-where
-  date < current_date at time zone 'UTC' - interval '7 days';
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-### Delete rooms which have not been played in 7 days
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-```sql
-delete from
-  room
-where
-  id in (
-    select
-      room_id
-    from
-      most_recent_correct_guess
-    where
-      room_created_at < current_date at time zone 'UTC' - interval '7 days'
-      AND (
-        found_at < current_date at time zone 'UTC' - interval '7 days'
-        OR found_at is null
-      )
-  );
-```
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## How to Run
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-### 1. Server and Database
+## Learn More
 
-Provides a Postgres database and a RESTful API.
+To learn more about Next.js, take a look at the following resources:
 
-1. Make sure Docker is running
-2. Run `supabase start`
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-### 2. Serverless Functions
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-Scrape puzzle data from the official spelling bee game.
+## Deploy on Vercel
 
-1. Create a `.env.local` file
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-```
-# supabase/.env
-ENVIRONMENT=production
-```
-
-2. Run `supabase functions serve load-puzzle --env-file ./supabase/.env` to get the function running locally
-3. Run the following cURL request to trigger the function:
-
-```
-curl --request POST 'http://localhost:54321/functions/v1/load-puzzle' \
-  --header 'Authorization: Bearer <SUPABASE_SERVICE_ROLE_KEY>' \
-  --header 'Content-Type: application/json'
-```
-
-### 3. Client
-
-1. Change into the `web/` directory
-2. Run `yarn install` to install dependencies
-3. Create a `.env.local` file:
-
-```
-# web/.env.local
-REACT_APP_SUPABASE_URL=http://localhost:54321  # Supabase API URL
-REACT_APP_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1N...  # Supabase anonymous public key
-```
-
-4. Run `yarn start`
-    - the application should be available at http://localhost:3000
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
