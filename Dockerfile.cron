@@ -1,0 +1,14 @@
+FROM node:24-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY ./scripts .
+
+RUN touch /var/log/cron/cron-$(date +'%Y%m%d').log
+
+RUN echo "${CRON_SCHEDULE} npm run cron >> /var/log/cron/cron-\$(date +'%Y%m%d').log 2>&1" >> /etc/crontabs/root
+
+CMD ["crond", "-f", "-l", "2"]

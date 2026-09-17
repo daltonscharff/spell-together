@@ -13,7 +13,7 @@ services:
         - action: rebuild
           path: package*.json
         - action: rebuild
-          path: Dockerfile
+          path: Dockerfile.web
     depends_on:
       db:
         condition: service_healthy
@@ -33,5 +33,22 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
 
+  cron:
+    build:
+      context: .
+      dockerfile: Dockerfile.cron
+    volumes:
+      - cron_logs:/var/log/cron
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - TZ=${CRON_TIMEZONE}
+      - CRON_SCHEDULE=${CRON_SCHEDULE}
+      - CRON_MAX_PUZZLES=${CRON_MAX_PUZZLES}
+      - CRON_MAX_UNUSED_ROOM_DAYS=${CRON_MAX_UNUSED_ROOM_DAYS}
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   db_data:
+  cron_logs:
