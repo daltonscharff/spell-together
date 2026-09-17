@@ -1,21 +1,52 @@
 // use prisma-8
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  username  String?
-  name      String?
-  posts     Post[]
-  createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+model Puzzle {
+  id            Int       @id @default(autoincrement())
+  date          DateTime  @default(now()) @unique
+  centerLetter  String 
+  outerLetters  String
+  maxScore      Int
+  createdAt     DateTime  @default(now())
+  updatedAt     temporal.updatedAtString()
+
+  words         WordsToPuzzles[]
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-  createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+model Room {
+  id          Int       @id @default(autoincrement())
+  shortcode   String    @unique
+  createdAt   DateTime  @default(now())
+  lastPlayed  DateTime  @default(now())
+}
+
+model Word {
+  id            Int       @id @default(autoincrement())
+  value         String
+  pointValue    Int
+  isPangram     Boolean   @default(false)
+  partOfSpeech  String?
+  definition    String?
+  createdAt     DateTime  @default(now())
+  updatedAt     temporal.updatedAtString()
+
+  puzzles       WordsToPuzzles[]
+}
+
+model CorrectGuess {
+  id          Int       @id @default(autoincrement())
+  puzzle      Puzzle    @relation(fields: [puzzleId], references: [id])
+  puzzleId    Int
+  room        Room      @relation(fields: [roomId], references: [id])
+  roomId      Int
+  word        Word      @relation(fields: [wordId], references: [id])
+  wordId      Int
+  submittedBy String
+  submittedAt DateTime  @default(now())
+}
+
+model WordsToPuzzles {
+  word      Word    @relation(fields: [wordId], references: [id])
+  wordId    Int
+  puzzles   Puzzle  @relation(fields: [puzzleId], references: [id])
+  puzzleId  Int
 }
