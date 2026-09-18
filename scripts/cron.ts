@@ -1,7 +1,11 @@
-import type { Models } from "../prisma/contract.d";
+import type { FieldOutputTypes } from "../prisma/contract.d";
 import { db } from "../prisma/db";
 import axios from "axios";
 import axiosRetry from "axios-retry";
+
+type Puzzle = FieldOutputTypes["public"]["Puzzle"];
+type Word = FieldOutputTypes["public"]["Word"];
+type PuzzleWord = FieldOutputTypes["public"]["PuzzleWord"];
 
 const PUZZLE_RETENTION_DAYS =
   process.env.CRON_PUZZLE_RETENTION_DAYS &&
@@ -11,6 +15,8 @@ const ROOM_RETENTION_DAYS =
   parseInt(process.env.CRON_ROOM_RETENTION_DAYS, 10);
 
 const SPELLING_BEE_URL = "https://www.nytimes.com/puzzles/spelling-bee";
+
+const PANGRAM_LENGTH = 7;
 
 type NytPuzzle = {
   answers: string[];
@@ -34,6 +40,44 @@ type GameDataResponse = {
     thisWeek: NytPuzzle[];
     today: NytPuzzle;
     yesterday: NytPuzzle;
+  };
+};
+
+type DictionaryApiResponse = {
+  word: string;
+  entries: {
+    language: {
+      code: string;
+      name: string;
+    };
+    partOfSpeech: string;
+    pronunciations: {
+      type: string;
+      text: string;
+      tags: string[];
+    }[];
+    forms: {
+      word: string;
+      tags: string[];
+    }[];
+    senses: {
+      definition: string;
+      examples: string[];
+      tags: string[];
+      quotes: string[];
+      synonyms: string[];
+      antonyms: string[];
+      subsenses: string[];
+    }[];
+    synonyms: string[];
+    antonyms: string[];
+  }[];
+  source: {
+    url: string;
+    license: {
+      name: string;
+      url: string;
+    };
   };
 };
 
@@ -73,41 +117,63 @@ async function scrapePuzzle() {
 }
 
 async function writePuzzle(
-  puzzle: Partial<Models.public_Puzzle>,
-): Promise<Models.public_Puzzle> {
-  // Implementation for writing puzzle
-  // const puzzleRecord = await db.orm.public.Puzzle.create({
-  //   date: puzzle.date,
-  //   centerLetter: puzzle.centerLetter,
-  //   outerLetters: puzzle.outerLetters,
-  // });
-  // return puzzleRecord;
+  puzzle: Omit<Puzzle, "id" | "createdAt" | "updatedAt">,
+): Promise<Puzzle> {
+  return db.orm.public.Puzzle.create(puzzle);
 }
 
 async function getDictionaryData(
   word: string,
-): Promise<Partial<Models.public_Word>> {
-  // Make request to dictionary API to get definition and part of speech
-  // e.g., https://freedictionaryapi.com/api/v1/entries/en/hello
+): Promise<Pick<Word, "definition" | "partOfSpeech">> {
+  const response = await axios.get<DictionaryApiResponse>(
+    `https://freedictionaryapi.com/api/v1/entries/en/${word}`,
+  );
 
-  return { value: "", definition: "", partOfSpeech: "" };
+  if (!response.data.entries || response.data.entries.length === 0) {
+    throw new Error(`No dictionary entries found for word: ${word}`);
+  }
+
+  return {
+    definition: response.data.entries[0].senses[0].definition,
+    partOfSpeech: response.data.entries[0].partOfSpeech,
+  };
 }
 
-async function writeWord(word: string): Promise<Models.public_Word> {
-  const dictionaryData = await getDictionaryData(word);
-  // const wordRecord = await db.orm.public.Word.create({
-  //   value: word,
-  //   definition: dictionaryData.definition,
-  //   partOfSpeech: dictionaryData.partOfSpeech,
-  // });
-  // return wordRecord;
+function getWordScore(word: string, isPangram: boolean): number {
+  let points = 0;
+  if (word.length === 4) {
+    points = 1;
+  } else if (word.length > 4) {
+    points = word.length;
+  }
+  if (isPangram) points += 7;
+  return points;
+}
+
+function getIsPangram(word: string): boolean {
+  const uniqueLetters = new Set(word.toLowerCase());
+  return uniqueLetters.size === PANGRAM_LENGTH;
+}
+
+async function writeWord(word: string): Promise<Word> {
+  const { definition, partOfSpeech } = await getDictionaryData(word);
+  const isPangram = getIsPangram(word);
+  const pointValue = getWordScore(word, isPangram);
+  const wordRecord = await db.orm.public.Word.create({
+    value: word,
+    definition,
+    partOfSpeech,
+    isPangram,
+    pointValue,
+  });
+  return wordRecord;
 }
 
 async function writePuzzleWord(
   puzzleId: number,
   wordId: number,
-): Promise<Models.public_PuzzleWord> {
-  await db.orm.public.PuzzleWord.create({
+): Promise<PuzzleWord> {
+  return db.orm.public.PuzzleWord.create({
     puzzleId,
     wordId,
   });
@@ -127,16 +193,22 @@ if (db.orm.public.Puzzle.first({ date: today }) !== null) {
 } else {
   const puzzle = await scrapePuzzle();
 
-  const wordRecords: Models.public_Word[] = [];
+  const wordRecords: Word[] = [];
   for (const answer of puzzle.answers) {
     const wordRecord = await writeWord(answer);
     wordRecords.push(wordRecord);
   }
 
+  const maxScore = wordRecords.reduce(
+    (total, word) => total + word.pointValue,
+    0,
+  );
+
   const puzzleRecord = await writePuzzle({
     date: Temporal.Instant.from(puzzle.displayDate),
     centerLetter: puzzle.centerLetter,
     outerLetters: puzzle.outerLetters.join(""),
+    maxScore,
   });
 
   await Promise.all(
