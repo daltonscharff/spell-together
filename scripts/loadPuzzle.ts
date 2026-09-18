@@ -1,19 +1,8 @@
-import type { FieldOutputTypes } from "../prisma/contract.d";
+import type { FieldOutputTypes } from "../prisma/contract";
 import { db } from "../prisma/db";
 import axios from "axios";
 import axiosRetry from "axios-retry";
-import pino from "pino";
-
-const logger = pino({
-  transport: {
-    target: "pino-pretty",
-    options: {
-      colorize: true,
-      translateTime: "SYS:standard",
-      ignore: "pid,hostname",
-    },
-  },
-});
+import logger from "./logger";
 
 type Puzzle = FieldOutputTypes["public"]["Puzzle"];
 type Word = FieldOutputTypes["public"]["Word"];
@@ -22,9 +11,6 @@ type PuzzleWord = FieldOutputTypes["public"]["PuzzleWord"];
 const PUZZLE_RETENTION_DAYS =
   process.env.CRON_PUZZLE_RETENTION_DAYS &&
   parseInt(process.env.CRON_PUZZLE_RETENTION_DAYS, 10);
-const ROOM_RETENTION_DAYS =
-  process.env.CRON_ROOM_RETENTION_DAYS &&
-  parseInt(process.env.CRON_ROOM_RETENTION_DAYS, 10);
 
 const SPELLING_BEE_URL = "https://www.nytimes.com/puzzles/spelling-bee";
 
@@ -106,13 +92,6 @@ async function deletePuzzles(olderThan: Temporal.Instant) {
     p.date.lt(olderThan),
   ).deleteAll();
   return deletedPuzzles;
-}
-
-async function deleteRooms(olderThan: Temporal.Instant) {
-  const deletedRooms = await db.orm.public.Room.where((r) =>
-    r.lastPlayed.lt(olderThan),
-  ).deleteAll();
-  return deletedRooms;
 }
 
 async function scrapePuzzle() {
@@ -213,18 +192,18 @@ const today = Temporal.Now.instant();
 if (!PUZZLE_RETENTION_DAYS) {
   throw new Error("CRON_PUZZLE_RETENTION_DAYS is not set");
 }
-if (!ROOM_RETENTION_DAYS) {
-  throw new Error("CRON_ROOM_RETENTION_DAYS is not set");
-}
 
-if (
-  (await db.orm.public.Puzzle.first({
-    dateDisplay: today.toLocaleString("en-US", {
-      dateStyle: "long",
-    }),
-  })) !== null
-) {
-  logger.info("Puzzle already exists for today, skipping scrape");
+const todaysPuzzle = await db.orm.public.Puzzle.first({
+  dateDisplay: today.toLocaleString("en-US", {
+    dateStyle: "long",
+  }),
+});
+if (todaysPuzzle !== null) {
+  logger.info(
+    `Today's puzzle is already loaded: ${todaysPuzzle.dateDisplay}, ${todaysPuzzle.centerLetter}_${todaysPuzzle.outerLetters}`,
+  );
+  await db.close();
+  process.exit(0);
 } else {
   const puzzle = await scrapePuzzle().catch((err) => {
     logger.error("Error scraping puzzle:", err);
@@ -286,15 +265,4 @@ if (deletedPuzzles) {
   );
 }
 
-const deletedRooms = await deleteRooms(
-  today.subtract({ hours: ROOM_RETENTION_DAYS * 24 }),
-).catch((err) => {
-  logger.error("Error deleting rooms:", err);
-});
-if (deletedRooms) {
-  logger.info(
-    `Deleted ${deletedRooms.length} rooms older than ${ROOM_RETENTION_DAYS} days`,
-  );
-}
-
-db.close();
+await db.close();

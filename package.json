@@ -10,7 +10,8 @@
     "lint": "eslint",
     "prisma:emit": "prisma contract emit",
     "prisma:update": "dotenv cross-var prisma db update --db %DATABASE_URL%",
-    "cron": "tsx ./scripts/cron.ts"
+    "load-puzzle": "tsx ./scripts/loadPuzzle.ts",
+    "remove-rooms": "tsx ./scripts/removeRooms.ts"
   },
   "dependencies": {
     "@prisma/orm-postgres": "^8.0.0-rc.11",
