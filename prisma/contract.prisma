@@ -35,20 +35,20 @@ model Word {
 
 model CorrectGuess {
   id          Int       @id @default(autoincrement())
-  puzzle      Puzzle    @relation(fields: [puzzleId], references: [id])
+  puzzle      Puzzle    @relation(fields: [puzzleId], references: [id], onDelete: Cascade)
   puzzleId    Int
-  room        Room      @relation(fields: [roomId], references: [id])
+  room        Room      @relation(fields: [roomId], references: [id], onDelete: Cascade)
   roomId      Int
-  word        Word      @relation(fields: [wordId], references: [id])
+  word        Word      @relation(fields: [wordId], references: [id], onDelete: Cascade)
   wordId      Int
   submittedBy String
   submittedAt DateTime  @default(now())
 }
 
 model PuzzleWord {
-  word      Word    @relation(fields: [wordId], references: [id])
+  word      Word    @relation(fields: [wordId], references: [id], onDelete: Cascade)
   wordId    Int
-  puzzles   Puzzle  @relation(fields: [puzzleId], references: [id])
+  puzzles   Puzzle  @relation(fields: [puzzleId], references: [id], onDelete: Cascade)
   puzzleId  Int
 
   @@id([puzzleId, wordId])

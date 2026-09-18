@@ -26,4 +26,17 @@ if (deletedPuzzles) {
   );
 }
 
+// Clean up any words which no longer belong to a puzzle
+const deletedWordsQuery = db.sql.public.word
+  .delete()
+  .where((f, fns) => {
+    return fns.notIn(f.id, db.sql.public.puzzleWord.select("wordId"));
+  })
+  .returning("id")
+  .build();
+const deletedWords = await db.runtime().query(deletedWordsQuery);
+if (deletedWords) {
+  logger.info(`Deleted ${deletedWords.length} unused words`);
+}
+
 db.close();
