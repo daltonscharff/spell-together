@@ -2,6 +2,9 @@ import type { FieldOutputTypes } from "../prisma/contract.d";
 import { db } from "../prisma/db";
 import axios from "axios";
 import axiosRetry from "axios-retry";
+import pino from "pino";
+
+const logger = pino();
 
 type Puzzle = FieldOutputTypes["public"]["Puzzle"];
 type Word = FieldOutputTypes["public"]["Word"];
@@ -84,7 +87,7 @@ type DictionaryApiResponse = {
 axiosRetry(axios, {
   retries: 3,
   retryDelay: (retryCount) => {
-    console.log(`Retry attempt: ${retryCount}`);
+    logger.info(`Retry attempt: ${retryCount}`);
     return retryCount * 1000; // Wait 1 second before retrying
   },
 });
@@ -156,7 +159,12 @@ function getIsPangram(word: string): boolean {
 }
 
 async function writeWord(word: string): Promise<Word> {
-  const { definition, partOfSpeech } = await getDictionaryData(word);
+  const { definition, partOfSpeech } = await getDictionaryData(word).catch(
+    (err) => {
+      logger.error(`Error fetching dictionary data for word "${word}":`, err);
+      return { definition: null, partOfSpeech: null };
+    },
+  );
   const isPangram = getIsPangram(word);
   const pointValue = getWordScore(word, isPangram);
   const wordRecord = await db.orm.public.Word.create({
@@ -166,6 +174,7 @@ async function writeWord(word: string): Promise<Word> {
     isPangram,
     pointValue,
   });
+
   return wordRecord;
 }
 
@@ -189,14 +198,22 @@ if (!ROOM_RETENTION_DAYS) {
 }
 
 if (db.orm.public.Puzzle.first({ date: today }) !== null) {
-  console.log("Puzzle already exists for today, skipping scrape");
+  logger.info("Puzzle already exists for today, skipping scrape");
 } else {
-  const puzzle = await scrapePuzzle();
+  const puzzle = await scrapePuzzle().catch((err) => {
+    logger.error("Error scraping puzzle:", err);
+    throw err;
+  });
 
   const wordRecords: Word[] = [];
-  for (const answer of puzzle.answers) {
-    const wordRecord = await writeWord(answer);
-    wordRecords.push(wordRecord);
+  for (const word of puzzle.answers) {
+    const wordRecord = await writeWord(word).catch((err) => {
+      logger.error(`Error writing word "${word}" to database:`, err);
+      return null;
+    });
+    if (wordRecord) {
+      wordRecords.push(wordRecord);
+    }
   }
 
   const maxScore = wordRecords.reduce(
@@ -209,22 +226,28 @@ if (db.orm.public.Puzzle.first({ date: today }) !== null) {
     centerLetter: puzzle.centerLetter,
     outerLetters: puzzle.outerLetters.join(""),
     maxScore,
+  }).catch((err) => {
+    logger.error("Error writing puzzle to database:", err);
+    throw err;
   });
 
   await Promise.all(
     wordRecords.map((wordRecord) =>
       writePuzzleWord(puzzleRecord.id, wordRecord.id),
     ),
-  );
+  ).catch((err) => {
+    logger.error("Error writing puzzle words to database:", err);
+    throw err;
+  });
 }
 
 await deletePuzzles(today.subtract({ days: PUZZLE_RETENTION_DAYS })).catch(
   (err) => {
-    console.error("Error deleting puzzles:", err);
+    logger.error("Error deleting puzzles:", err);
   },
 );
 await deleteRooms(today.subtract({ days: ROOM_RETENTION_DAYS })).catch(
   (err) => {
-    console.error("Error deleting rooms:", err);
+    logger.error("Error deleting rooms:", err);
   },
 );
