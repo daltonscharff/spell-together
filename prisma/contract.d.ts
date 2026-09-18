@@ -34,7 +34,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'ce0c0ccc8d078ed20d03edf8f83ad6aa48c06b047337fd96ec44900eb1e335a7'>;
+  StorageHashBase<'ec646a3f8e89efd5c46db41178d4f7b614cdde4750e15323ace4fba2a627554e'>;
 export type ExecutionHash =
   ExecutionHashBase<'014c2e5f4239d33a95147cea07961c64d833f4bfb15be9055a7938dfb7f2ce1c'>;
 export type ProfileHash =
@@ -253,6 +253,7 @@ export type FieldOutputTypes = {
     readonly Puzzle: {
       readonly id: CodecTypes['pg/int4@1']['output'];
       readonly date: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly dateDisplay: CodecTypes['pg/text@1']['output'];
       readonly centerLetter: CodecTypes['pg/text@1']['output'];
       readonly outerLetters: CodecTypes['pg/text@1']['output'];
       readonly maxScore: CodecTypes['pg/int4@1']['output'];
@@ -294,6 +295,7 @@ export type FieldInputTypes = {
     readonly Puzzle: {
       readonly id: CodecTypes['pg/int4@1']['input'];
       readonly date: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly dateDisplay: CodecTypes['pg/text@1']['input'];
       readonly centerLetter: CodecTypes['pg/text@1']['input'];
       readonly outerLetters: CodecTypes['pg/text@1']['input'];
       readonly maxScore: CodecTypes['pg/int4@1']['input'];
@@ -336,6 +338,7 @@ export type StorageColumnTypes = {
       readonly centerLetter: CodecTypes['pg/text@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly date: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly dateDisplay: CodecTypes['pg/text@1']['output'];
       readonly id: CodecTypes['pg/int4@1']['output'];
       readonly maxScore: CodecTypes['pg/int4@1']['output'];
       readonly outerLetters: CodecTypes['pg/text@1']['output'];
@@ -377,6 +380,7 @@ export type StorageColumnInputTypes = {
       readonly centerLetter: CodecTypes['pg/text@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly date: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly dateDisplay: CodecTypes['pg/text@1']['input'];
       readonly id: CodecTypes['pg/int4@1']['input'];
       readonly maxScore: CodecTypes['pg/int4@1']['input'];
       readonly outerLetters: CodecTypes['pg/text@1']['input'];
@@ -538,6 +542,11 @@ type ContractBase = Omit<
                   readonly nullable: false;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                 };
+                readonly dateDisplay: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
                 readonly centerLetter: {
                   readonly nativeType: 'text';
                   readonly codecId: 'pg/text@1';
@@ -566,7 +575,10 @@ type ContractBase = Omit<
                 };
               };
               primaryKey: { readonly columns: readonly ['id'] };
-              uniques: readonly [{ readonly columns: readonly ['date'] }];
+              uniques: readonly [
+                { readonly columns: readonly ['date'] },
+                { readonly columns: readonly ['dateDisplay'] },
+              ];
               indexes: readonly [];
               foreignKeys: readonly [];
             };
@@ -829,6 +841,10 @@ type ContractBase = Omit<
                   readonly codecId: 'pg/timestamptz-temporal@1';
                 };
               };
+              readonly dateDisplay: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
               readonly centerLetter: {
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
@@ -875,6 +891,7 @@ type ContractBase = Omit<
               readonly fields: {
                 readonly id: { readonly column: 'id' };
                 readonly date: { readonly column: 'date' };
+                readonly dateDisplay: { readonly column: 'dateDisplay' };
                 readonly centerLetter: { readonly column: 'centerLetter' };
                 readonly outerLetters: { readonly column: 'outerLetters' };
                 readonly maxScore: { readonly column: 'maxScore' };

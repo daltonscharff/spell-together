@@ -118,7 +118,9 @@ async function deleteRooms(olderThan: Temporal.Instant) {
 async function scrapePuzzle() {
   const spellingBeeResponse = await axios.get<string>(SPELLING_BEE_URL);
   const html = spellingBeeResponse.data;
-  const gameDataRaw = html.match(/window\.gameData\s*=\s*(.*)<\/script>/)?.[0];
+  const gameDataRaw = html.match(
+    /window\.gameData\s*=\s*(.*)<\/script><\/div>/,
+  )?.[1];
 
   if (!gameDataRaw) {
     throw new Error("Could not find gameData in the HTML");
@@ -170,9 +172,9 @@ function getIsPangram(word: string): boolean {
 async function writeWord(
   word: string,
 ): Promise<{ wordRecord: Word; isNewWord: boolean }> {
-  let wordRecord = await db.orm.public.Word.where({
+  let wordRecord = await db.orm.public.Word.first({
     value: word,
-  }).first();
+  });
   if (wordRecord) {
     return { wordRecord, isNewWord: false };
   }
@@ -215,7 +217,13 @@ if (!ROOM_RETENTION_DAYS) {
   throw new Error("CRON_ROOM_RETENTION_DAYS is not set");
 }
 
-if (db.orm.public.Puzzle.first({ date: today }) !== null) {
+if (
+  (await db.orm.public.Puzzle.first({
+    dateDisplay: today.toLocaleString("en-US", {
+      dateStyle: "long",
+    }),
+  })) !== null
+) {
   logger.info("Puzzle already exists for today, skipping scrape");
 } else {
   const puzzle = await scrapePuzzle().catch((err) => {
@@ -247,7 +255,8 @@ if (db.orm.public.Puzzle.first({ date: today }) !== null) {
   logger.info(`MaxScore: ${maxScore}`);
 
   const puzzleRecord = await writePuzzle({
-    date: Temporal.Instant.from(puzzle.displayDate),
+    date: new Date(puzzle.displayDate).toTemporalInstant(),
+    dateDisplay: puzzle.displayDate,
     centerLetter: puzzle.centerLetter,
     outerLetters: puzzle.outerLetters.join(""),
     maxScore,
@@ -267,7 +276,7 @@ if (db.orm.public.Puzzle.first({ date: today }) !== null) {
 }
 
 const deletedPuzzles = await deletePuzzles(
-  today.subtract({ days: PUZZLE_RETENTION_DAYS }),
+  today.subtract({ hours: PUZZLE_RETENTION_DAYS * 24 }),
 ).catch((err) => {
   logger.error("Error deleting puzzles:", err);
 });
@@ -278,7 +287,7 @@ if (deletedPuzzles) {
 }
 
 const deletedRooms = await deleteRooms(
-  today.subtract({ days: ROOM_RETENTION_DAYS }),
+  today.subtract({ hours: ROOM_RETENTION_DAYS * 24 }),
 ).catch((err) => {
   logger.error("Error deleting rooms:", err);
 });
@@ -287,3 +296,5 @@ if (deletedRooms) {
     `Deleted ${deletedRooms.length} rooms older than ${ROOM_RETENTION_DAYS} days`,
   );
 }
+
+db.close();
