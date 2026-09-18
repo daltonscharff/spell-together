@@ -4,7 +4,16 @@ import axios from "axios";
 import axiosRetry from "axios-retry";
 import pino from "pino";
 
-const logger = pino();
+const logger = pino({
+  transport: {
+    target: "pino-pretty",
+    options: {
+      colorize: true,
+      translateTime: "SYS:standard",
+      ignore: "pid,hostname",
+    },
+  },
+});
 
 type Puzzle = FieldOutputTypes["public"]["Puzzle"];
 type Word = FieldOutputTypes["public"]["Word"];
@@ -96,14 +105,14 @@ async function deletePuzzles(olderThan: Temporal.Instant) {
   const deletedPuzzles = await db.orm.public.Puzzle.where((p) =>
     p.date.lt(olderThan),
   ).deleteAll();
-  return deletedPuzzles.length;
+  return deletedPuzzles;
 }
 
 async function deleteRooms(olderThan: Temporal.Instant) {
   const deletedRooms = await db.orm.public.Room.where((r) =>
     r.lastPlayed.lt(olderThan),
   ).deleteAll();
-  return deletedRooms.length;
+  return deletedRooms;
 }
 
 async function scrapePuzzle() {
@@ -158,7 +167,16 @@ function getIsPangram(word: string): boolean {
   return uniqueLetters.size === PANGRAM_LENGTH;
 }
 
-async function writeWord(word: string): Promise<Word> {
+async function writeWord(
+  word: string,
+): Promise<{ wordRecord: Word; isNewWord: boolean }> {
+  let wordRecord = await db.orm.public.Word.where({
+    value: word,
+  }).first();
+  if (wordRecord) {
+    return { wordRecord, isNewWord: false };
+  }
+
   const { definition, partOfSpeech } = await getDictionaryData(word).catch(
     (err) => {
       logger.error(`Error fetching dictionary data for word "${word}":`, err);
@@ -167,7 +185,7 @@ async function writeWord(word: string): Promise<Word> {
   );
   const isPangram = getIsPangram(word);
   const pointValue = getWordScore(word, isPangram);
-  const wordRecord = await db.orm.public.Word.create({
+  wordRecord = await db.orm.public.Word.create({
     value: word,
     definition,
     partOfSpeech,
@@ -175,7 +193,7 @@ async function writeWord(word: string): Promise<Word> {
     pointValue,
   });
 
-  return wordRecord;
+  return { wordRecord, isNewWord: true };
 }
 
 async function writePuzzleWord(
@@ -204,22 +222,29 @@ if (db.orm.public.Puzzle.first({ date: today }) !== null) {
     logger.error("Error scraping puzzle:", err);
     throw err;
   });
+  logger.info(
+    `Scraped puzzle for ${puzzle.displayDate}: ${puzzle.centerLetter}_${puzzle.outerLetters.join("")}, ${puzzle.answers.length} answers, ${puzzle.pangrams.length} pangrams`,
+  );
 
   const wordRecords: Word[] = [];
+  let newWordCount = 0;
   for (const word of puzzle.answers) {
-    const wordRecord = await writeWord(word).catch((err) => {
+    const { wordRecord, isNewWord } = await writeWord(word).catch((err) => {
       logger.error(`Error writing word "${word}" to database:`, err);
-      return null;
+      return { wordRecord: null, isNewWord: null };
     });
     if (wordRecord) {
       wordRecords.push(wordRecord);
     }
+    if (isNewWord) newWordCount++;
   }
+  logger.info(`Wrote ${newWordCount} new words`);
 
   const maxScore = wordRecords.reduce(
     (total, word) => total + word.pointValue,
     0,
   );
+  logger.info(`MaxScore: ${maxScore}`);
 
   const puzzleRecord = await writePuzzle({
     date: Temporal.Instant.from(puzzle.displayDate),
@@ -241,13 +266,24 @@ if (db.orm.public.Puzzle.first({ date: today }) !== null) {
   });
 }
 
-await deletePuzzles(today.subtract({ days: PUZZLE_RETENTION_DAYS })).catch(
-  (err) => {
-    logger.error("Error deleting puzzles:", err);
-  },
-);
-await deleteRooms(today.subtract({ days: ROOM_RETENTION_DAYS })).catch(
-  (err) => {
-    logger.error("Error deleting rooms:", err);
-  },
-);
+const deletedPuzzles = await deletePuzzles(
+  today.subtract({ days: PUZZLE_RETENTION_DAYS }),
+).catch((err) => {
+  logger.error("Error deleting puzzles:", err);
+});
+if (deletedPuzzles) {
+  logger.info(
+    `Deleted ${deletedPuzzles.length} puzzles older than ${PUZZLE_RETENTION_DAYS} days`,
+  );
+}
+
+const deletedRooms = await deleteRooms(
+  today.subtract({ days: ROOM_RETENTION_DAYS }),
+).catch((err) => {
+  logger.error("Error deleting rooms:", err);
+});
+if (deletedRooms) {
+  logger.info(
+    `Deleted ${deletedRooms.length} rooms older than ${ROOM_RETENTION_DAYS} days`,
+  );
+}
