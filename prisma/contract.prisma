@@ -9,7 +9,7 @@ model Puzzle {
   createdAt     DateTime  @default(now())
   updatedAt     temporal.updatedAtString()
 
-  words         WordsToPuzzles[]
+  words         PuzzleWord[]
 }
 
 model Room {
@@ -29,7 +29,7 @@ model Word {
   createdAt     DateTime  @default(now())
   updatedAt     temporal.updatedAtString()
 
-  puzzles       WordsToPuzzles[]
+  puzzles       PuzzleWord[]
 }
 
 model CorrectGuess {
@@ -44,9 +44,11 @@ model CorrectGuess {
   submittedAt DateTime  @default(now())
 }
 
-model WordsToPuzzles {
+model PuzzleWord {
   word      Word    @relation(fields: [wordId], references: [id])
   wordId    Int
   puzzles   Puzzle  @relation(fields: [puzzleId], references: [id])
   puzzleId  Int
+
+  @@id([puzzleId, wordId])
 }

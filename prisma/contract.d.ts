@@ -34,7 +34,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'04cbb499c3dadbcc967d49434738ed6d40a5dc659a8076599206ef25a96cd7ab'>;
+  StorageHashBase<'ce0c0ccc8d078ed20d03edf8f83ad6aa48c06b047337fd96ec44900eb1e335a7'>;
 export type ExecutionHash =
   ExecutionHashBase<'014c2e5f4239d33a95147cea07961c64d833f4bfb15be9055a7938dfb7f2ce1c'>;
 export type ProfileHash =
@@ -259,6 +259,10 @@ export type FieldOutputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
     };
+    readonly PuzzleWord: {
+      readonly wordId: CodecTypes['pg/int4@1']['output'];
+      readonly puzzleId: CodecTypes['pg/int4@1']['output'];
+    };
     readonly Room: {
       readonly id: CodecTypes['pg/int4@1']['output'];
       readonly shortcode: CodecTypes['pg/text@1']['output'];
@@ -274,10 +278,6 @@ export type FieldOutputTypes = {
       readonly definition: CodecTypes['pg/text@1']['output'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
-    };
-    readonly WordsToPuzzles: {
-      readonly wordId: CodecTypes['pg/int4@1']['output'];
-      readonly puzzleId: CodecTypes['pg/int4@1']['output'];
     };
   };
 };
@@ -300,6 +300,10 @@ export type FieldInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
     };
+    readonly PuzzleWord: {
+      readonly wordId: CodecTypes['pg/int4@1']['input'];
+      readonly puzzleId: CodecTypes['pg/int4@1']['input'];
+    };
     readonly Room: {
       readonly id: CodecTypes['pg/int4@1']['input'];
       readonly shortcode: CodecTypes['pg/text@1']['input'];
@@ -315,10 +319,6 @@ export type FieldInputTypes = {
       readonly definition: CodecTypes['pg/text@1']['input'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
-    };
-    readonly WordsToPuzzles: {
-      readonly wordId: CodecTypes['pg/int4@1']['input'];
-      readonly puzzleId: CodecTypes['pg/int4@1']['input'];
     };
   };
 };
@@ -341,6 +341,10 @@ export type StorageColumnTypes = {
       readonly outerLetters: CodecTypes['pg/text@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
     };
+    readonly puzzleWord: {
+      readonly puzzleId: CodecTypes['pg/int4@1']['output'];
+      readonly wordId: CodecTypes['pg/int4@1']['output'];
+    };
     readonly room: {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly id: CodecTypes['pg/int4@1']['output'];
@@ -356,10 +360,6 @@ export type StorageColumnTypes = {
       readonly pointValue: CodecTypes['pg/int4@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
       readonly value: CodecTypes['pg/text@1']['output'];
-    };
-    readonly wordsToPuzzles: {
-      readonly puzzleId: CodecTypes['pg/int4@1']['output'];
-      readonly wordId: CodecTypes['pg/int4@1']['output'];
     };
   };
 };
@@ -382,6 +382,10 @@ export type StorageColumnInputTypes = {
       readonly outerLetters: CodecTypes['pg/text@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
     };
+    readonly puzzleWord: {
+      readonly puzzleId: CodecTypes['pg/int4@1']['input'];
+      readonly wordId: CodecTypes['pg/int4@1']['input'];
+    };
     readonly room: {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly id: CodecTypes['pg/int4@1']['input'];
@@ -398,75 +402,8 @@ export type StorageColumnInputTypes = {
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
       readonly value: CodecTypes['pg/text@1']['input'];
     };
-    readonly wordsToPuzzles: {
-      readonly puzzleId: CodecTypes['pg/int4@1']['input'];
-      readonly wordId: CodecTypes['pg/int4@1']['input'];
-    };
   };
 };
-
-export namespace Models {
-  export type public_Puzzle = {
-    id: CodecTypes['pg/int4@1']['output'];
-    date: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    centerLetter: CodecTypes['pg/text@1']['output'];
-    outerLetters: CodecTypes['pg/text@1']['output'];
-    maxScore: CodecTypes['pg/int4@1']['output'];
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
-    words: public_WordsToPuzzles[];
-    readonly [RelationKeys]?: 'words';
-  };
-  export type public_Room = {
-    id: CodecTypes['pg/int4@1']['output'];
-    shortcode: CodecTypes['pg/text@1']['output'];
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    lastPlayed: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    readonly [RelationKeys]?: never;
-  };
-  export type public_Word = {
-    id: CodecTypes['pg/int4@1']['output'];
-    value: CodecTypes['pg/text@1']['output'];
-    pointValue: CodecTypes['pg/int4@1']['output'];
-    isPangram: CodecTypes['pg/bool@1']['output'];
-    partOfSpeech: CodecTypes['pg/text@1']['output'] | null;
-    definition: CodecTypes['pg/text@1']['output'] | null;
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
-    puzzles: public_WordsToPuzzles[];
-    readonly [RelationKeys]?: 'puzzles';
-  };
-  export type public_CorrectGuess = {
-    id: CodecTypes['pg/int4@1']['output'];
-    puzzleId: CodecTypes['pg/int4@1']['output'];
-    roomId: CodecTypes['pg/int4@1']['output'];
-    wordId: CodecTypes['pg/int4@1']['output'];
-    submittedBy: CodecTypes['pg/text@1']['output'];
-    submittedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    puzzle: public_Puzzle;
-    room: public_Room;
-    word: public_Word;
-    readonly [RelationKeys]?: 'puzzle' | 'room' | 'word';
-  };
-  export type public_WordsToPuzzles = {
-    wordId: CodecTypes['pg/int4@1']['output'];
-    puzzleId: CodecTypes['pg/int4@1']['output'];
-    puzzles: public_Puzzle;
-    word: public_Word;
-    readonly [RelationKeys]?: 'puzzles' | 'word';
-  };
-}
-
-export declare const models: {
-  public: {
-    Puzzle: Models.public_Puzzle;
-    Room: Models.public_Room;
-    Word: Models.public_Word;
-    CorrectGuess: Models.public_CorrectGuess;
-    WordsToPuzzles: Models.public_WordsToPuzzles;
-  };
-};
-
 export type TypeMaps = TypeMapsType<
   CodecTypes,
   QueryOperationTypes,
@@ -633,6 +570,62 @@ type ContractBase = Omit<
               indexes: readonly [];
               foreignKeys: readonly [];
             };
+            readonly puzzleWord: {
+              columns: {
+                readonly wordId: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly puzzleId: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['puzzleId', 'wordId'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'puzzleWord_wordId_idx_123c525a';
+                  readonly prefix: 'puzzleWord_wordId_idx';
+                  readonly columns: readonly ['wordId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'puzzleWord_puzzleId_idx_3a0a3e4e';
+                  readonly prefix: 'puzzleWord_puzzleId_idx';
+                  readonly columns: readonly ['puzzleId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'puzzleWord';
+                    readonly columns: readonly ['wordId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'word';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'puzzleWord';
+                    readonly columns: readonly ['puzzleId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'puzzle';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
             readonly room: {
               columns: {
                 readonly id: {
@@ -724,61 +717,6 @@ type ContractBase = Omit<
               indexes: readonly [];
               foreignKeys: readonly [];
             };
-            readonly wordsToPuzzles: {
-              columns: {
-                readonly wordId: {
-                  readonly nativeType: 'int4';
-                  readonly codecId: 'pg/int4@1';
-                  readonly nullable: false;
-                };
-                readonly puzzleId: {
-                  readonly nativeType: 'int4';
-                  readonly codecId: 'pg/int4@1';
-                  readonly nullable: false;
-                };
-              };
-              uniques: readonly [];
-              indexes: readonly [
-                {
-                  readonly name: 'wordsToPuzzles_wordId_idx_123c525a';
-                  readonly prefix: 'wordsToPuzzles_wordId_idx';
-                  readonly columns: readonly ['wordId'];
-                  readonly unique: false;
-                },
-                {
-                  readonly name: 'wordsToPuzzles_puzzleId_idx_3a0a3e4e';
-                  readonly prefix: 'wordsToPuzzles_puzzleId_idx';
-                  readonly columns: readonly ['puzzleId'];
-                  readonly unique: false;
-                },
-              ];
-              foreignKeys: readonly [
-                {
-                  readonly source: {
-                    readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'wordsToPuzzles';
-                    readonly columns: readonly ['wordId'];
-                  };
-                  readonly target: {
-                    readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'word';
-                    readonly columns: readonly ['id'];
-                  };
-                },
-                {
-                  readonly source: {
-                    readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'wordsToPuzzles';
-                    readonly columns: readonly ['puzzleId'];
-                  };
-                  readonly target: {
-                    readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'puzzle';
-                    readonly columns: readonly ['id'];
-                  };
-                },
-              ];
-            };
           };
         };
       };
@@ -797,9 +735,9 @@ type ContractBase = Omit<
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'CorrectGuess';
     };
-    readonly wordsToPuzzles: {
+    readonly puzzleWord: {
       readonly namespace: 'public' & NamespaceId;
-      readonly model: 'WordsToPuzzles';
+      readonly model: 'PuzzleWord';
     };
   };
   readonly domain: {
@@ -843,7 +781,6 @@ type ContractBase = Omit<
                   readonly model: 'Puzzle';
                 };
                 readonly cardinality: 'N:1';
-                readonly nullable: false;
                 readonly on: {
                   readonly localFields: readonly ['puzzleId'];
                   readonly targetFields: readonly ['id'];
@@ -852,7 +789,6 @@ type ContractBase = Omit<
               readonly room: {
                 readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Room' };
                 readonly cardinality: 'N:1';
-                readonly nullable: false;
                 readonly on: {
                   readonly localFields: readonly ['roomId'];
                   readonly targetFields: readonly ['id'];
@@ -861,7 +797,6 @@ type ContractBase = Omit<
               readonly word: {
                 readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Word' };
                 readonly cardinality: 'N:1';
-                readonly nullable: false;
                 readonly on: {
                   readonly localFields: readonly ['wordId'];
                   readonly targetFields: readonly ['id'];
@@ -925,7 +860,7 @@ type ContractBase = Omit<
               readonly words: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
-                  readonly model: 'WordsToPuzzles';
+                  readonly model: 'PuzzleWord';
                 };
                 readonly cardinality: '1:N';
                 readonly on: {
@@ -945,6 +880,47 @@ type ContractBase = Omit<
                 readonly maxScore: { readonly column: 'maxScore' };
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
+              };
+            };
+          };
+          readonly PuzzleWord: {
+            readonly fields: {
+              readonly wordId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly puzzleId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+            };
+            readonly relations: {
+              readonly puzzles: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Puzzle';
+                };
+                readonly cardinality: 'N:1';
+                readonly on: {
+                  readonly localFields: readonly ['puzzleId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly word: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Word' };
+                readonly cardinality: 'N:1';
+                readonly on: {
+                  readonly localFields: readonly ['wordId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'puzzleWord';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly wordId: { readonly column: 'wordId' };
+                readonly puzzleId: { readonly column: 'puzzleId' };
               };
             };
           };
@@ -1030,7 +1006,7 @@ type ContractBase = Omit<
               readonly puzzles: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
-                  readonly model: 'WordsToPuzzles';
+                  readonly model: 'PuzzleWord';
                 };
                 readonly cardinality: '1:N';
                 readonly on: {
@@ -1051,49 +1027,6 @@ type ContractBase = Omit<
                 readonly definition: { readonly column: 'definition' };
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
-              };
-            };
-          };
-          readonly WordsToPuzzles: {
-            readonly fields: {
-              readonly wordId: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
-              };
-              readonly puzzleId: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
-              };
-            };
-            readonly relations: {
-              readonly puzzles: {
-                readonly to: {
-                  readonly namespace: 'public' & NamespaceId;
-                  readonly model: 'Puzzle';
-                };
-                readonly cardinality: 'N:1';
-                readonly nullable: false;
-                readonly on: {
-                  readonly localFields: readonly ['puzzleId'];
-                  readonly targetFields: readonly ['id'];
-                };
-              };
-              readonly word: {
-                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Word' };
-                readonly cardinality: 'N:1';
-                readonly nullable: false;
-                readonly on: {
-                  readonly localFields: readonly ['wordId'];
-                  readonly targetFields: readonly ['id'];
-                };
-              };
-            };
-            readonly storage: {
-              readonly table: 'wordsToPuzzles';
-              readonly namespaceId: 'public';
-              readonly fields: {
-                readonly wordId: { readonly column: 'wordId' };
-                readonly puzzleId: { readonly column: 'puzzleId' };
               };
             };
           };

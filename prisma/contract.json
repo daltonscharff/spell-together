@@ -12,16 +12,16 @@
       "model": "Puzzle",
       "namespace": "public"
     },
+    "puzzleWord": {
+      "model": "PuzzleWord",
+      "namespace": "public"
+    },
     "room": {
       "model": "Room",
       "namespace": "public"
     },
     "word": {
       "model": "Word",
-      "namespace": "public"
-    },
-    "wordsToPuzzles": {
-      "model": "WordsToPuzzles",
       "namespace": "public"
     }
   },
@@ -213,7 +213,7 @@
                   ]
                 },
                 "to": {
-                  "model": "WordsToPuzzles",
+                  "model": "PuzzleWord",
                   "namespace": "public"
                 }
               }
@@ -244,6 +244,70 @@
               },
               "namespaceId": "public",
               "table": "puzzle"
+            }
+          },
+          "PuzzleWord": {
+            "fields": {
+              "puzzleId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "wordId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "puzzles": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "puzzleId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Puzzle",
+                  "namespace": "public"
+                }
+              },
+              "word": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "wordId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Word",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "puzzleId": {
+                  "column": "puzzleId"
+                },
+                "wordId": {
+                  "column": "wordId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "puzzleWord"
             }
           },
           "Room": {
@@ -368,7 +432,7 @@
                   ]
                 },
                 "to": {
-                  "model": "WordsToPuzzles",
+                  "model": "PuzzleWord",
                   "namespace": "public"
                 }
               }
@@ -402,70 +466,6 @@
               },
               "namespaceId": "public",
               "table": "word"
-            }
-          },
-          "WordsToPuzzles": {
-            "fields": {
-              "puzzleId": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/int4@1",
-                  "kind": "scalar"
-                }
-              },
-              "wordId": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/int4@1",
-                  "kind": "scalar"
-                }
-              }
-            },
-            "relations": {
-              "puzzles": {
-                "cardinality": "N:1",
-                "nullable": false,
-                "on": {
-                  "localFields": [
-                    "puzzleId"
-                  ],
-                  "targetFields": [
-                    "id"
-                  ]
-                },
-                "to": {
-                  "model": "Puzzle",
-                  "namespace": "public"
-                }
-              },
-              "word": {
-                "cardinality": "N:1",
-                "nullable": false,
-                "on": {
-                  "localFields": [
-                    "wordId"
-                  ],
-                  "targetFields": [
-                    "id"
-                  ]
-                },
-                "to": {
-                  "model": "Word",
-                  "namespace": "public"
-                }
-              }
-            },
-            "storage": {
-              "fields": {
-                "puzzleId": {
-                  "column": "puzzleId"
-                },
-                "wordId": {
-                  "column": "wordId"
-                }
-              },
-              "namespaceId": "public",
-              "table": "wordsToPuzzles"
             }
           }
         }
@@ -666,6 +666,79 @@
                 }
               ]
             },
+            "puzzleWord": {
+              "columns": {
+                "puzzleId": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "wordId": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "wordId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "puzzleWord"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "word"
+                  }
+                },
+                {
+                  "source": {
+                    "columns": [
+                      "puzzleId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "puzzleWord"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "puzzle"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "puzzleId"
+                  ],
+                  "name": "puzzleWord_puzzleId_idx_3a0a3e4e",
+                  "prefix": "puzzleWord_puzzleId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "wordId"
+                  ],
+                  "name": "puzzleWord_wordId_idx_123c525a",
+                  "prefix": "puzzleWord_wordId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "puzzleId",
+                  "wordId"
+                ]
+              },
+              "uniques": []
+            },
             "room": {
               "columns": {
                 "createdAt": {
@@ -779,73 +852,6 @@
                 ]
               },
               "uniques": []
-            },
-            "wordsToPuzzles": {
-              "columns": {
-                "puzzleId": {
-                  "codecId": "pg/int4@1",
-                  "nativeType": "int4",
-                  "nullable": false
-                },
-                "wordId": {
-                  "codecId": "pg/int4@1",
-                  "nativeType": "int4",
-                  "nullable": false
-                }
-              },
-              "foreignKeys": [
-                {
-                  "source": {
-                    "columns": [
-                      "wordId"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "wordsToPuzzles"
-                  },
-                  "target": {
-                    "columns": [
-                      "id"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "word"
-                  }
-                },
-                {
-                  "source": {
-                    "columns": [
-                      "puzzleId"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "wordsToPuzzles"
-                  },
-                  "target": {
-                    "columns": [
-                      "id"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "puzzle"
-                  }
-                }
-              ],
-              "indexes": [
-                {
-                  "columns": [
-                    "puzzleId"
-                  ],
-                  "name": "wordsToPuzzles_puzzleId_idx_3a0a3e4e",
-                  "prefix": "wordsToPuzzles_puzzleId_idx",
-                  "unique": false
-                },
-                {
-                  "columns": [
-                    "wordId"
-                  ],
-                  "name": "wordsToPuzzles_wordId_idx_123c525a",
-                  "prefix": "wordsToPuzzles_wordId_idx",
-                  "unique": false
-                }
-              ],
-              "uniques": []
             }
           }
         },
@@ -853,7 +859,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "04cbb499c3dadbcc967d49434738ed6d40a5dc659a8076599206ef25a96cd7ab"
+    "storageHash": "ce0c0ccc8d078ed20d03edf8f83ad6aa48c06b047337fd96ec44900eb1e335a7"
   },
   "execution": {
     "executionHash": "014c2e5f4239d33a95147cea07961c64d833f4bfb15be9055a7938dfb7f2ce1c",
