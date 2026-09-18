@@ -1,4 +1,4 @@
-FROM node:24-alpine
+FROM node:26-alpine
 
 WORKDIR /app
 
@@ -7,8 +7,9 @@ RUN npm ci
 
 COPY ./scripts .
 
-RUN touch /var/log/cron/cron-$(date +'%Y%m%d').log
+# RUN touch /var/log/cron/cron-$(date +'%Y%m%d').log
 
-RUN echo "${CRON_SCHEDULE} npm run cron >> /var/log/cron/cron-\$(date +'%Y%m%d').log 2>&1" >> /etc/crontabs/root
+RUN echo "${CRON_SCHEDULE_LOAD_PUZZLE} npm run load-puzzle >> /var/log/cron/cron-\$(date +'%Y%m%d').log 2>&1" >> /etc/crontabs/root
+RUN echo "${CRON_SCHEDULE_REMOVE_ROOMS} npm run remove-rooms >> /var/log/cron/cron-\$(date +'%Y%m%d').log 2>&1" >> /etc/crontabs/root
 
 CMD ["crond", "-f", "-l", "2"]
