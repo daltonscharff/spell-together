@@ -76,6 +76,12 @@ async function writePuzzle(
   puzzle: Partial<Models.public_Puzzle>,
 ): Promise<Models.public_Puzzle> {
   // Implementation for writing puzzle
+  // const puzzleRecord = await db.orm.public.Puzzle.create({
+  //   date: puzzle.date,
+  //   centerLetter: puzzle.centerLetter,
+  //   outerLetters: puzzle.outerLetters,
+  // });
+  // return puzzleRecord;
 }
 
 async function getDictionaryData(
@@ -133,7 +139,6 @@ if (db.orm.public.Puzzle.first({ date: today }) !== null) {
     outerLetters: puzzle.outerLetters.join(""),
   });
 
-  // write puzzle_words
   await Promise.all(
     wordRecords.map((wordRecord) =>
       writePuzzleWord(puzzleRecord.id, wordRecord.id),
