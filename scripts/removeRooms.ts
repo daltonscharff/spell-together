@@ -24,6 +24,7 @@ if (deletedRooms) {
   logger.info(
     `Deleted ${deletedRooms.length} rooms older than ${ROOM_RETENTION_DAYS} days`,
   );
+  logger.debug(`Deleted rooms: ${deletedRooms}`);
 }
 
 await db.close();

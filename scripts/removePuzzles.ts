@@ -24,6 +24,7 @@ if (deletedPuzzles) {
   logger.info(
     `Deleted ${deletedPuzzles.length} puzzles older than ${PUZZLE_RETENTION_DAYS} days`,
   );
+  logger.debug(`Deleted puzzles: ${deletePuzzles}`);
 }
 
 // Clean up any words which no longer belong to a puzzle
@@ -32,11 +33,12 @@ const deletedWordsQuery = db.sql.public.word
   .where((f, fns) => {
     return fns.notIn(f.id, db.sql.public.puzzleWord.select("wordId"));
   })
-  .returning("id")
+  .returning("id", "value")
   .build();
 const deletedWords = await db.runtime().query(deletedWordsQuery);
 if (deletedWords) {
   logger.info(`Deleted ${deletedWords.length} unused words`);
+  logger.debug(`Deleted words: ${deletedWords}`);
 }
 
 db.close();
