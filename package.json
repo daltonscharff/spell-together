@@ -11,6 +11,7 @@
     "prisma:emit": "prisma contract emit",
     "prisma:update": "dotenv cross-var prisma db update --db %DATABASE_URL%",
     "load-puzzle": "tsx ./scripts/loadPuzzle.ts",
+    "remove-puzzles": "tsx ./scripts/removePuzzles.ts",
     "remove-rooms": "tsx ./scripts/removeRooms.ts"
   },
   "dependencies": {

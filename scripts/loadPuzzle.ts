@@ -8,10 +8,6 @@ type Puzzle = FieldOutputTypes["public"]["Puzzle"];
 type Word = FieldOutputTypes["public"]["Word"];
 type PuzzleWord = FieldOutputTypes["public"]["PuzzleWord"];
 
-const PUZZLE_RETENTION_DAYS =
-  process.env.CRON_PUZZLE_RETENTION_DAYS &&
-  parseInt(process.env.CRON_PUZZLE_RETENTION_DAYS, 10);
-
 const SPELLING_BEE_URL = "https://www.nytimes.com/puzzles/spelling-bee";
 
 const PANGRAM_LENGTH = 7;
@@ -86,13 +82,6 @@ axiosRetry(axios, {
     return retryCount * 1000; // Wait 1 second before retrying
   },
 });
-
-async function deletePuzzles(olderThan: Temporal.Instant) {
-  const deletedPuzzles = await db.orm.public.Puzzle.where((p) =>
-    p.date.lt(olderThan),
-  ).deleteAll();
-  return deletedPuzzles;
-}
 
 async function scrapePuzzle() {
   const spellingBeeResponse = await axios.get<string>(SPELLING_BEE_URL);
@@ -189,10 +178,6 @@ async function writePuzzleWord(
 
 const today = Temporal.Now.instant();
 
-if (!PUZZLE_RETENTION_DAYS) {
-  throw new Error("CRON_PUZZLE_RETENTION_DAYS is not set");
-}
-
 const todaysPuzzle = await db.orm.public.Puzzle.first({
   dateDisplay: today.toLocaleString("en-US", {
     dateStyle: "long",
@@ -252,17 +237,6 @@ if (todaysPuzzle !== null) {
     logger.error("Error writing puzzle words to database:", err);
     throw err;
   });
-}
-
-const deletedPuzzles = await deletePuzzles(
-  today.subtract({ hours: PUZZLE_RETENTION_DAYS * 24 }),
-).catch((err) => {
-  logger.error("Error deleting puzzles:", err);
-});
-if (deletedPuzzles) {
-  logger.info(
-    `Deleted ${deletedPuzzles.length} puzzles older than ${PUZZLE_RETENTION_DAYS} days`,
-  );
 }
 
 await db.close();

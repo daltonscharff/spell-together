@@ -8,15 +8,12 @@ async function deleteRooms(olderThan: Temporal.Instant) {
   return deletedRooms;
 }
 
-const ROOM_RETENTION_DAYS =
-  process.env.CRON_ROOM_RETENTION_DAYS &&
-  parseInt(process.env.CRON_ROOM_RETENTION_DAYS, 10);
+const ROOM_RETENTION_DAYS = process.argv[2] && parseInt(process.argv[2], 10);
+if (!ROOM_RETENTION_DAYS) {
+  throw new Error("ROOM_RETENTION_DAYS must be passed in as an argument");
+}
 
 const today = Temporal.Now.instant();
-
-if (!ROOM_RETENTION_DAYS) {
-  throw new Error("CRON_ROOM_RETENTION_DAYS is not set");
-}
 
 const deletedRooms = await deleteRooms(
   today.subtract({ hours: ROOM_RETENTION_DAYS * 24 }),
