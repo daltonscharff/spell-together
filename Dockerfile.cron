@@ -7,14 +7,10 @@ RUN npm ci
 
 COPY ./scripts .
 
-# RUN touch /var/log/cron/cron-$(date +'%Y%m%d').log
-
-ARG ESCAPED_CRON_FILE=/var/log/cron/cron-\$(date +'%Y%m%d').log
-
 # Load puzzle and, if successful, remove puzzles older than 3 days
-RUN echo "${CRON_SCHEDULE_LOAD_PUZZLE} npm run load-puzzle >> $ESCAPED_CRON_FILE 2>&1 && npm run remove-puzzles ${CRON_PUZZLE_RETENTION_DAYS} >> $ESCAPED_CRON_FILE 2>&1" >> /etc/crontabs/root
+RUN echo "${CRON_SCHEDULE_LOAD_PUZZLE} npm run load-puzzle && npm run remove-puzzles ${CRON_PUZZLE_RETENTION_DAYS}" >> /etc/crontabs/root
 
 # Remove rooms which have not been used in 7 days
-RUN echo "${CRON_SCHEDULE_REMOVE_ROOMS} npm run remove-rooms ${CRON_ROOM_RETENTION_DAYS} >> $ESCAPED_CRON_FILE 2>&1" >> /etc/crontabs/root
+RUN echo "${CRON_SCHEDULE_REMOVE_ROOMS} npm run remove-rooms ${CRON_ROOM_RETENTION_DAYS}" >> /etc/crontabs/root
 
 CMD ["crond", "-f", "-l", "2"]

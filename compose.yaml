@@ -40,12 +40,15 @@ services:
     volumes:
       - cron_logs:/var/log/cron
     environment:
+      - LOG_FILE_PATH=/var/log/cron
       - DATABASE_URL=${DATABASE_URL}
-      - TZ=${CRON_TIMEZONE}
-      - CRON_SCHEDULE_LOAD_PUZZLE=${CRON_SCHEDULE_LOAD_PUZZLE}
-      - CRON_SCHEDULE_REMOVE_ROOMS=${CRON_SCHEDULE_REMOVE_ROOMS}
-      - CRON_PUZZLE_RETENTION_DAYS=${CRON_PUZZLE_RETENTION_DAYS}
-      - CRON_ROOM_RETENTION_DAYS=${CRON_ROOM_RETENTION_DAYS}
+      - TZ="America/Chicago"
+      - SCHEDULE_LOAD_PUZZLE="*/15 4-7 * * *" # Every 15 minutes between 4AM - 7AM
+      - SCHEDULE_REMOVE_ROOMS="0 5 * * *" # 5 AM every day
+      - PUZZLE_RETENTION_DAYS=3
+      - ROOM_RETENTION_DAYS=7
+      - PINO_LOG_LEVEL=debug
+      - NODE_ENV=production
     depends_on:
       db:
         condition: service_healthy
