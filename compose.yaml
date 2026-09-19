@@ -37,6 +37,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.cron
+    develop:
+      watch:
+        - action: rebuild
+          path: Dockerfile.cron
     volumes:
       - cron_logs:/var/log/cron
     environment:
