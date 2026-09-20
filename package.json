@@ -15,6 +15,7 @@
 		"postinstall": "prisma skills sync || exit 0",
 		"prisma:emit": "prisma contract emit",
 		"prisma:update": "prisma db update",
+		"supabase": "supabase",
 		"load-puzzle": "deno ./scripts/loadPuzzle.ts",
 		"remove-puzzles": "deno ./scripts/removePuzzles.ts",
 		"remove-rooms": "deno ./scripts/removeRooms.ts"

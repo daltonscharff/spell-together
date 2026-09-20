@@ -20,7 +20,7 @@ export default {
   2. Make an HTTP request:
 
   curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/remove-puzzles' \
-    --header 'apiKey: sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH' \
+    --header 'apiKey: <Secret Authentication Key>' \
     --data '{"name":"Functions"}'
 
 */

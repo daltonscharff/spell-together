@@ -1,6 +1,8 @@
 {
-  "imports": {
-    "@supabase/functions-js": "jsr:@supabase/functions-js@^2",
-    "@supabase/server": "npm:@supabase/server@^1"
-  }
+	"imports": {
+		"@supabase/functions-js": "jsr:@supabase/functions-js@^2",
+		"@supabase/server": "npm:@supabase/server@^1",
+		"@prisma/orm-postgres": "npm:@prisma/orm-postgres@8.0.0-rc.11",
+		"pino": "npm:pino@^10.3.1"
+	}
 }
