@@ -11,20 +11,34 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"postinstall": "prisma skills sync || exit 0",
+		"prisma:emit": "prisma contract emit",
+		"prisma:update": "prisma db update",
+		"load-puzzle": "deno ./scripts/loadPuzzle.ts",
+		"remove-puzzles": "deno ./scripts/removePuzzles.ts",
+		"remove-rooms": "deno ./scripts/removeRooms.ts"
+	},
+	"dependencies": {
+		"@supabase/supabase-js": "^2.116.0",
+		"axios": "^1.20.0",
+		"axios-retry": "^4.5.0",
+		"pino": "^10.3.1"
 	},
 	"devDependencies": {
+		"@prisma/orm-postgres": "8.0.0-rc.11",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.63.0",
 		"@sveltejs/vite-plugin-svelte": "^7.1.2",
 		"@tailwindcss/vite": "^4.3.0",
-		"prettier": "^3.8.3",
 		"prettier-plugin-svelte": "^4.1.0",
 		"prettier-plugin-tailwindcss": "^0.8.0",
+		"supabase": "^2.117.0",
 		"svelte": "^5.56.1",
 		"svelte-check": "^4.6.0",
 		"tailwindcss": "^4.3.0",
 		"typescript": "^6.0.3",
-		"vite": "^8.0.16"
+		"vite": "^8.0.16",
+		"prisma": "8.0.0-rc.15"
 	}
 }

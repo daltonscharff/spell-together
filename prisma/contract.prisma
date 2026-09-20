@@ -1,0 +1,55 @@
+// use prisma-8
+
+model Puzzle {
+  id            Int       @id @default(autoincrement())
+  date          DateTime  @default(now()) @unique
+  dateDisplay   String    @unique
+  centerLetter  String 
+  outerLetters  String
+  maxScore      Int
+  createdAt     DateTime  @default(now())
+  updatedAt     temporal.updatedAtString()
+
+  words         PuzzleWord[]
+}
+
+model Room {
+  id          Int       @id @default(autoincrement())
+  shortcode   String    @unique
+  createdAt   DateTime  @default(now())
+  lastPlayed  DateTime  @default(now())
+}
+
+model Word {
+  id            Int       @id @default(autoincrement())
+  value         String
+  pointValue    Int
+  isPangram     Boolean   @default(false)
+  partOfSpeech  String?
+  definition    String?
+  createdAt     DateTime  @default(now())
+  updatedAt     temporal.updatedAtString()
+
+  puzzles       PuzzleWord[]
+}
+
+model CorrectGuess {
+  id          Int       @id @default(autoincrement())
+  puzzle      Puzzle    @relation(fields: [puzzleId], references: [id], onDelete: Cascade)
+  puzzleId    Int
+  room        Room      @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId      Int
+  word        Word      @relation(fields: [wordId], references: [id], onDelete: Cascade)
+  wordId      Int
+  submittedBy String
+  submittedAt DateTime  @default(now())
+}
+
+model PuzzleWord {
+  word      Word    @relation(fields: [wordId], references: [id], onDelete: Cascade)
+  wordId    Int
+  puzzles   Puzzle  @relation(fields: [puzzleId], references: [id], onDelete: Cascade)
+  puzzleId  Int
+
+  @@id([puzzleId, wordId])
+}
