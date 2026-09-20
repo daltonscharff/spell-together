@@ -1,91 +1,42 @@
-# spell-together
+# sv
 
-Compete to see who can create the most words using letters from the hive in this multiplayer modification of [The New York Times Spelling Bee](https://www.nytimes.com/puzzles/spelling-bee).
+Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
-## Requirements
+## Creating a project
 
--   [Deno](https://deno.land/#installation)
--   [Docker](https://www.docker.com/products/docker-desktop/)
--   [Node](https://nodejs.org/en/)
--   [Supabase CLI](https://supabase.com/docs/reference/cli/installing-and-updating)
+If you're seeing this, you've probably already done this step. Congrats!
 
-## Daily Tasks
-
-The production version of this application requires the following daily tasks to be run. These are executed via cron on Supabase.
-
-### Load the day's puzzle
-
-Completed by running the `load-puzzle` function.
-
-### Delete puzzles older than 7 days
-
-```sql
-delete from
-  puzzle
-where
-  date < current_date at time zone 'UTC' - interval '7 days';
+```sh
+# create a new project
+npx sv create my-app
 ```
 
-### Delete rooms which have not been played in 7 days
+To recreate this project with the same configuration:
 
-```sql
-delete from
-  room
-where
-  id in (
-    select
-      room_id
-    from
-      most_recent_correct_guess
-    where
-      room_created_at < current_date at time zone 'UTC' - interval '7 days'
-      AND (
-        found_at < current_date at time zone 'UTC' - interval '7 days'
-        OR found_at is null
-      )
-  );
+```sh
+# recreate this project
+deno x sv@0.17.0 create --template minimal --types ts --add prettier tailwindcss="plugins:none" sveltekit-adapter="adapter:static" --install deno .
 ```
 
-## How to Run
+## Developing
 
-### 1. Server and Database
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-Provides a Postgres database and a RESTful API.
+```sh
+npm run dev
 
-1. Make sure Docker is running
-2. Run `supabase start`
-
-### 2. Serverless Functions
-
-Scrape puzzle data from the official spelling bee game.
-
-1. Create a `.env.local` file
-
-```
-# supabase/.env
-ENVIRONMENT=production
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
 ```
 
-2. Run `supabase functions serve load-puzzle --env-file ./supabase/.env` to get the function running locally
-3. Run the following cURL request to trigger the function:
+## Building
 
-```
-curl --request POST 'http://localhost:54321/functions/v1/load-puzzle' \
-  --header 'Authorization: Bearer <SUPABASE_SERVICE_ROLE_KEY>' \
-  --header 'Content-Type: application/json'
-```
+To create a production version of your app:
 
-### 3. Client
-
-1. Change into the `web/` directory
-2. Run `yarn install` to install dependencies
-3. Create a `.env.local` file:
-
-```
-# web/.env.local
-REACT_APP_SUPABASE_URL=http://localhost:54321  # Supabase API URL
-REACT_APP_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1N...  # Supabase anonymous public key
+```sh
+npm run build
 ```
 
-4. Run `yarn start`
-    - the application should be available at http://localhost:3000
+You can preview the production build with `npm run preview`.
+
+> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
