@@ -20,6 +20,7 @@
 		"remove-rooms": "deno ./scripts/removeRooms.ts"
 	},
 	"dependencies": {
+		"@supabase/server": "^1.7.0",
 		"@supabase/supabase-js": "^2.116.0",
 		"axios": "^1.20.0",
 		"axios-retry": "^4.5.0",
