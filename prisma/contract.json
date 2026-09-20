@@ -530,6 +530,7 @@
               },
               "foreignKeys": [
                 {
+                  "onDelete": "cascade",
                   "source": {
                     "columns": [
                       "puzzleId"
@@ -546,6 +547,7 @@
                   }
                 },
                 {
+                  "onDelete": "cascade",
                   "source": {
                     "columns": [
                       "roomId"
@@ -562,6 +564,7 @@
                   }
                 },
                 {
+                  "onDelete": "cascade",
                   "source": {
                     "columns": [
                       "wordId"
@@ -701,6 +704,7 @@
               },
               "foreignKeys": [
                 {
+                  "onDelete": "cascade",
                   "source": {
                     "columns": [
                       "wordId"
@@ -717,6 +721,7 @@
                   }
                 },
                 {
+                  "onDelete": "cascade",
                   "source": {
                     "columns": [
                       "puzzleId"
@@ -879,7 +884,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "ec646a3f8e89efd5c46db41178d4f7b614cdde4750e15323ace4fba2a627554e"
+    "storageHash": "75f3b5125edd0f94d28268f6b96b85765c1eedeb1789cc72b3375561ed306c3e"
   },
   "execution": {
     "executionHash": "014c2e5f4239d33a95147cea07961c64d833f4bfb15be9055a7938dfb7f2ce1c",
