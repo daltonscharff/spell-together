@@ -18,7 +18,7 @@ services:
       db:
         condition: service_healthy
     environment:
-      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
 
   db:
     image: postgres:18-alpine
@@ -45,7 +45,7 @@ services:
       - cron_logs:/var/log/cron
     environment:
       - LOG_FILE_PATH=/var/log/cron
-      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       - TZ="America/Chicago"
       - SCHEDULE_LOAD_PUZZLE="*/15 4-7 * * *" # Every 15 minutes between 4AM - 7AM
       - SCHEDULE_REMOVE_ROOMS="0 5 * * *" # 5 AM every day
