@@ -4,10 +4,13 @@ type TitleBarProps = {
 };
 
 export function TitleBar({ title, date }: TitleBarProps) {
+  console.log(title);
   return (
-    <div>
-      <title>{title}</title>
-      <div>{date.toLocaleDateString("en-US", { dateStyle: "long" })}</div>
+    <div className="flex flex-row flex-wrap items-baseline gap-x-3">
+      <div className="text-2xl font-bold">{title}</div>
+      <div className="text-lg font-light">
+        {date.toLocaleDateString("en-US", { dateStyle: "long" })}
+      </div>
     </div>
   );
 }

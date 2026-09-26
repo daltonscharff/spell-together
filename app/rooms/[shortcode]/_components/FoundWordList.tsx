@@ -2,6 +2,7 @@ import { FoundWord } from "@/app/_hooks/useFoundWords";
 import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import pluralize from "pluralize";
+import React from "react";
 
 type FoundWordListProps = {
   foundWords: FoundWord[];
@@ -33,7 +34,7 @@ export function FoundWordList({
           {isCollapsed &&
             foundWords.map((word) => (
               <div
-                key={word.id}
+                key={`${word.id}_collapsed`}
                 className={`${word.isPangram && "font-bold"} capitalize`}
               >
                 {word.value}
@@ -49,11 +50,8 @@ export function FoundWordList({
       {!isCollapsed && (
         <div className="grid grid-cols-6 px-5 py-2">
           {foundWords.map((word) => (
-            <>
-              <div
-                key={`${word.id}_expanded`}
-                className={`col-span-5 flex flex-row items-center`}
-              >
+            <React.Fragment key={`${word.id}_expanded`}>
+              <div className={`col-span-5 flex flex-row items-center`}>
                 <div
                   className={`${word.isPangram && "bg-amber-300"} capitalize`}
                 >
@@ -70,7 +68,7 @@ export function FoundWordList({
                 <span className="italic pr-2">{word.partOfSpeech}</span>
                 {word.definition}
               </div>
-            </>
+            </React.Fragment>
           ))}
         </div>
       )}
