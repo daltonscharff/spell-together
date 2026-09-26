@@ -14,13 +14,16 @@ export function FoundWordList({
   isCollapsible,
 }: FoundWordListProps) {
   const [isCollapsed, setIsCollapsed] = useState(isCollapsible);
+  console.log(isCollapsed);
 
   return (
     <div
-      className={`ring ring-gray-200 rounded-sm flex flex-col`}
-      onClick={() => isCollapsible && setIsCollapsed(!isCollapsed)}
+      className={`ring ring-gray-200 rounded-sm flex flex-col max-h-[inherit]`}
     >
-      <div className="flex flex-row gap-2 pl-3 pr-0 items-center w-full">
+      <div
+        className={`flex flex-row gap-2 pl-3 pr-0 items-center w-full ${isCollapsible && "cursor-pointer"}`}
+        onClick={() => isCollapsible && setIsCollapsed(!isCollapsed)}
+      >
         <div className="flex flex-row gap-1.5 p-2 items-center flex-1 overflow-hidden">
           {isCollapsed && foundWords.length === 0 && (
             <div className="text-gray-200">Your words ...</div>
@@ -48,7 +51,7 @@ export function FoundWordList({
         )}
       </div>
       {!isCollapsed && (
-        <div className="grid grid-cols-6 px-5 py-2">
+        <div className="grid grid-cols-6 px-5 py-2 overflow-y-auto">
           {foundWords.map((word) => (
             <React.Fragment key={`${word.id}_expanded`}>
               <div className={`col-span-5 flex flex-row items-center`}>
