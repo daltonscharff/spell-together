@@ -42,8 +42,8 @@ export function ScoreDisplay({ currentScore, maxScore }: ScoreDisplayProps) {
   const level = LEVELS[levelIndex];
 
   return (
-    <div className="flex flex-row items-center">
-      <span>{level.rank}</span>
+    <div className="flex flex-row items-center gap-4">
+      <span className="capitalize font-bold">{level.rank}</span>
       <div className="w-full">
         <hr className="w-full relative top-[15px] text-gray-200 z-[-1]" />
         <div className="flex flex-row flex-wrap-none justify-between items-center">
