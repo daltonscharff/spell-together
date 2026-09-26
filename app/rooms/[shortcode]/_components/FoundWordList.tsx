@@ -14,7 +14,6 @@ export function FoundWordList({
   isCollapsible,
 }: FoundWordListProps) {
   const [isCollapsed, setIsCollapsed] = useState(isCollapsible);
-  console.log(isCollapsed);
 
   return (
     <div

@@ -4,7 +4,6 @@ type TitleBarProps = {
 };
 
 export function TitleBar({ title, date }: TitleBarProps) {
-  console.log(title);
   return (
     <div className="flex flex-row flex-wrap items-baseline gap-x-3">
       <div className="text-2xl font-bold">{title}</div>
