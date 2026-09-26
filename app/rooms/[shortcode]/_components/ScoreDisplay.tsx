@@ -45,7 +45,7 @@ export function ScoreDisplay({ currentScore, maxScore }: ScoreDisplayProps) {
     <div className="flex flex-row items-center gap-4">
       <span className="capitalize font-bold">{level.rank}</span>
       <div className="w-full">
-        <hr className="w-full relative top-[15px] text-gray-200 z-[-1]" />
+        <hr className="w-full relative top-[15px] text-zinc-200 z-[-1]" />
         <div className="flex flex-row flex-wrap-none justify-between items-center">
           {LEVELS.map((level, i) => {
             const bgColor = "bg-amber-300";
@@ -61,7 +61,7 @@ export function ScoreDisplay({ currentScore, maxScore }: ScoreDisplayProps) {
               return (
                 <div
                   key={level.rank}
-                  className={`w-2.5 h-2.5 rounded-full bg-gray-200`}
+                  className={`w-2.5 h-2.5 rounded-full bg-zinc-200`}
                 />
               );
             }

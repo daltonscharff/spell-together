@@ -14,13 +14,13 @@ export default function Room() {
       <div>
         <div>Hello from ROOM: {shortcode}</div>
         <div className="flex flex-row justify-center gap-3">
-          <button className="ring ring-gray-200 rounded-full px-5 py-2 cursor-pointer active:bg-gray-200">
+          <button className="ring ring-zinc-200 rounded-full px-5 py-2 cursor-pointer active:bg-zinc-200">
             Delete
           </button>
-          <button className="ring ring-gray-200 rounded-full px-5 py-2 cursor-pointer active:bg-gray-200">
+          <button className="ring ring-zinc-200 rounded-full px-5 py-2 cursor-pointer active:bg-zinc-200">
             o
           </button>
-          <button className="ring ring-gray-200 rounded-full px-5 py-2 cursor-pointer active:bg-gray-200">
+          <button className="ring ring-zinc-200 rounded-full px-5 py-2 cursor-pointer active:bg-zinc-200">
             Enter
           </button>
         </div>

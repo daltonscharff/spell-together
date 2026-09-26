@@ -18,7 +18,7 @@ export function FoundWordList({
 
   return (
     <div
-      className={`ring ring-gray-200 rounded-sm flex flex-col max-h-[inherit]`}
+      className={`ring ring-zinc-200 rounded-sm flex flex-col max-h-[inherit]`}
     >
       <div
         className={`flex flex-row gap-2 pl-3 pr-0 items-center w-full ${isCollapsible && "cursor-pointer"}`}
@@ -26,7 +26,7 @@ export function FoundWordList({
       >
         <div className="flex flex-row gap-1.5 p-2 items-center flex-1 overflow-hidden">
           {isCollapsed && foundWords.length === 0 && (
-            <div className="text-gray-200">Your words ...</div>
+            <div className="text-zinc-200">Your words ...</div>
           )}
           {!isCollapsed && (
             <div>
@@ -60,14 +60,14 @@ export function FoundWordList({
                 >
                   {word.value}
                 </div>
-                <div className="pl-1.5 text-sm text-gray-500">
+                <div className="pl-1.5 text-sm text-zinc-500">
                   {word.pointValue}
                 </div>
               </div>
-              <span className="col-span-1 text-right text-gray-600 text-sm">
+              <span className="col-span-1 text-right text-zinc-600 text-sm">
                 {word.submittedBy}
               </span>
-              <div className="col-span-6 text-sm text-gray-500 pb-1 mb-2 border-b border-gray-200">
+              <div className="col-span-6 text-sm text-zinc-500 pb-1 mb-2 border-b border-zinc-200">
                 <span className="italic pr-2">{word.partOfSpeech}</span>
                 {word.definition}
               </div>
