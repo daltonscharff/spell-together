@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+@theme {
+  --animate-half-spin: half-spin 1s;
+
+  @keyframes half-spin {
+    to {
+      transform: rotate(180deg);
+    }
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

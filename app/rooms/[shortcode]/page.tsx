@@ -4,8 +4,8 @@ import { useParams } from "next/navigation";
 import { ScoreDisplay } from "./_components/ScoreDisplay";
 import { FoundWordList } from "./_components/FoundWordList";
 import { useFoundWords } from "@/app/_hooks/useFoundWords";
-import ShuffleIcon from "@/public/icons/shuffle.svg";
-import Image from "next/image";
+import { Button } from "./_components/Button";
+import { ShuffleButton } from "./_components/Button/ShuffleButton";
 
 export default function Room() {
   const { shortcode } = useParams<{ shortcode: string }>();
@@ -16,15 +16,9 @@ export default function Room() {
       <div>
         <div>Hello from ROOM: {shortcode}</div>
         <div className="flex flex-row justify-center gap-3">
-          <button className="ring ring-zinc-200 rounded-full px-5 py-2 cursor-pointer active:bg-zinc-200">
-            Delete
-          </button>
-          <button className="ring ring-zinc-200 rounded-full p-2 cursor-pointer active:bg-zinc-200">
-            <Image src={ShuffleIcon} alt="shuffle" className="w-6" />
-          </button>
-          <button className="ring ring-zinc-200 rounded-full px-5 py-2 cursor-pointer active:bg-zinc-200">
-            Enter
-          </button>
+          <Button>Delete</Button>
+          <ShuffleButton />
+          <Button>Enter</Button>
         </div>
       </div>
       <div className="flex flex-col gap-2 max-h-160">
