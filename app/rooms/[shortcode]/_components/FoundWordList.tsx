@@ -19,6 +19,7 @@ export function FoundWordList({
     <div
       className={`ring ring-zinc-200 rounded-sm flex flex-col max-h-[inherit]`}
     >
+      {/* Top Bar */}
       <div
         className={`flex flex-row gap-2 pl-3 pr-0 items-center w-full ${isCollapsible && "cursor-pointer"}`}
         onClick={() => isCollapsible && setIsCollapsed(!isCollapsed)}
@@ -43,12 +44,21 @@ export function FoundWordList({
               </div>
             ))}
         </div>
+
+        {/* Drop Down Arrow */}
         {isCollapsible && (
-          <ChevronDownIcon
-            className={`w-5 h-5 mr-3 ${!isCollapsed && "rotate-180"}`}
-          />
+          <div className="relative">
+            {isCollapsed && (
+              <span className="absolute w-7 h-5 left-[-24px] bg-linear-to-r from-[#FFF0] to-[#FFF] to-75%" />
+            )}
+            <ChevronDownIcon
+              className={`w-5 h-5 mr-3 ${!isCollapsed && "rotate-180"}`}
+            />
+          </div>
         )}
       </div>
+
+      {/* Expanded Word List */}
       {!isCollapsed && (
         <div className="grid grid-cols-6 px-5 py-2 overflow-y-auto">
           {foundWords.map((word) => (
