@@ -21,7 +21,7 @@ export function FoundWordList({
     >
       {/* Top Bar */}
       <div
-        className={`flex flex-row gap-2 pl-3 pr-0 items-center w-full ${isCollapsible && "cursor-pointer"}`}
+        className={`flex flex-row gap-2 pl-3 pr-0 items-center w-full ${isCollapsible && "cursor-pointer"} ${!isCollapsed && "border-b border-zinc-200"}`}
         onClick={() => isCollapsible && setIsCollapsed(!isCollapsed)}
       >
         <div className="flex flex-row gap-1.5 p-2 items-center flex-1 overflow-hidden">

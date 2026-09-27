@@ -16,9 +16,9 @@ export default function Room() {
 
   return (
     <div className="flex-1 flex flex-col-reverse justify-end md:grid md:grid-cols-2 gap-2">
-      <div className="flex-grow flex flex-col justify-center items-center gap-6">
+      <div className="flex-grow flex flex-col justify-center items-center gap-6 my-6">
         {/* <div>Hello from ROOM: {shortcode}</div> */}
-        <div className="w-full max-w-70">
+        <div className="w-full max-w-72">
           <Hive centerLetter={centerLetter} outerLetters={outerLetters} />
         </div>
         <div className="flex flex-row justify-center gap-3">
@@ -28,7 +28,7 @@ export default function Room() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 max-h-160">
+      <div className="flex flex-col gap-4 max-h-160">
         <ScoreDisplay currentScore={1} maxScore={100} />
         <div className="block md:hidden max-h-150">
           <FoundWordList isCollapsible foundWords={foundWords} />
