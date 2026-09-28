@@ -1,11 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --animate-half-spin: half-spin 1s;
+  --animate-blink: blink 1200ms steps(1, end) infinite;
 
-  @keyframes half-spin {
-    to {
-      transform: rotate(180deg);
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
     }
   }
 }
