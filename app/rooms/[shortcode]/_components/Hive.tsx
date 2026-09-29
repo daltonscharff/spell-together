@@ -1,6 +1,6 @@
 import { TextInputContext } from "@/app/_contexts/textInputContext";
 import { FieldOutputTypes } from "@/prisma/contract";
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 
 type HiveProps = {
   outerLetters: string[];
@@ -18,14 +18,36 @@ const translations = [
 ];
 
 export const Hive = ({ outerLetters, centerLetter }: HiveProps) => {
-  const { addLetter } = useContext(TextInputContext);
+  const { addLetter, removeLetter, submitText } = useContext(TextInputContext);
+  const hiveRef = useRef(null);
+
+  useEffect(() => {
+    const keyboardListener = (event: KeyboardEvent) => {
+      switch (event.code) {
+        case "Backspace":
+          removeLetter();
+          return;
+        case "Enter":
+          submitText();
+          return;
+        default:
+          const [_, character] = event.code.split("Key");
+          if (!character) return;
+          const letter = character.toLowerCase();
+          addLetter(letter);
+      }
+    };
+
+    document.addEventListener("keydown", keyboardListener);
+    return () => document.removeEventListener("keydown", keyboardListener);
+  }, []);
+
   return (
-    <svg viewBox="0 0 257 265" xmlns="http://www.w3.org/2000/svg">
+    <svg ref={hiveRef} viewBox="0 0 257 265" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <polygon id="hexagon" points="27,89 78,89 103,45.5 78,2 27,2 2,45.5" />
       </defs>
       {[...outerLetters, centerLetter].map((letter, i, array) => {
-        letter = letter.toUpperCase();
         const hexClasses = `cursor-pointer stroke-white stroke-[5px] ${
           i === array.length - 1
             ? "fill-amber-300 active:fill-amber-200"
@@ -43,7 +65,7 @@ export const Hive = ({ outerLetters, centerLetter }: HiveProps) => {
           >
             <use href="#hexagon" className={hexClasses} />
             <text
-              className="anchor-middle baseline-middle font-bold text-3xl pointer-events-none"
+              className="anchor-middle baseline-middle font-bold text-3xl pointer-events-none uppercase"
               x="50%"
               y="53%"
               textAnchor="middle"

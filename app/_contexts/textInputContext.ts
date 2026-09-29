@@ -5,11 +5,13 @@ export const TextInputContext = createContext<{
   addLetter: (letter: string) => void;
   removeLetter: () => void;
   clearTextInput: () => void;
+  submitText: () => void;
   setTextInput: (text: string) => void;
 }>({
   textInput: "",
   addLetter: () => {},
   removeLetter: () => {},
   clearTextInput: () => {},
+  submitText: () => {},
   setTextInput: () => {},
 });

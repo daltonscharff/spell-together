@@ -17,8 +17,8 @@ export function TextInput({ outerLetters, centerLetter }: TextInputProps) {
   }, [textInput]);
 
   return (
-    <div className="flex flex-row flex-wrap justify-center text-3xl">
-      <span className="font-bold uppercase">
+    <div className="flex flex-row justify-center text-3xl">
+      <span className="flex flex-row flex-wrap font-bold uppercase">
         {textInput
           .toLowerCase()
           .split("")
@@ -39,8 +39,8 @@ export function TextInput({ outerLetters, centerLetter }: TextInputProps) {
             }
             return <span key={`validLetter_${i}`}>{letter}</span>;
           })}
+        <span className="w-0.5 h-9 bg-amber-300 animate-blink mx-[2px]" />
       </span>
-      <div className="w-0.5 h-9 bg-amber-300 animate-blink mx-[1px]" />
       {firstLoad && textInput.length === 0 && (
         <span className="text-zinc-400">Type or click</span>
       )}

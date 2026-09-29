@@ -23,11 +23,18 @@ export default function Room() {
   }
 
   function addLetter(letter: string) {
-    setTextInput((prev) => prev.concat(letter.toLowerCase()));
+    setTextInput((prev) =>
+      prev.length < 20 ? prev.concat(letter.toLowerCase()) : prev,
+    );
   }
 
   function removeLetter() {
     setTextInput((prev) => prev.substring(0, prev.length - 1));
+  }
+
+  function submitText() {
+    // TODO: submit answer
+    clearTextInput();
   }
 
   return (
@@ -40,6 +47,7 @@ export default function Room() {
             setTextInput,
             addLetter,
             removeLetter,
+            submitText,
             clearTextInput,
           }}
         >
@@ -55,14 +63,7 @@ export default function Room() {
           <div className="flex flex-row justify-center gap-3">
             <Button onClick={removeLetter}>Delete</Button>
             <ShuffleButton />
-            <Button
-              onClick={() => {
-                // TODO: submit answer
-                clearTextInput();
-              }}
-            >
-              Enter
-            </Button>
+            <Button onClick={submitText}>Enter</Button>
           </div>
         </TextInputContext>
       </div>
