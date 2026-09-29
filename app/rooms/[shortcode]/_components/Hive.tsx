@@ -1,6 +1,5 @@
 import { TextInputContext } from "@/app/_contexts/textInputContext";
-import { FieldOutputTypes } from "@/prisma/contract";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect } from "react";
 
 type HiveProps = {
   outerLetters: string[];
@@ -19,7 +18,6 @@ const translations = [
 
 export const Hive = ({ outerLetters, centerLetter }: HiveProps) => {
   const { addLetter, removeLetter, submitText } = useContext(TextInputContext);
-  const hiveRef = useRef(null);
 
   useEffect(() => {
     const keyboardListener = (event: KeyboardEvent) => {
@@ -43,7 +41,7 @@ export const Hive = ({ outerLetters, centerLetter }: HiveProps) => {
   }, []);
 
   return (
-    <svg ref={hiveRef} viewBox="0 0 257 265" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 257 265" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <polygon id="hexagon" points="27,89 78,89 103,45.5 78,2 27,2 2,45.5" />
       </defs>
