@@ -40,7 +40,7 @@ export function TextInput({ outerLetters, centerLetter }: TextInputProps) {
             return <span key={`validLetter_${i}`}>{letter}</span>;
           })}
       </span>
-      <div className="w-0.5 h-auto bg-amber-300 animate-blink mx-[1px]" />
+      <div className="w-0.5 h-9 bg-amber-300 animate-blink mx-[1px]" />
       {firstLoad && textInput.length === 0 && (
         <span className="text-zinc-400">Type or click</span>
       )}

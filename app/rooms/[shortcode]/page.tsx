@@ -18,11 +18,31 @@ export default function Room() {
   const { centerLetter, outerLetters } = usePuzzle();
   const [textInput, setTextInput] = useState("");
 
+  function clearTextInput() {
+    setTextInput("");
+  }
+
+  function addLetter(letter: string) {
+    setTextInput((prev) => prev.concat(letter.toLowerCase()));
+  }
+
+  function removeLetter() {
+    setTextInput((prev) => prev.substring(0, prev.length - 1));
+  }
+
   return (
     <div className="flex-1 flex flex-col-reverse justify-end md:grid md:grid-cols-2 gap-2 my-2">
       <div className="flex-grow flex flex-col justify-center items-center gap-6 my-6">
         {/* <div>Hello from ROOM: {shortcode}</div> */}
-        <TextInputContext value={{ textInput, setTextInput }}>
+        <TextInputContext
+          value={{
+            textInput,
+            setTextInput,
+            addLetter,
+            removeLetter,
+            clearTextInput,
+          }}
+        >
           <div className="w-full max-w-72">
             <TextInput
               centerLetter={centerLetter}
@@ -33,9 +53,16 @@ export default function Room() {
             <Hive centerLetter={centerLetter} outerLetters={outerLetters} />
           </div>
           <div className="flex flex-row justify-center gap-3">
-            <Button>Delete</Button>
+            <Button onClick={removeLetter}>Delete</Button>
             <ShuffleButton />
-            <Button>Enter</Button>
+            <Button
+              onClick={() => {
+                // TODO: submit answer
+                clearTextInput();
+              }}
+            >
+              Enter
+            </Button>
           </div>
         </TextInputContext>
       </div>
