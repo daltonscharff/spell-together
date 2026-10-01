@@ -63,7 +63,7 @@ export const Hive = ({ outerLetters, centerLetter }: HiveProps) => {
           >
             <use href="#hexagon" className={hexClasses} />
             <text
-              className="anchor-middle baseline-middle font-bold text-3xl pointer-events-none uppercase"
+              className="anchor-middle baseline-middle font-bold text-[1.65rem] pointer-events-none uppercase"
               x="50%"
               y="53%"
               textAnchor="middle"
