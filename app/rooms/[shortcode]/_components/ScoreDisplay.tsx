@@ -43,7 +43,7 @@ export function ScoreDisplay({ currentScore, maxScore }: ScoreDisplayProps) {
 
   return (
     <div className="flex flex-row items-center gap-4">
-      <span className="capitalize font-bold">{level.rank}</span>
+      <span className="capitalize font-bold shrink-0">{level.rank}</span>
       <div className="w-full">
         <hr className="w-full relative top-[15px] text-zinc-200 z-[-1]" />
         <div className="flex flex-row flex-wrap-none justify-between items-center">
