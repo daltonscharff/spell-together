@@ -1,5 +1,5 @@
-import { TextInputContext } from "@/app/_contexts/textInputContext";
-import { useContext, useEffect } from "react";
+import { useTextInputContext } from "@/app/_contexts/textInputContext";
+import { useEffect } from "react";
 
 type HiveProps = {
   outerLetters: string[];
@@ -17,7 +17,7 @@ const translations = [
 ];
 
 export const Hive = ({ outerLetters, centerLetter }: HiveProps) => {
-  const { addLetter, removeLetter, submitText } = useContext(TextInputContext);
+  const { addLetter, removeLetter, submitText } = useTextInputContext();
 
   useEffect(() => {
     const keyboardListener = (event: KeyboardEvent) => {

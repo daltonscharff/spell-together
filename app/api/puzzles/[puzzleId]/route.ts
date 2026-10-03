@@ -4,8 +4,9 @@ import { db } from "@/prisma/db";
 type Word = FieldOutputTypes["public"]["Word"];
 type Puzzle = FieldOutputTypes["public"]["Puzzle"];
 
-export type PuzzleResponse = Puzzle & {
+export type PuzzleResponse = Omit<Puzzle, "outerLetters"> & {
   words: Word[];
+  outerLetters: string[];
 };
 
 export async function GET(
@@ -36,6 +37,7 @@ export async function GET(
 
   const puzzleResponse: PuzzleResponse = {
     ...puzzle,
+    outerLetters: puzzle.outerLetters.split(""),
     words: puzzle.words.map((pw) => pw.word).filter((word) => word !== null),
   };
   return new Response(JSON.stringify(puzzleResponse), {

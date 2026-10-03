@@ -1,6 +1,12 @@
-export function usePuzzle() {
-  return {
-    centerLetter: "a",
-    outerLetters: ["b", "c", "d", "e", "f", "g"],
-  };
+import useSWR from "swr";
+import { fetcher } from "../_utils/fetcher";
+import { PuzzleResponse } from "../api/puzzles/[puzzleId]/route";
+
+export function usePuzzle(id: number | null) {
+  const { data, error, isLoading } = useSWR<PuzzleResponse>(
+    id ? `/api/puzzles/${id}` : null,
+    fetcher,
+  );
+
+  return { puzzle: data, error, isLoading };
 }

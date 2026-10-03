@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 
 export const TextInputContext = createContext<{
   textInput: string;
@@ -15,3 +15,5 @@ export const TextInputContext = createContext<{
   submitText: () => {},
   setTextInput: () => {},
 });
+
+export const useTextInputContext = () => useContext(TextInputContext);

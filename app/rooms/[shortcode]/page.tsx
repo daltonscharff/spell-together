@@ -6,16 +6,22 @@ import { FoundWordList } from "./_components/FoundWordList";
 import { useFoundWords } from "@/app/_hooks/useFoundWords";
 import { Button } from "./_components/Button";
 import { ShuffleButton } from "./_components/Button/ShuffleButton";
-import { usePuzzle } from "@/app/_hooks/usePuzzle";
 import { Hive } from "./_components/Hive";
 import { TextInput } from "./_components/TextInput";
 import { useState } from "react";
 import { TextInputContext } from "@/app/_contexts/textInputContext";
+import { useSelectedPuzzleIdContext } from "@/app/_contexts/selectedPuzzleIdContext";
+import { usePuzzle } from "@/app/_hooks/usePuzzle";
 
 export default function Room() {
   const { shortcode } = useParams<{ shortcode: string }>();
   const { foundWords } = useFoundWords();
-  const { centerLetter, outerLetters } = usePuzzle();
+  const { selectedPuzzleId } = useSelectedPuzzleIdContext();
+  const { puzzle } = usePuzzle(selectedPuzzleId);
+  const { outerLetters, centerLetter } = puzzle || {
+    outerLetters: [],
+    centerLetter: "",
+  };
   const [textInput, setTextInput] = useState("");
 
   function clearTextInput() {
@@ -35,6 +41,10 @@ export default function Room() {
   function submitText() {
     // TODO: submit answer
     clearTextInput();
+  }
+
+  if (!puzzle) {
+    return <div>Loading puzzle...</div>;
   }
 
   return (
