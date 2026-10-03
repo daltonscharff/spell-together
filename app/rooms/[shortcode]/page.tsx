@@ -8,7 +8,7 @@ import { Button } from "./_components/Button";
 import { ShuffleButton } from "./_components/Button/ShuffleButton";
 import { Hive } from "./_components/Hive";
 import { TextInput } from "./_components/TextInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextInputContext } from "@/app/_contexts/textInputContext";
 import { useSelectedPuzzleIdContext } from "@/app/_contexts/selectedPuzzleIdContext";
 import { usePuzzle } from "@/app/_hooks/usePuzzle";
@@ -25,6 +25,13 @@ export default function Room() {
     centerLetter: "",
   };
   const [textInput, setTextInput] = useState("");
+  const [shuffledLetters, setShuffledLetters] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (outerLetters && outerLetters.length > 0) {
+      setShuffledLetters(outerLetters);
+    }
+  }, [outerLetters]);
 
   function clearTextInput() {
     setTextInput("");
@@ -70,11 +77,17 @@ export default function Room() {
             />
           </div>
           <div className="w-full max-w-72">
-            <Hive centerLetter={centerLetter} outerLetters={outerLetters} />
+            <Hive centerLetter={centerLetter} outerLetters={shuffledLetters} />
           </div>
           <div className="flex flex-row justify-center gap-3">
             <Button onClick={removeLetter}>Delete</Button>
-            <ShuffleButton />
+            <ShuffleButton
+              onClick={() =>
+                setShuffledLetters((letters) =>
+                  [...letters].sort(() => Math.random() - 0.5),
+                )
+              }
+            />
             <Button onClick={submitText}>Enter</Button>
           </div>
         </TextInputContext>
