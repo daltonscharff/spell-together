@@ -98,7 +98,7 @@ export default function Room() {
         <div className="block md:hidden max-h-150">
           <FoundWordList isCollapsible foundWords={foundWords} />
         </div>
-        <div className="hidden md:block max-h-full">
+        <div className="hidden md:block max-h-full md:h-full">
           <FoundWordList foundWords={foundWords} />
         </div>
       </div>

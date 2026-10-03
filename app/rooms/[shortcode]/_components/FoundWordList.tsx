@@ -17,7 +17,7 @@ export function FoundWordList({
 
   return (
     <div
-      className={`ring ring-zinc-200 rounded-sm flex flex-col max-h-[inherit]`}
+      className={`ring ring-zinc-200 rounded-sm flex flex-col max-h-[inherit] md:h-full`}
     >
       {/* Top Bar */}
       <div
@@ -76,7 +76,7 @@ export function FoundWordList({
               <span className="col-span-1 text-right text-zinc-600 text-sm">
                 {word.submittedBy}
               </span>
-              <div className="col-span-6 text-sm text-zinc-500 pb-1 mb-2 border-b border-zinc-200">
+              <div className="col-span-6 text-sm text-zinc-500 pb-1 border-b border-zinc-200">
                 <span className="italic pr-2">{word.partOfSpeech}</span>
                 {word.definition}
               </div>
