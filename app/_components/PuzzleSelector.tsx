@@ -15,6 +15,7 @@ export function PuzzleSelector() {
 
   return (
     <select
+      className="cursor-pointer"
       value={selectedPuzzleId ?? undefined}
       onChange={(e) =>
         setSelectedPuzzleId(e.target.value ? parseInt(e.target.value) : null)
