@@ -1,164 +1,55 @@
 import { FieldOutputTypes } from "@/prisma/contract";
+import { CorrectGuessResponse } from "../api/correctGuesses/route";
+import useSWR from "swr";
+import { fetcher } from "../_utils/fetcher";
+import { usePuzzle } from "./usePuzzle";
+import { useMemo } from "react";
 
 type Word = FieldOutputTypes["public"]["Word"];
 type CorrectGuess = FieldOutputTypes["public"]["CorrectGuess"];
 export type FoundWord = Omit<Word, "createdAt" | "updatedAt"> &
   Pick<CorrectGuess, "submittedAt" | "submittedBy">;
 
-export function useFoundWords() {
+export function useFoundWords(
+  roomId?: number | null,
+  puzzleId?: number | null,
+) {
+  const {
+    puzzle,
+    isLoading: isPuzzleLoading,
+    error: puzzleError,
+  } = usePuzzle(puzzleId);
+  const {
+    data: correctGuesses,
+    isLoading,
+    error,
+  } = useSWR<CorrectGuessResponse>(
+    roomId && puzzleId
+      ? `/api/correctGuesses?roomId=${roomId}&puzzleId=${puzzleId}`
+      : null,
+    fetcher,
+  );
+
+  const foundWords = useMemo(
+    () =>
+      correctGuesses?.correctGuesses
+        .map((guess) => {
+          const word = puzzle?.words.find((w) => w.id === guess.wordId);
+          if (!word) return null;
+          return {
+            ...word,
+            submittedAt: guess.submittedAt,
+            submittedBy: guess.submittedBy,
+          };
+        })
+        .filter((word) => word !== null) ?? [],
+    [correctGuesses, puzzle],
+  );
+
   return {
-    foundWords: [
-      {
-        id: 1,
-        value: "planet",
-        pointValue: 8,
-        isPangram: false,
-        partOfSpeech: "noun",
-        definition: "A celestial body orbiting a star.",
-        submittedAt: new Date("2026-09-26T12:00:00.000Z").toTemporalInstant(),
-        submittedBy: "Alice",
-      },
-      {
-        id: 2,
-        value: "starlight",
-        pointValue: 10,
-        isPangram: true,
-        partOfSpeech: "noun",
-        definition: "The light emitted by stars.",
-        submittedAt: new Date("2026-09-26T12:05:00.000Z").toTemporalInstant(),
-        submittedBy: "Bob",
-      },
-      {
-        id: 3,
-        value: "orbit",
-        pointValue: 7,
-        isPangram: false,
-        partOfSpeech: "noun",
-        definition: "The curved path of an object around a star or planet.",
-        submittedAt: new Date("2026-09-26T12:10:00.000Z").toTemporalInstant(),
-        submittedBy: "Cara",
-      },
-      {
-        id: 4,
-        value: "comet",
-        pointValue: 6,
-        isPangram: false,
-        partOfSpeech: "noun",
-        definition: "A celestial object with a glowing coma and tail.",
-        submittedAt: new Date("2026-09-26T12:15:00.000Z").toTemporalInstant(),
-        submittedBy: "Drew",
-      },
-      {
-        id: 5,
-        value: "galaxy",
-        pointValue: 9,
-        isPangram: false,
-        partOfSpeech: "noun",
-        definition: "A vast system of stars, gas, and dust.",
-        submittedAt: new Date("2026-09-26T12:20:00.000Z").toTemporalInstant(),
-        submittedBy: "Eve",
-      },
-      {
-        id: 6,
-        value: "meteor",
-        pointValue: 7,
-        isPangram: false,
-        partOfSpeech: "noun",
-        definition:
-          "A streak of light caused by a meteoroid burning up in the atmosphere.",
-        submittedAt: new Date("2026-09-26T12:25:00.000Z").toTemporalInstant(),
-        submittedBy: "Frank",
-      },
-      {
-        id: 7,
-        value: "nova",
-        pointValue: 5,
-        isPangram: false,
-        partOfSpeech: "noun",
-        definition: "A sudden increase in brightness of a star.",
-        submittedAt: new Date("2026-09-26T12:30:00.000Z").toTemporalInstant(),
-        submittedBy: "Gina",
-      },
-      {
-        id: 8,
-        value: "constellation",
-        pointValue: 12,
-        isPangram: true,
-        partOfSpeech: "noun",
-        definition: "A recognizable pattern of stars in the night sky.",
-        submittedAt: new Date("2026-09-26T12:35:00.000Z").toTemporalInstant(),
-        submittedBy: "Hugo",
-      },
-      {
-        id: 9,
-        value: "asteroid",
-        pointValue: 8,
-        isPangram: false,
-        partOfSpeech: "noun",
-        definition: "A rocky object orbiting the sun.",
-        submittedAt: new Date("2026-09-26T12:40:00.000Z").toTemporalInstant(),
-        submittedBy: "Iris",
-      },
-      {
-        id: 10,
-        value: "quasar",
-        pointValue: 11,
-        isPangram: false,
-        partOfSpeech: "noun",
-        definition: "An extremely luminous active galactic nucleus.",
-        submittedAt: new Date("2026-09-26T12:45:00.000Z").toTemporalInstant(),
-        submittedBy: "Jules",
-      },
-      {
-        id: 11,
-        value: "nebula",
-        pointValue: 9,
-        isPangram: false,
-        partOfSpeech: "noun",
-        definition: "A giant cloud of gas and dust in space.",
-        submittedAt: new Date("2026-09-26T12:50:00.000Z").toTemporalInstant(),
-        submittedBy: "Kim",
-      },
-      {
-        id: 12,
-        value: "eclipse",
-        pointValue: 8,
-        isPangram: false,
-        partOfSpeech: "noun",
-        definition: "The blocking of one celestial body by another.",
-        submittedAt: new Date("2026-09-26T12:55:00.000Z").toTemporalInstant(),
-        submittedBy: "Liam",
-      },
-      {
-        id: 13,
-        value: "supernova",
-        pointValue: 14,
-        isPangram: true,
-        partOfSpeech: "noun",
-        definition: "The explosion of a massive star at the end of its life.",
-        submittedAt: new Date("2026-09-26T13:00:00.000Z").toTemporalInstant(),
-        submittedBy: "Maya",
-      },
-      {
-        id: 14,
-        value: "cosmos",
-        pointValue: 7,
-        isPangram: false,
-        partOfSpeech: "noun",
-        definition: "The universe regarded as an orderly whole.",
-        submittedAt: new Date("2026-09-26T13:05:00.000Z").toTemporalInstant(),
-        submittedBy: "Noah",
-      },
-      {
-        id: 15,
-        value: "orbiting",
-        pointValue: 10,
-        isPangram: false,
-        partOfSpeech: "adjective",
-        definition: "Moving in a curved path around a celestial body.",
-        submittedAt: new Date("2026-09-26T13:10:00.000Z").toTemporalInstant(),
-        submittedBy: "Olivia",
-      },
-    ] satisfies FoundWord[],
+    foundWords,
+    score: foundWords.reduce((acc, word) => acc + word.pointValue, 0),
+    isLoading: isLoading || isPuzzleLoading,
+    error: error || puzzleError,
   };
 }

@@ -12,12 +12,14 @@ import { useState } from "react";
 import { TextInputContext } from "@/app/_contexts/textInputContext";
 import { useSelectedPuzzleIdContext } from "@/app/_contexts/selectedPuzzleIdContext";
 import { usePuzzle } from "@/app/_hooks/usePuzzle";
+import { useRoom } from "@/app/_hooks/useRoom";
 
 export default function Room() {
   const { shortcode } = useParams<{ shortcode: string }>();
-  const { foundWords } = useFoundWords();
+  const { room } = useRoom(shortcode);
   const { selectedPuzzleId } = useSelectedPuzzleIdContext();
   const { puzzle } = usePuzzle(selectedPuzzleId);
+  const { foundWords, score } = useFoundWords(room?.id, puzzle?.id);
   const { outerLetters, centerLetter } = puzzle || {
     outerLetters: [],
     centerLetter: "",
@@ -79,7 +81,7 @@ export default function Room() {
       </div>
 
       <div className="flex flex-col gap-4 max-h-160">
-        <ScoreDisplay currentScore={1} maxScore={100} />
+        <ScoreDisplay currentScore={score} maxScore={puzzle?.maxScore ?? 0} />
         <div className="block md:hidden max-h-150">
           <FoundWordList isCollapsible foundWords={foundWords} />
         </div>

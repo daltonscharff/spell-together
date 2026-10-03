@@ -17,7 +17,7 @@ export async function GET(
       headers: { "Content-Type": "application/json" },
     });
   }
-  return new Response(JSON.stringify({ room }), {
+  return new Response(JSON.stringify(room), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });
