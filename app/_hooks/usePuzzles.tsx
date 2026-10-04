@@ -1,15 +1,12 @@
-import useSWR from "swr";
 import { fetcher } from "../_utils/fetcher";
 import { PuzzlesResponse } from "../api/puzzles/route";
+import useSWRImmutable from "swr/immutable";
 
 export type Puzzles = PuzzlesResponse["puzzles"];
 export function usePuzzles() {
-  const { data, error, isLoading } = useSWR<PuzzlesResponse>(
+  const { data, error, isLoading } = useSWRImmutable<PuzzlesResponse>(
     "/api/puzzles",
     fetcher,
-    {
-      revalidateOnFocus: false,
-    },
   );
 
   return { puzzles: data?.puzzles, error, isLoading };

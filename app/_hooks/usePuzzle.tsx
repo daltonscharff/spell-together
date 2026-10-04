@@ -1,16 +1,13 @@
-import useSWR from "swr";
 import { fetcher } from "../_utils/fetcher";
 import { PuzzleResponse } from "../api/puzzles/[puzzleId]/route";
 import { useMemo } from "react";
+import useSWRImmutable from "swr/immutable";
 
 export type Puzzle = PuzzleResponse;
 export function usePuzzle(id?: number | null) {
-  const { data, error, isLoading } = useSWR<PuzzleResponse>(
+  const { data, error, isLoading } = useSWRImmutable<PuzzleResponse>(
     id ? `/api/puzzles/${id}` : null,
     fetcher,
-    {
-      revalidateOnFocus: false,
-    },
   );
 
   const wordMap = useMemo(() => {
