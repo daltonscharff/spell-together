@@ -19,7 +19,10 @@ export default function Room() {
   const { room } = useRoom(shortcode);
   const { selectedPuzzleId } = useSelectedPuzzleIdContext();
   const { puzzle, wordMap } = usePuzzle(selectedPuzzleId);
-  const { foundWords, score } = useFoundWords(room?.id, puzzle?.id);
+  const { foundWords, score, mutateCorrectGuesses } = useFoundWords(
+    room?.id,
+    puzzle?.id,
+  );
   const { outerLetters, centerLetter } = puzzle || {
     outerLetters: [],
     centerLetter: "",
@@ -51,17 +54,56 @@ export default function Room() {
     setTextInput((prev) => prev.substring(0, prev.length - 1));
   }
 
-  function submitText() {
-    if (
-      wordMap?.has(textInput) &&
-      !foundWords?.some((word) => word.value === textInput)
-    ) {
-      console.log(`Found word: ${textInput}`);
-      // TODO: attempt to write via POST request
-    } else {
-      console.log(`Not a valid word: ${textInput}`);
+  async function submitText() {
+    if (textInput.length < 4) {
+      console.log(`Too short: ${textInput}`);
+      // TODO: show alert toast
+      clearTextInput();
+      return;
+    }
+    if (!textInput.includes(centerLetter)) {
+      console.log(`Missing center letter: ${textInput}`);
+      // TODO: show alert toast
+      clearTextInput();
+      return;
+    }
+    if (!wordMap.has(textInput)) {
+      console.log(`Not in word list: ${textInput}`);
+      // TODO: show alert toast
+      clearTextInput();
+      return;
+    }
+    const alreadyFoundWord = foundWords?.find(
+      (word) => word.value === textInput,
+    );
+    if (alreadyFoundWord) {
+      console.log(
+        `Already found by ${alreadyFoundWord.submittedBy}: ${textInput}`,
+      );
+      // TODO: show alert toast
+      clearTextInput();
+      return;
+    }
+
+    const res = await fetch(`/api/correctGuesses`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        roomId: room?.id,
+        puzzleId: puzzle?.id,
+        wordId: wordMap.get(textInput)?.id,
+        submittedBy: "test-user", // TODO: replace with actual user ID
+      }),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error("Error submitting correct guess:", errorData);
       // TODO: show alert toast
     }
+    mutateCorrectGuesses();
     clearTextInput();
   }
 

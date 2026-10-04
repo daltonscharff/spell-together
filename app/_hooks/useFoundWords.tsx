@@ -24,6 +24,7 @@ export function useFoundWords(
     data: correctGuesses,
     isLoading,
     error,
+    mutate: mutateCorrectGuesses,
   } = useSWR<CorrectGuessResponse>(
     roomId && puzzleId
       ? `/api/correctGuesses?roomId=${roomId}&puzzleId=${puzzleId}`
@@ -52,5 +53,6 @@ export function useFoundWords(
     score: foundWords.reduce((acc, word) => acc + word.pointValue, 0),
     isLoading: isLoading || isPuzzleLoading,
     error: error || puzzleError,
+    mutateCorrectGuesses,
   };
 }
