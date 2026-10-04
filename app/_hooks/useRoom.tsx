@@ -7,6 +7,9 @@ export function useRoom(shortcode: string) {
   const { data, error, isLoading } = useSWR<RoomResponse>(
     shortcode ? `/api/rooms/${shortcode}` : null,
     fetcher,
+    {
+      revalidateOnFocus: false,
+    },
   );
 
   return { room: data, error, isLoading };

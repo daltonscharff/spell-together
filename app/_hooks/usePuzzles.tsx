@@ -7,6 +7,9 @@ export function usePuzzles() {
   const { data, error, isLoading } = useSWR<PuzzlesResponse>(
     "/api/puzzles",
     fetcher,
+    {
+      revalidateOnFocus: false,
+    },
   );
 
   return { puzzles: data?.puzzles, error, isLoading };

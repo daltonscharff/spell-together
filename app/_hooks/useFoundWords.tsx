@@ -16,6 +16,7 @@ export function useFoundWords(
 ) {
   const {
     puzzle,
+    wordIdMap,
     isLoading: isPuzzleLoading,
     error: puzzleError,
   } = usePuzzle(puzzleId);
@@ -34,7 +35,7 @@ export function useFoundWords(
     () =>
       correctGuesses?.correctGuesses
         .map((guess) => {
-          const word = puzzle?.words.find((w) => w.id === guess.wordId);
+          const word = wordIdMap.get(guess.wordId);
           if (!word) return null;
           return {
             ...word,
