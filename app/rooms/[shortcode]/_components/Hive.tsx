@@ -38,7 +38,7 @@ export const Hive = ({ outerLetters, centerLetter }: HiveProps) => {
 
     document.addEventListener("keydown", keyboardListener);
     return () => document.removeEventListener("keydown", keyboardListener);
-  }, []);
+  }, [addLetter, removeLetter, submitText]);
 
   return (
     <svg viewBox="0 0 257 265" xmlns="http://www.w3.org/2000/svg">

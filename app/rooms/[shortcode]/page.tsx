@@ -18,7 +18,7 @@ export default function Room() {
   const { shortcode } = useParams<{ shortcode: string }>();
   const { room } = useRoom(shortcode);
   const { selectedPuzzleId } = useSelectedPuzzleIdContext();
-  const { puzzle } = usePuzzle(selectedPuzzleId);
+  const { puzzle, wordMap } = usePuzzle(selectedPuzzleId);
   const { foundWords, score } = useFoundWords(room?.id, puzzle?.id);
   const { outerLetters, centerLetter } = puzzle || {
     outerLetters: [],
@@ -52,7 +52,16 @@ export default function Room() {
   }
 
   function submitText() {
-    // TODO: submit answer
+    if (
+      wordMap?.has(textInput) &&
+      !foundWords?.some((word) => word.value === textInput)
+    ) {
+      console.log(`Found word: ${textInput}`);
+      // TODO: attempt to write via POST request
+    } else {
+      console.log(`Not a valid word: ${textInput}`);
+      // TODO: show alert toast
+    }
     clearTextInput();
   }
 
@@ -63,7 +72,6 @@ export default function Room() {
   return (
     <div className="flex-1 flex flex-col-reverse justify-end md:grid md:grid-cols-2 gap-2 my-2">
       <div className="flex-grow flex flex-col justify-center items-center gap-6 my-6">
-        {/* <div>Hello from ROOM: {shortcode}</div> */}
         <TextInputContext
           value={{
             textInput,
