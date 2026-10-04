@@ -28,6 +28,10 @@ export default function Room() {
   const [shuffledLetters, setShuffledLetters] = useState<string[]>([]);
 
   useEffect(() => {
+    clearTextInput();
+  }, [selectedPuzzleId]);
+
+  useEffect(() => {
     if (outerLetters && outerLetters.length > 0) {
       setShuffledLetters(outerLetters);
     }
