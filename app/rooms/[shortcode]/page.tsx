@@ -149,7 +149,7 @@ export default function Room() {
 
       <div className="flex flex-col gap-4 max-h-160">
         <ScoreDisplay currentScore={score} maxScore={puzzle?.maxScore ?? 0} />
-        <div className="block md:hidden max-h-150">
+        <div className="block md:hidden max-h-60">
           <FoundWordList isCollapsible foundWords={foundWords} />
         </div>
         <div className="hidden md:block max-h-full md:h-full">
