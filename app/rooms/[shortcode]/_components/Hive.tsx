@@ -48,8 +48,8 @@ export const Hive = ({ outerLetters, centerLetter }: HiveProps) => {
       {[...outerLetters, centerLetter].map((letter, i, array) => {
         const hexClasses = `cursor-pointer stroke-white stroke-[5px] ${
           i === array.length - 1
-            ? "fill-amber-300 active:fill-amber-200"
-            : "fill-zinc-200 active:fill-zinc-300"
+            ? "fill-amber-300/75 active:fill-amber-300"
+            : "fill-zinc-200/75 active:fill-zinc-200"
         }`;
         return (
           <svg
