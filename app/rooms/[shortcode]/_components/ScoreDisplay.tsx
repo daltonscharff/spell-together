@@ -68,7 +68,7 @@ export function ScoreDisplay({ currentScore, maxScore }: ScoreDisplayProps) {
             return (
               <div
                 key={level.rank}
-                className={`flex justify-center items-center w-7.5 h-7.5 rounded-full text-xs ${bgColor}`}
+                className={`flex justify-center items-center w-7.5 h-7.5 ${i === LEVELS.length - 1 ? "rounded-xs" : "rounded-full"} text-xs ${bgColor}`}
               >
                 {currentScore}
               </div>
