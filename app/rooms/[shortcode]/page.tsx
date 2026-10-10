@@ -133,7 +133,7 @@ export default function Room() {
           <div className="w-full max-w-72">
             <Hive centerLetter={centerLetter} outerLetters={shuffledLetters} />
           </div>
-          <div className="flex flex-row justify-center gap-3">
+          <div className="flex flex-row justify-center gap-4">
             <Button onClick={removeLetter}>Delete</Button>
             <ShuffleButton
               onClick={() =>

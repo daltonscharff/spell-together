@@ -10,7 +10,7 @@ export function ShuffleButton({ onClick }: ShuffleButtonProps) {
   const [rotation, setRotation] = useState(0);
   return (
     <Button
-      className="px-2! flex-shrink-0"
+      className="px-3! flex-shrink-0"
       onClick={() => {
         setRotation((prev) => prev - 180);
         onClick?.();
