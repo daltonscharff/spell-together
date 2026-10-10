@@ -112,7 +112,7 @@ export default function Room() {
   }
 
   return (
-    <div className="flex-1 flex flex-col-reverse justify-end md:grid md:grid-cols-2 gap-2 my-2">
+    <div className="flex-1 flex flex-col-reverse justify-end md:grid md:grid-cols-2 gap-2 my-2 max-w-5xl mx-auto w-full">
       <div className="flex-grow flex flex-col justify-center items-center gap-6 my-6">
         <TextInputContext
           value={{

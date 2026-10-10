@@ -9,6 +9,19 @@ type FoundWordListProps = {
   isCollapsible?: boolean;
 };
 
+function stringToColor(s: string) {
+  let hash = 0;
+  for (let i = 0; i < s.length; i++) {
+    hash = s.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  let color = "#";
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += value.toString(16);
+  }
+  return color;
+}
+
 export function FoundWordList({
   foundWords,
   isCollapsible,
@@ -60,28 +73,21 @@ export function FoundWordList({
 
       {/* Expanded Word List */}
       {!isCollapsed && (
-        <div className="grid grid-cols-6 px-5 py-2 overflow-y-auto">
-          {foundWords.map((word) => (
-            <React.Fragment key={`${word.id}_expanded`}>
-              <div className={`col-span-5 flex flex-row items-center`}>
-                <div
-                  className={`${word.isPangram && "bg-amber-300"} capitalize`}
-                >
-                  {word.value}
-                </div>
-                <div className="pl-1.5 text-sm text-zinc-500">
-                  {word.pointValue}
-                </div>
-              </div>
-              <span className="col-span-1 text-right text-zinc-600 text-sm">
-                {word.submittedBy}
-              </span>
-              <div className="col-span-6 text-sm text-zinc-500 pb-1 border-b border-zinc-200">
-                <span className="italic pr-2">{word.partOfSpeech}</span>
-                {word.definition}
-              </div>
-            </React.Fragment>
-          ))}
+        <div className="flex flex-row flex-wrap justify-start px-5 py-2 overflow-y-auto gap-x-3 gap-y-2">
+          {foundWords
+            .sort((a, b) => a.value.charCodeAt(0) - b.value.charCodeAt(0))
+            .map((word) => (
+              <button
+                key={`${word.id}_expanded`}
+                className={`capitalize px-2 pt-1 pb-[2px] rounded-sm border-t border-b border-l border-r border-l-zinc-100/75 border-t-zinc-100/75 cursor-pointer hover:bg-zinc-100/50 text-left ${word.isPangram && "bg-amber-300/75 hover:bg-amber-300/50! border-l-0 border-t-0"}`}
+                style={{
+                  borderBottomColor: stringToColor(word.submittedBy),
+                  borderRightColor: stringToColor(word.submittedBy),
+                }}
+              >
+                {word.value}
+              </button>
+            ))}
         </div>
       )}
     </div>
