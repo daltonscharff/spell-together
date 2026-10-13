@@ -80,7 +80,8 @@ export function FoundWordList({
             .map((word) => (
               <button
                 key={`${word.id}_expanded`}
-                className={`flex justify-between items-center capitalize pl-1 pr-2 pt-1 pb-[2px] cursor-pointer hover:bg-zinc-100/75 text-left border-b border-zinc-300`}
+                className={`flex justify-between items-center capitalize pl-1 pr-2 pt-1 pb-[2px] cursor-pointer hover:bg-zinc-100/75 text-left border-b`}
+                style={{ borderBottomColor: stringToColor(word.submittedBy) }}
                 onClick={() => setSelectedWord(word)}
               >
                 <span
@@ -88,10 +89,6 @@ export function FoundWordList({
                 >
                   {word.value}
                 </span>
-                <span
-                  className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: stringToColor(word.submittedBy) }}
-                />
               </button>
             ))}
         </div>
