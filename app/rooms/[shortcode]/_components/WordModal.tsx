@@ -67,8 +67,8 @@ export function WordModal({
   const isOpen = !!word;
   return (
     <Dialog open={isOpen} onClose={close} className="relative z-50">
-      <div className="fixed inset-0 flex w-screen flex-col justify-end bg-zinc-100/50">
-        <DialogPanel className="w-full bg-white p-6 mx-auto rounded-t-2xl border-t border-l border-r border-zinc-300 max-h-[66%] overflow-y-auto max-w-xl">
+      <div className="fixed inset-0 flex w-screen flex-col justify-center bg-white/80">
+        <DialogPanel className="w-full bg-white p-6 mx-auto rounded-2xl shadow-lg max-h-[66%] max-w-xl">
           <DialogTitle
             className={`font-bold italic capitalize text-xl border-b border-zinc-300`}
           >
@@ -76,23 +76,23 @@ export function WordModal({
               {word}
             </span>
           </DialogTitle>
-          <Description className="px-2">
+          <div className="px-2 overflow-y-auto">
             <div className="flex flex-row justify-between pt-3 pb-2">
               <div>Point value: {pointValue}</div>
               <div>Found by: {foundBy}</div>
             </div>
             <div className="flex flex-col gap-2">
               {isLoading && "Loading..."}
-              {data?.entries.map((entry) => {
+              {data?.entries.map((entry, i) => {
                 return (
-                  <div>
+                  <div key={`entry_${i}`}>
                     <span className="italic">{entry.partOfSpeech}</span> -{" "}
                     {entry.senses[0].definition}
                   </div>
                 );
               })}
             </div>
-          </Description>
+          </div>
         </DialogPanel>
       </div>
     </Dialog>
